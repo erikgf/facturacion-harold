@@ -1,5 +1,3 @@
-const SESSION_NAME = "andreitakids_session";
-
 var Util = {
 	TFloat : function (valor, digitos){
 		return parseFloat(valor).toFixed(!digitos ? 2 : digitos);
