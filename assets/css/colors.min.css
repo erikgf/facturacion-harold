@@ -1,0 +1,98 @@
+:root{
+      --primary-color: #2f323c;
+      --secondary-color: rgb(37, 48, 98);
+      --primary-light-color: #2e3036;
+      --primary-dark-color: #11141b;
+      --secondary-light-color: rgb(55 74 158);
+
+    }
+
+.navbar{
+	background: var(--primary-color) !important;
+}
+
+
+.app-color{
+	color: var(--primary-color) !important;
+}
+
+
+.ace-nav>li.app-color>a {
+    background-color: var(--primary-color) !important;
+}
+
+.menu-principal-label {
+    background: var(--secondary-color) !important;
+}
+
+.no-skin .nav-list>li .submenu>li.active>a {
+    color: var(--secondary-color) !important;
+}
+
+.no-skin .nav-list>li.open>a {
+    color: var(--secondary-color) !important;
+}
+
+.no-skin .nav-list li.active>a:after {
+    border-right-color:var(--secondary-color) !important;
+}
+
+.no-skin .nav-list>li .submenu>li>a:hover {
+    color: var(--secondary-color) !important;
+    background-color: var(--secondary-color-light) !important;
+}
+
+.no-skin .nav-list>li>a:focus {
+    background-color: #F8F8F8;
+    color: var(--secondary-color) !important;
+}
+
+.no-skin .nav-list>li:hover>a {
+    background-color: #FFF;
+    color: var(--secondary-color) !important;
+}
+
+.btn-primary, .btn-primary.focus, .btn-primary:focus {
+    background-color: var(--primary-color) !important;
+    border-color:var(--primary-color) !important;
+}
+
+.btn-primary.focus:hover, .btn-primary:active:hover, .btn-primary:focus:active, .btn-primary:focus:hover, .btn-primary:hover, .open>.btn-primary.dropdown-toggle, .open>.btn-primary.dropdown-toggle.focus, .open>.btn-primary.dropdown-toggle:active, .open>.btn-primary.dropdown-toggle:focus, .open>.btn-primary.dropdown-toggle:hover {
+    background-color:  var(--primary-dark-color) !important;
+    border-color:var(--primary-color) !important;
+}
+
+.no-skin .nav-list>li.active>a {
+    font-weight: 700;
+    color: var(--secondary-color) !important;
+}
+
+.widget-color-blue {
+    border-color: var(--primary-color) !important;
+}
+
+.widget-color-blue>.widget-header {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.nav-tabs.tab-color-blue>li>a, .nav-tabs.tab-color-blue>li>a:focus {
+    background-color: rgb(160, 212,208);
+}
+
+.nav-tabs.tab-color-blue>li.active>a, .nav-tabs.tab-color-blue>li.active>a:focus, .nav-tabs.tab-color-blue>li.active>a:hover {
+    color: var(--primary-color);
+    border-color: #7DB4D8 #7DB4D8 transparent;
+}
+
+.page-header h1 {
+    color: var(--primary-color) !important;
+}
+
+.breadcrumb>li>a {
+    color: var(--primary-color) !important;
+}
+
+.blue {
+    color: var(--primary-color) !important;
+}

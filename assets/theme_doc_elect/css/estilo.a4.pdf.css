@@ -1,0 +1,272 @@
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+header {
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+h1 {
+  border-top: 1px solid  #5D6975;
+  border-bottom: 1px solid  #5D6975;
+  color: #5D6975;
+  font-size: 2.4em;
+  line-height: 1.4em;
+  font-weight: normal;
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+#fecha{
+  float: right;
+  text-align: right;
+}
+
+#logo{
+  //float: left;
+   top: 0;
+   left: 0;
+   position: absolute;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+/*
+table tr:nth-child(2n-1) td {
+  background: #F5F5F5;
+}
+
+table.limpio tr td{
+  background: #FFF;
+}
+*/
+
+table.f-cabecera tr td {
+  padding: 5px 0;
+}
+
+table.f-ala-izquierda tr td {
+  text-align: left;
+   padding: 5px 0;
+  padding-left: 1cm;
+}
+
+table.f-ala-izquierda tr td.f-ala-derecha {
+  text-align: right;
+  padding-right: 1cm;
+}
+
+table th,
+table td {
+  text-align: center;
+}
+
+
+table th {
+  padding: 5px 20px;  
+  border-bottom: 1px solid #C1CED9;
+  white-space: nowrap;        
+  font-weight: bold;
+}
+/*
+table.f-cabecera {
+	font-size: 1.45em;
+}
+
+table td.subfila{
+	text-align: left;
+    padding: 6.5px;
+    font-weight: bold;
+    font-size: .85em;
+}
+
+*/
+.separador{
+  height: .75cm;
+}
+
+.text-left{
+  text-align: left;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.nombre_empresa > p{
+  margin: 0;
+  text-transform: none !important;
+}
+
+.nombre_empresa > .nombre_empresa_rotulo{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logofactura {
+  width:130px;
+  margin-top:5.5px;
+  margin-bottom:5.5px;
+}
+
+.nombre_comprobante{
+  border: 1.5px solid;
+  font-size: 18px;
+}
+
+.cabecera_cliente label{
+  float:left;
+}
+
+.cabecera_cliente .col-izq{
+  padding-right: 19px;
+  padding-bottom: 10px;
+}
+
+
+.cabecera_cliente .txt-izq{
+  margin-left: 105px;
+  border-bottom: solid 1px #000;
+}
+
+.cabecera_cliente .txt-der{
+  margin-left: 118px; 
+  border-bottom: solid 1px #000;
+}
+
+.tablageneral {
+  font-size: 15px;
+}
+
+.tablageneral thead{
+  font-size: 13px;
+}
+
+.detalletable td{
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.th-small {
+  width: 25px;
+}
+
+.th-medium{
+  width: 35px;
+}
+
+.th-large{
+  width: 45px;
+}
+
+.importeletras{
+  border-top: 1px solid #a09f9f;
+  border-bottom: 1px solid #a09f9f;
+  text-align: left;
+  font-size: 18px;
+  padding-top: 35px;
+  padding-left: 15px;
+}
+
+.imprentaqr{
+ text-align:left;
+}
+
+.imprentaqr img{
+  width: 120px; margin-top:11px; margin-bottom: 11px;
+}
+
+body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #FAFAFA;
+      font: 10pt "Tahoma";
+  }
+
+  * {
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+  }
+
+  .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 20mm 15mm;
+      margin: 10mm auto;
+      border: 1px #D3D3D3 solid;
+      border-radius: 5px;
+      background: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  .subpage {
+      padding: 1cm;
+      border: 5px red solid;
+      height: 257mm;
+      outline: 2cm #FFEAEA solid;
+  }
+  
+  @page {
+      size: A4;
+      margin: 0;
+  }
+
+
+  @media print {
+      html, body {
+          width: 210mm;
+          height: 297mm;        
+      }
+      .page {
+          margin: 0;
+          border: initial;
+          border-radius: initial;
+          width: initial;
+          min-height: initial;
+          box-shadow: initial;
+          background: initial;
+          page-break-after: always;
+      }
+
+      .btnimprimir{
+        display: none;
+      }
+
+  }
+
+
+  .btnimprimir{
+     position: absolute;
+     left: 50%;
+     top: 2cm;
+  }
+
+.flex{
+  display: flex;
+}
+
+.flex-auto{
+  flex: auto;
+}
+
+.logo{
+  width: 7.5cm;
+    flex: auto;
+}
+
+.fila-cabecera{
+  padding: .15cm 0px;
+  font-size: 11pt;
+}
+
+.text-right{
+  text-align: right;
+}

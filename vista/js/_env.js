@@ -1,0 +1,1 @@
+const __URL_API = 'http://localhost/andreitababy-server/public/api/';

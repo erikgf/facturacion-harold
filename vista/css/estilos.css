@@ -1,0 +1,220 @@
+#sidebar.menu-min >  #sidebar-shortcuts > .menu-principal-label{
+	visibility: hidden;
+}
+
+.compucodexlogo{
+  display: block;
+  line-height: 1px;
+}
+
+.menu-principal-label{
+	font-size: .85em;
+    text-align: left;
+    padding: 15px;
+    background: #438eb9e0;
+    color: white;
+    font-weight: bold;
+}
+
+.loader {
+    width: 100%;
+    position: absolute;
+    z-index: 9999999;
+    height: 100%;
+    background: black;
+    opacity: .5;
+    display: none;
+}
+
+.loader.loader-on{
+    display: block;
+}
+
+.loader div{
+    left: 50%;
+    top: 50%;
+    position: absolute;    
+}
+
+.seleccionado-tr{
+    background-color: #b9d1e6 !important;
+}
+
+.creado-tr{
+   background-color: #b6dcaf !important;
+}
+
+input.ahp-valor{
+    transition: background-color ease-in-out .5s;
+}
+
+
+.matriz-efecto-sel{
+   background-color: #89b1c8 !important;
+   color: white;
+}
+
+.matriz-efecto-error {
+    background-color: #d15b47 !important;
+}
+
+.td-ordenador{
+    font-size: 2em;
+    color: white;
+    background-color: #d15b47;
+    text-align: center;
+}
+
+
+.borrar-img-producto{
+    position: absolute;
+    right: 18px;
+    font-size: 1.3em;
+    color: white;
+    background: #c32323;
+    padding: 5px 10px;
+}
+
+.tr-middle-align > tr > td{
+    vertical-align: middle !important;
+}
+.pointer{
+    cursor: pointer;
+}
+
+.carousel-items{
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.carousel-items .item > img{
+    height: 128px;
+    max-width: 128px;
+}
+
+.widget-header>.widget-title {
+    line-height: 36px;
+    padding: 0;
+    margin: 0;
+    display: inline;
+}
+
+.item .img-thumbnail-selected{
+    opacity: .7;
+    background-color: #307ECC;
+}
+
+.widget-box {
+    margin: 0px 0px 15px 0;
+}
+
+.price{
+    font-size: 22px;
+    line-height: 20px;
+    height: 28px;
+    text-align: center;
+    color: #555
+}
+
+.stock{
+    font-size: 16px;
+    font-weight: bold;
+    height: 20px;
+    color: #307ecc;
+    text-align: center;
+}
+
+.img-catalogo-res{
+    height: 156px;
+    width: 156px;
+}
+
+.img-descripcion-catalogo{
+    word-wrap: break-word;
+    font-size: 11px;
+    overflow: auto;
+    white-space: pre-line;
+    text-align: justify;
+}
+
+.img-logo-izq{
+    width: 72px;
+    height: 72px;
+    display: inline !important;
+    margin-right: 16px;
+    border-radius: 5em;
+}
+
+
+@media (min-width: 992px){
+    .img-catalogo-res{
+        height: 256px;
+        max-width: 256px;
+    }
+}
+
+@media (min-width:  768px){
+    .img-catalogo-res{
+        height: 246px;
+        max-width: 246px;
+    }
+}
+
+@media (min-width:  420px){
+    .img-catalogo-res{
+        height: 156px;
+        max-width: 156px;
+    }
+}
+
+
+@media (max-width:  420px){
+    .img-logo-izq{
+        display: block !important;
+        margin: auto;
+    }
+}
+
+.page-content {
+    background: linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.95)), url(../../imagenes/logo_grande.jpeg) no-repeat center;
+}
+
+.widget-header{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 6px;
+    max-height: 38px;
+}
+
+.btn-excel{
+    background-color: #4d7d50!important;
+    border-color: #4d7d50;
+}
+.shine {
+    -webkit-mask-image: linear-gradient(
+        -75deg,
+        rgba(0, 0, 0, 1) 30%,
+        rgba(0, 0, 0, 0.93) 50%,
+        rgba(0, 0, 0, 1) 70%
+    );
+    -webkit-mask-size: 200%;
+    animation: shine 1s linear infinite;
+}
+    
+@keyframes shine {
+    from {
+    -webkit-mask-position: 150%;
+    }
+    to {
+    -webkit-mask-position: -50%;
+    }
+}
+
+.navbar-fixed-top+.main-container {
+    padding-top: 90px;
+}
+.no-skin .sidebar-shortcuts {
+    background-color: var(--secondary-color);
+}
