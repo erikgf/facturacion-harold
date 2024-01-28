@@ -2,8 +2,9 @@
 
 include '../datos/local_config_web.php';
 
-$TITULO_PAGINA = "Generación y envío Comprobantes";
+$TITULO_PAGINA = "Generación - Envío Comprobantes";
 $fechaHoy = date('Y-m-d');
+$fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
 
 ?>
 
@@ -59,7 +60,7 @@ $fechaHoy = date('Y-m-d');
                     <div class="col-xs-6 col-sm-3 col-md-2">
                       <div class="control-group">
                         <label class="control-label">Desde Fecha</label>
-                        <input type="date" value="<?php echo $fechaHoy; ?>" class="form-control input-sm" id="txtfechadesde">
+                        <input type="date" value="<?php echo $fechaHaceSemana; ?>" class="form-control input-sm" id="txtfechadesde">
                       </div>
                     </div>
                     <div class="col-xs-6 col-sm-3 col-md-2">

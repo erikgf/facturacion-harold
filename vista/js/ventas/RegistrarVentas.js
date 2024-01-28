@@ -1062,9 +1062,9 @@ const RegistrarVentas = function($contenedor, _tpl8){
                 
                 const idTipoComprobante =  data.id_tipo_comprobante;
                 if (idTipoComprobante == ""){
-                    app.ListaVentas.verAtencion(data.id);
+                    app.ListarVentas.verAtencion(data.id);
                 } else {
-                    app.ListaVentas.verComprobante(data.id_documento_electronico);
+                    app.ListarVentas.verComprobante(data.id_documento_electronico);
                 }
       
               } catch (error) {

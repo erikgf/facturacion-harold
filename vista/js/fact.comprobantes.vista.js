@@ -198,44 +198,39 @@ app.generarSUNAT = async function(btn, idComprobante, nombre_comprobante){
 
     mostrarAlert(`${nombre_comprobante} - Generación y firma correcta.`, "s");
 
-    if (!enviandoDesdeGlobal){
-      const $btn = $(btn);
-      const tableRow = DT.row($btn.parents('tr'));
-      const {firmado, generado} = data;
-      const {datos_comprobante, respuesta, fue_generado} = generado;
+    const $btn = $(btn);
+    const tableRow = DT.row($btn.parents('tr'));
+    const {firmado, generado} = data;
+    const {datos_comprobante, respuesta, fue_generado} = generado;
 
-      const fueFirmado = firmado.valor_firma.length > 0;
-      const fueGenerado = fue_generado == 1;
+    const fueFirmado = firmado.valor_firma.length > 0;
+    const fueGenerado = fue_generado == 1;
 
-      const nuevosDatos = {
-        "id": datos_comprobante.id,
-        "id_tipo_comprobante": datos_comprobante.COD_TIPO_DOCUMENTO,
-        "numero_documento_cliente": datos_comprobante.NRO_DOCUMENTO_CLIENTE,
-        "descripcion_cliente": datos_comprobante.RAZON_SOCIAL_CLIENTE,
-        "id_tipo_moneda": datos_comprobante.COD_MONEDA,
-        "total_gravadas": datos_comprobante.TOTAL_GRAVADAS,
-        "total_igv": datos_comprobante.TOTAL_IGV,
-        "importe_total":  datos_comprobante.TOTAL,
-        "xml_filename": `${respuesta.ruta}/${respuesta.xml_filename}`,
-        "fue_generado": fueGenerado,
-        "fue_firmado": fueFirmado,
-        "cdr_estado": null,
-        "enviar_a_sunat": "0",
-        "comprobante": nombre_comprobante,
-        "fecha_emision": datos_comprobante.FECHA_DOCUMENTO
-      };
+    const nuevosDatos = {
+      "id": datos_comprobante.id,
+      "id_tipo_comprobante": datos_comprobante.COD_TIPO_DOCUMENTO,
+      "numero_documento_cliente": datos_comprobante.NRO_DOCUMENTO_CLIENTE,
+      "descripcion_cliente": datos_comprobante.RAZON_SOCIAL_CLIENTE,
+      "id_tipo_moneda": datos_comprobante.COD_MONEDA,
+      "total_gravadas": datos_comprobante.TOTAL_GRAVADAS,
+      "total_igv": datos_comprobante.TOTAL_IGV,
+      "importe_total":  datos_comprobante.TOTAL,
+      "xml_filename": `${respuesta.ruta}/${respuesta.xml_filename}`,
+      "fue_generado": fueGenerado,
+      "fue_firmado": fueFirmado,
+      "cdr_estado": null,
+      "enviar_a_sunat": "0",
+      "comprobante": nombre_comprobante,
+      "fecha_emision": datos_comprobante.FECHA_DOCUMENTO
+    };
 
-      const rData = $(app.tpl8.listado([nuevosDatos].map(mapEstadoGenerado))).children().toArray().map(td => {
-        return td.innerHTML;
-      });
+    const rData = $(app.tpl8.listado([nuevosDatos].map(mapEstadoGenerado))).children().toArray().map(td => {
+      return td.innerHTML;
+    });
 
-      console.log({tableRow, rData});
-      DT.row( tableRow )
-        .data(rData);
+    DT.row( tableRow )
+      .data(rData);
       
-      return;
-    }
-
   } catch (error) {
       const { response } = error;
       if (response?.data?.message){

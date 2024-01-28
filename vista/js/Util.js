@@ -227,16 +227,13 @@ var Util = {
 	    return DOM;
 	},
   downloadPDFUsingPost : ({url, variableName, JSONData}) => {
-    console.log({
-      url, variableName, JSONData
-    })
     const $form = $(`<form target="_blank" method="post" action="${url}">
                         <input type="hidden" name="${variableName}" value=\'${JSONData}\'/>
                     </form>`);
 
     $("body").append($form);
     $form.submit();
-   // $form.remove();  
+    $form.remove();  
   }
 };
 
