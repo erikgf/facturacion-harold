@@ -149,75 +149,75 @@ $fechaHoy = date('Y-m-d');
                                     </tr>
                                   </thead>    
                                   <tbody id="listado-body">
-                            <script id="tpl8Listado" type="handlebars-x">                             
-                                      {{#this}}
-                                        <tr data-id="{{id}}" data-comprobante="{{comprobante}}"> 
-                                            <td>
-                                              {{#if_ enviar_a_sunat '==' '0'}} 
-                                                <input type="checkbox" class="chkselect">                                                
-                                              {{/if_}}
-                                              <div class="btn-group">
-                                                <button data-toggle="dropdown" class="btn btn-inverse btn-xs dropdown-toggle" aria-expanded="false">
-                                                  Opciones
-                                                  <span class="ace-icon fa fa-caret-down icon-on-right"></span>
-                                                </button>
+                                    <script id="tpl8Listado" type="handlebars-x">                             
+                                              {{#this}}
+                                                <tr data-id="{{id}}" data-comprobante="{{comprobante}}"> 
+                                                    <td>
+                                                      {{#if_ enviar_a_sunat '==' '0'}} 
+                                                        <input type="checkbox" class="chkselect">                                                
+                                                      {{/if_}}
+                                                      <div class="btn-group">
+                                                        <button data-toggle="dropdown" class="btn btn-inverse btn-xs dropdown-toggle" aria-expanded="false">
+                                                          Opciones
+                                                          <span class="ace-icon fa fa-caret-down icon-on-right"></span>
+                                                        </button>
 
-                                                <ul data-id="{{id}}" class="dropdown-menu dropdown-inverse">
-                                                  {{#if_ enviar_a_sunat '==' '0'}} 
-                                                  <li>
-                                                    <a href="#" onclick="app.generarSUNAT(this, {{id}},'{{comprobante}}')">Generar XML</a>
-                                                  </li>       
-                                                  <!--
-                                                  <li>
-                                                    <a href="#" onclick="app.generarEnviarSUNAT({{id}},'{{comprobante}}')">Genera XML y Enviar SUNAT</a>
-                                                  </li>      
-                                                  -->
-                                                  {{/if_}}
-                                                  <li>
-                                                    <a href="#" onclick="app.verComprobante({{id}})">Ver comprobante</a>
-                                                  </li>
-                                                  {{#if_ fue_firmado '==' '1'}} 
-                                                  <li>
-                                                    <a href="#" onclick="app.descargarXML('{{xml_filename}}')">Descargar XML</a>
-                                                  </li>
-                                                  {{/if_}}
-                                                </ul>
-                                              </div>
-                                            </td>
-                                            <td>{{comprobante}}</td>
-                                            <td>{{descripcion_cliente}}</td>
-                                            <td class="text-center">{{fecha_emision}}</td>
-                                            <td class="text-right">S/{{total_gravadas}}</td>
-                                            <td class="text-right">S/{{total_igv}}</td>
-                                            <td class="text-right">S/{{importe_total}}</td>
-                                            <td class="text-center">
-                                              <span class="label label-{{estado_generado.color}}">
-                                                <i class="ace-icon fa fa-{{estado_generado.icon}} bigger-120"></i>
-                                                {{estado_generado.rotulo}}
-                                              </span>
-                                            </td>
-                                            <td class="text-center">
-                                              {{#if_ enviar_a_sunat '==' '0'}}
-                                                <span class="label">
-                                                  No Enviado
-                                                </span>
-                                              {{else}}
-                                                {{#if_ cdr_estado '==' '0'}}
-                                                  <span class="label label-success">
-                                                    Enviado y Aceptado
-                                                  </span>
-                                                  {{#fecha_envio_sunat}}<br> <small>Fecha: {{this}}</small>{{/fecha_envio_sunat}} 
-                                                {{/if_}}
-                                                {{#if_ cdr_estado '!=' '0'}}
-                                                  <span class="label label-danger">
-                                                    Rechazado
-                                                  </span>
-                                                {{/if_}}
-                                              {{/if_}}
-                                            </td>
-                                         </tr>
-                                      {{/this}}
-                           </script>   
+                                                        <ul data-id="{{id}}" class="dropdown-menu dropdown-inverse">
+                                                          {{#if_ enviar_a_sunat '==' '0'}} 
+                                                          <li>
+                                                            <a href="#" onclick="app.generarSUNAT(this, {{id}},'{{comprobante}}')">Generar XML</a>
+                                                          </li>       
+                                                          <!--
+                                                          <li>
+                                                            <a href="#" onclick="app.generarEnviarSUNAT({{id}},'{{comprobante}}')">Genera XML y Enviar SUNAT</a>
+                                                          </li>      
+                                                          -->
+                                                          {{/if_}}
+                                                          <li>
+                                                            <a href="#" onclick="app.verComprobante({{id}})">Ver comprobante</a>
+                                                          </li>
+                                                          {{#if_ fue_firmado '==' '1'}} 
+                                                          <li>
+                                                            <a href="#" onclick="app.descargarXML('{{xml_filename}}')">Descargar XML</a>
+                                                          </li>
+                                                          {{/if_}}
+                                                        </ul>
+                                                      </div>
+                                                    </td>
+                                                    <td>{{comprobante}}</td>
+                                                    <td>{{descripcion_cliente}}</td>
+                                                    <td class="text-center">{{fecha_emision}}</td>
+                                                    <td class="text-right">S/{{total_gravadas}}</td>
+                                                    <td class="text-right">S/{{total_igv}}</td>
+                                                    <td class="text-right">S/{{importe_total}}</td>
+                                                    <td class="text-center">
+                                                      <span class="label label-{{estado_generado.color}}">
+                                                        <i class="ace-icon fa fa-{{estado_generado.icon}} bigger-120"></i>
+                                                        {{estado_generado.rotulo}}
+                                                      </span>
+                                                    </td>
+                                                    <td class="text-center">
+                                                      {{#if_ enviar_a_sunat '==' '0'}}
+                                                        <span class="label">
+                                                          No Enviado
+                                                        </span>
+                                                      {{else}}
+                                                        {{#if_ cdr_estado '==' '0'}}
+                                                          <span class="label label-success">
+                                                            Enviado y Aceptado
+                                                          </span>
+                                                          {{#fecha_envio_sunat}}<br> <small>Fecha: {{this}}</small>{{/fecha_envio_sunat}} 
+                                                        {{/if_}}
+                                                        {{#if_ cdr_estado '!=' '0'}}
+                                                          <span class="label label-danger">
+                                                            Rechazado
+                                                          </span>
+                                                        {{/if_}}
+                                                      {{/if_}}
+                                                    </td>
+                                                </tr>
+                                              {{/this}}
+                                  </script>   
                                 </tbody>
                             </table>                                 
                           </div>  <!-- table-responsive --> 
