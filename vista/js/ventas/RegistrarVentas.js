@@ -683,14 +683,15 @@ const RegistrarVentas = function($contenedor, _tpl8){
       const keyStorageSerie = NOMBRE_LOCALSTORAGE+"serie"+tipoComprobante;
       let serie = localStorage.getItem(keyStorageSerie);
 
+                
+      if (serie === null || serie === undefined){
+        serie = `${primeraLetraRecomendada}001`;
+        localStorage.setItem(keyStorageSerie, serie);
+    }
+
       if (serie.length > 0 && serie.length < 4){
         serie = `${primeraLetraRecomendada}${serie.padStart(3, '0')}`;
         localStorage.setItem(keyStorageSerie, serie);
-      }
-                          
-      if (serie === null || serie === undefined){
-          serie = `${primeraLetraRecomendada}001`;
-          localStorage.setItem(keyStorageSerie, serie);
       }
       
       const keyStorageComprobante = NOMBRE_LOCALSTORAGE+"correlativo"+tipoComprobante+serie;
