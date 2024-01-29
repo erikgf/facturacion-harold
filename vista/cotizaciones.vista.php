@@ -12,34 +12,22 @@ $TITULO_PAGINA = "Gestionar Cotizaciones";
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-            include '_css/main.css.php'; 
-          ?>
-
+          <?php include '_css/main.css.php';  ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+             <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.transacciones.php' ?>
+                <?php include './partials/_globals/breadcrumb.transacciones.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -191,22 +179,16 @@ $TITULO_PAGINA = "Gestionar Cotizaciones";
                 {{/.}}
             </script>   
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
 
 
-        <?php  include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
+       <?php  include '_js/main.js.php'; ?>
        <script type="text/javascript">
           var ___ad = '<?php echo $_SESSION["usuario"]["cod_rol"] == "1";?>';
        </script>
-       <script src="js/cotizaciones.vista.js<?php echo '?'.time();?>"></script>
+       <script src="js/cotizaciones.vista.js"></script>
     </body>
 
 </html>

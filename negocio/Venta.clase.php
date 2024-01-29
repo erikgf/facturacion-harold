@@ -1617,22 +1617,6 @@ class Venta extends Transaccion {
 
             $sqlWhere = " t.estado = 1 ";
 
-            if ($todos == "true"){
-                $sqlWhere .= " AND true ";
-            } else {
-                $sqlWhere .= " AND (fecha_transaccion BETWEEN :0 AND :1)";
-                array_push($params, $fDesde);
-                array_push($params, $fHasta);
-            }
-
-            if ($codSucursal == ""){
-                $sqlWhere .= " AND true";
-            } else {
-                $j = count($params);
-                $sqlWhere .= " AND suc.cod_sucursal = :$j";
-                array_push($params, $codSucursal);
-            }
-
             $sql = "SELECT 
                     p.codigo as codigo_producto,
                     p.nombre as producto,

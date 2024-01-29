@@ -2,6 +2,8 @@
 
 include '../datos/local_config_web.php';
 $TITULO_PAGINA = "Gestionar Almacén";
+
+$fechaHoy = date('Y-m-d');
 ?>
 
 <!DOCTYPE html>
@@ -12,34 +14,22 @@ $TITULO_PAGINA = "Gestionar Almacén";
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php  
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-            include '_css/main.css.php'; 
-          ?>
-
+          <?php  include '_css/main.css.php';  ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.transacciones.php' ?>
+                <?php include './partials/_globals/breadcrumb.transacciones.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -71,10 +61,10 @@ $TITULO_PAGINA = "Gestionar Almacén";
 
                       <div class="tab-content">
                         <div id="tabStockProductos" class="tab-pane active">
-                          <?php include '_stockproductos.almacen.vista.php'; ?>
+                          <?php include './partials/almacen/stockproductos.partial.php'; ?>
                         </div>
                         <div id="tabHistorialMovimientos" class="tab-pane">
-                          <?php include '_historialproductos.almacen.vista.php'; ?>
+                          <?php include './partials/almacen/historialproductos.partial.php'; ?>
                         </div>
                       </div>
                     </div>
@@ -86,7 +76,7 @@ $TITULO_PAGINA = "Gestionar Almacén";
 
             <script id="tpl8Sucursal" type="handlebars-x">
                 {{#.}}
-                <option value='{{id}}'>{{nombre}}</option>
+                  <option value='{{id}}'>{{nombre}}</option>
                 {{/.}}
             </script> 
 
@@ -97,20 +87,11 @@ $TITULO_PAGINA = "Gestionar Almacén";
                 {{/.}}
             </script>  
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
 
-
-        <?php  include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              /*echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';*/
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
-
+        <?php  include '_js/main.js.php'; ?>
         <script src="js/almacenes/HistorialMovimientos.js" type="text/javascript"></script>
         <script src="js/almacenes/StockProductos.js" type="text/javascript"></script>
         <script src="js/almacenes/almacenes.vista.js" type="text/javascript"></script>

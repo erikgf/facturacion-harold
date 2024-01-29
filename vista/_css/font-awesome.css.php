@@ -7,10 +7,10 @@
 -->
 <?php 
   if (MODO_PRODUCCION == "1"){
-                echo '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />';
+        echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />';
 
-            } else {
-                echo '  <link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css" />';
-            }
+    } else {
+        echo '<link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css" />';
+    }
 
  ?>

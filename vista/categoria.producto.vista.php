@@ -15,23 +15,18 @@ $TITULO_PAGINA = "Gestión Categoría de Productos";
           <?php  include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+             <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
-
-                <?php include 'breadcrumb.mantenimiento.php' ?>
+                <?php include './partials/_globals/breadcrumb.mantenimiento.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -115,73 +110,71 @@ $TITULO_PAGINA = "Gestión Categoría de Productos";
                 </div><!-- /.page-content -->
               </div>
             </div><!-- /.main-content -->
-
-
-            <?php include 'footer.php'; ?>
-           
-        </div><!-- /.main-container -->
-
-
-        <div id="mdlRegistro" class="modal fade" tabindex="-1" style="display: none;">
-            <div class="modal-dialog">
-              <form id="frmgrabar">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 class="smaller lighter blue no-margin">Mantenimiento</h3>
-                      </div>
-
-                      <div class="modal-body">
-                        <div class="row">
-                              <div class="col-xs-6">
-                                <div class="control-group">
-                                    <label class="control-label">Nombre: </label>
-                                    <textarea name="txtnombre" id="txtnombre" placeholder="Nombre..." class="form-control" required=""></textarea>
-                                </div>
-                              </div>
-                              <div class="col-xs-6">
-                                <div class="control-group">
-                                  <label class="control-label">Descripción: </label>
-                                  <textarea name="txtdescripcion" id="txtdescripcion" class="form-control" placeholder="Descripción..."></textarea>
-                                </div>
-                              </div>
+            
+          <div id="mdlRegistro" class="modal fade" tabindex="-1" style="display: none;">
+              <div class="modal-dialog">
+                <form id="frmgrabar">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                          <h3 class="smaller lighter blue no-margin">Mantenimiento</h3>
                         </div>
-                        <div class="row">
-                          <div class="col-xs-6">
-                            <div class="control-group">
-                                <label class="control-label">Tipo Categoría: </label>
-                                <select class="form-control" id="cbotipo" required="">
-                                </select>
+
+                        <div class="modal-body">
+                          <div class="row">
+                                <div class="col-xs-6">
+                                  <div class="control-group">
+                                      <label class="control-label">Nombre: </label>
+                                      <textarea name="txtnombre" id="txtnombre" placeholder="Nombre..." class="form-control" required=""></textarea>
+                                  </div>
+                                </div>
+                                <div class="col-xs-6">
+                                  <div class="control-group">
+                                    <label class="control-label">Descripción: </label>
+                                    <textarea name="txtdescripcion" id="txtdescripcion" class="form-control" placeholder="Descripción..."></textarea>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-xs-6">
+                              <div class="control-group">
+                                  <label class="control-label">Tipo Categoría: </label>
+                                  <select class="form-control" id="cbotipo" required="">
+                                  </select>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div class="modal-footer">
-                        <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-                          <i class="ace-icon fa fa-times"></i>
-                          Cancelar
-                        </button>
-                        <button type="submit"  class="btn btn-sm btn-primary pull-right">
-                          <i class="ace-icon fa fa-save"></i>
-                          Guardar
-                        </button>
-                      </div>
-                    </div><!-- /.modal-content -->
-              </form>
-            </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+                            <i class="ace-icon fa fa-times"></i>
+                            Cancelar
+                          </button>
+                          <button type="submit"  class="btn btn-sm btn-primary pull-right">
+                            <i class="ace-icon fa fa-save"></i>
+                            Guardar
+                          </button>
+                        </div>
+                      </div><!-- /.modal-content -->
+                </form>
+              </div>
+          </div>
 
-        </div>
+          <?php include './partials/_globals/footer.php'; ?>
+           
+        </div><!-- /.main-container -->
+
 
         <script id="tpl8Combo" type="handlebars-x">
                 <option value="">Seleccionar {{rotulo}}</option>
                 {{#items}}
                   <option value='{{codigo}}'>{{nombre}}</option>
                 {{/items}}
-         </script>
+        </script>
 
         <?php  include '_js/main.js.php';?>
-        <script src="js/categoria.producto.vista.js?<?php echo time();?>"></script>
+        <script src="js/categoria.producto.vista.js"></script>
     </body>
 
 </html>

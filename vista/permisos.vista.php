@@ -15,23 +15,19 @@ $TITULO_PAGINA = "Permisos por Rol";
           <?php  include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.mantenimiento.php' ?>
+                <?php include './partials/_globals/breadcrumb.mantenimiento.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -88,9 +84,8 @@ $TITULO_PAGINA = "Permisos por Rol";
               </div>
             </div><!-- /.main-content -->
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
         </div><!-- /.main-container -->
-
 
         <?php  include '_js/main.js.php';?>
         <script src="js/permisos.vista.js" type="text/javascript"></script>

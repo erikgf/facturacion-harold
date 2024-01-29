@@ -12,14 +12,7 @@ $TITULO_PAGINA = "Gestión de Comisionistas";
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-            include '_css/main.css.php'; 
-          ?>
+          <?php include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
         <?php include 'navbar.php'; ?>
@@ -263,16 +256,9 @@ $TITULO_PAGINA = "Gestión de Comisionistas";
             {{/data}}
          </script>  
 
-        <?php  include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              /*echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';*/
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
+        <?php  include '_js/main.js.php'; ?>
         
-        <script src="js/comisionista.vista.js<?php echo '?'.time();?>" type="text/javascript"></script>
+        <script src="js/comisionista.vista.js" type="text/javascript"></script>
     </body>
 
 </html>

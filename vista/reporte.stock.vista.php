@@ -14,42 +14,27 @@ $fechaHoy = date('Y-m-d');
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php  include '_css/main.css.php'; 
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-            ?>
+          <?php  include '_css/main.css.php';  ?>
+          <?php  include '_css/dataTableButtons.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.reportes.php' ?>
+                <?php include './partials/_globals/breadcrumb.reportes.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
                       <?php echo $TITULO_PAGINA; ?>
-                      <!--
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        Gestión y mantenimiento
-                      </small>
-                      -->
                     </h1>
                   </div><!-- /.page-header -->
                   <div class="row">
@@ -62,12 +47,7 @@ $fechaHoy = date('Y-m-d');
                     </div>
                     <div class="col-xs-12 col-sm-6 col-md-2">
                       <div class="control-group">
-                        <br><button class="btn btn-info btn-block btn-lg" id="btnbuscar">BUSCAR</button>
-                      </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6 col-md-2">
-                      <div class="control-group">
-                        <br><button class="btn btn-excel btn-block btn-lg" id="btnexcel">EXCEL</button>
+                        <br><button class="btn btn-info btn-block" id="btnbuscar">BUSCAR</button>
                       </div>
                     </div>
                   </div>
@@ -75,41 +55,35 @@ $fechaHoy = date('Y-m-d');
                   <h4>Registros: </h4>                  
                   <div class="row">
                         <div class="col-sm-12 col-xs-12">
-                          <div  id="listado" class="table-responsive">           
-                            <script id="tpl8Listado" type="handlebars-x">
-                              <table class="table table-striped table-bordered table-hover dataTable dt-responsive"  cellspacing="0" width="100%">
+                          <div class="table-responsive">           
+                              <table id="tbllista" class="table table-striped table-bordered table-hover dataTable dt-responsive"  cellspacing="0" width="100%">
                                   <thead>
                                     <tr>
-                                      <th width="150px">Sucursal</th>
-                                      <th width="100px">Código Producto</th>
                                       <th>Producto</th>
-                                      <td width="135px">F. Vencimiento</td>
-                                      <td width="125px">Lote</td>
-                                      <th width="185px">Categoría de Producto</th>
-                                      <th width="175px">Tipo de Categoría</th>
-                                      <th class="text-center" width="125px">Stock</th>
-                                      <th class="text-center" width="125px">Precio</th>
-                                      <th class="text-center" width="135px">Total</th>
+                                      <th>Lote</th>
+                                      <th>Categoría de Producto</th>
+                                      <th>Tipo de Categoría</th>
+                                      <th class="text-center">Stock</th>
+                                      <th class="text-center">Costo (Prom.)</th>
+                                      <th class="text-center">Total</th>
                                     </tr>
                                   </thead>
                                   <tbody>
+                                    <script id="tpl8Listado" type="handlebars-x">
                                       {{#.}}
                                         <tr>
-                                          <td>{{sucursal}}</td>
-                                            <td>{{codigo_producto}}</td>
-                                            <td>{{producto}}</td>
-                                            <td>{{fecha_vencimiento}}</td>
-                                            <td>{{lote}}</td>
-                                            <td>{{categoria}}</td>
-                                            <td>{{tipo}}</td>
-                                            <td class="text-right">{{stock}}</td>
-                                            <td class="text-right">{{precio_entrada}}</td>
-                                            <td class="text-right">{{total}}</td>
+                                          <td>{{producto}}</td>
+                                          <td>{{lote}}</td>
+                                          <td>{{categoria}}</td>
+                                          <td>{{tipo}}</td>
+                                          <td class="text-right">{{stock}}</td>
+                                          <td class="text-right">{{precio_entrada_promedio}}</td>
+                                          <td class="text-right">{{total}}</td>
                                          </tr>
                                       {{/.}}
+                                    </script>                                    
                                   </tbody>
                               </table>
-                           </script>                                    
                           </div>  <!-- table-responsive --> 
                         </div> 
                       </div>
@@ -123,21 +97,15 @@ $fechaHoy = date('Y-m-d');
             <script id="tpl8Sucursal" type="handlebars-x">
               <option value="">Todas</option>
               {{#.}}
-                <option value="{{cod_sucursal}}">{{nombre}}</option>
+                <option value="{{id}}">{{nombre}}</option>
               {{/.}}
             </script>
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
         </div><!-- /.main-container -->
 
-        <?php  include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              /*echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';*/
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
+        <?php  include '_js/main.js.php'; ?>
+        <?php  include '_js/dataTableButtons.js.php'; ?>
         <script src="js/reporte.stock.vista.js" type="text/javascript"></script>
     </body>
 

@@ -1,8 +1,7 @@
 <?php
-
 include '../datos/local_config_web.php';
 $TITULO_PAGINA = "Gestionar Ventas";
-
+$fechaHoy = date('Y-m-d');
 ?>
 
 <!DOCTYPE html>
@@ -13,35 +12,29 @@ $TITULO_PAGINA = "Gestionar Ventas";
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php  
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-
-            include '_css/main.css.php'; 
-          ?>
+          <?php include '_css/main.css.php'; ?>
+          
+          <style type="text/css">
+              .detalle-rotulo{
+                  font-size: 1.25em;
+              }
+          </style>
 
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.transacciones.php' ?>
+                <?php include './partials/_globals/breadcrumb.transacciones.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -64,10 +57,10 @@ $TITULO_PAGINA = "Gestionar Ventas";
 
                       <div class="tab-content">
                         <div id="tabRegistrarVentas" class="tab-pane active">
-                          <?php include '_registrarventas.ventas.vista.php'; ?>
+                          <?php include './partials/ventas/registrarventas.partial.php'; ?>
                         </div>
                         <div id="tabListadoVentas" class="tab-pane">
-                          <?php include '_listaventas.ventas.vista.php'; ?>
+                          <?php include './partials/ventas/listaventas.partial.php'; ?>
                         </div>
                       </div>
                     </div>
@@ -216,12 +209,6 @@ $TITULO_PAGINA = "Gestionar Ventas";
               </div>
             </div>
 
-            <style type="text/css">
-                .detalle-rotulo{
-                   font-size: 1.25em;
-                }
-            </style>
-
             <div id="mdlDetalleVenta" class="modal fade" tabindex="-1" style="display: none;">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -322,7 +309,7 @@ $TITULO_PAGINA = "Gestionar Ventas";
                                     </tr>
                                     <tr style="font-size:1.15em;">
                                       <td class="text-right" colspan="5">DESCUENTO GLOBAL</td>
-                                      <td class="text-right">S/{{monto_descuento}}</td>
+                                      <td class="text-right text-danger bolder">- S/{{monto_descuento}}</td>
                                     </tr>
                                     <tr style="font-size:1.25em">
                                       <td class="text-left" colspan="2">
@@ -371,18 +358,10 @@ $TITULO_PAGINA = "Gestionar Ventas";
                 {{/.}}
             </script>   
 
-        <?php include 'footer.php'; ?>
+        <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
-
-
-        <?php  include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
+       <?php  include '_js/main.js.php'; ?>
        <script src="js/ventas/RegistrarVentas.js"></script>
        <script src="js/ventas/ListarVentas.js"></script>
        <script src="js/ventas/ventas.vista.js"></script>

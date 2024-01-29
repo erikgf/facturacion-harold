@@ -1,2 +1,0 @@
-[10-Apr-2019 04:02:46 UTC] PHP Warning:  require_once(../datos/Conexion.clase.php): failed to open stream: No such file or directory in /home/jupase57/public_html/vista/template/AccesoAuxiliar.clase.php on line 3
-[10-Apr-2019 04:02:46 UTC] PHP Fatal error:  require_once(): Failed opening required '../datos/Conexion.clase.php' (include_path='.:/opt/alt/php71/usr/share/pear') in /home/jupase57/public_html/vista/template/AccesoAuxiliar.clase.php on line 3

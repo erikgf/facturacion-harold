@@ -15,55 +15,28 @@ $TITULO_PAGINA = "Gestión de Productos";
           <?php  include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.mantenimiento.php' ?>
+                <?php include './partials/_globals/breadcrumb.mantenimiento.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
                       <?php echo $TITULO_PAGINA; ?>
-                      <!--
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        Gestión y mantenimiento
-                      </small>
-                      -->
                     </h1>
                   </div><!-- /.page-header -->
 
                   <div class="row">
                     <div class="col-ms-12">
-                      <!-- PAGE CONTENT BEGINS -->
-                      <!-- USARE ESTE ALERT PARA DESPUES
-                      <div class="alert alert-block alert-success">
-                        <button type="button" class="close" data-dismiss="alert">
-                          <i class="ace-icon fa fa-times"></i>
-                        </button>
-
-                        <i class="ace-icon fa fa-check green"></i>
-
-                        Welcome to
-                        <strong class="green">
-                          Ace
-                          <small>(v1.4)</small>
-                        </strong>, лёгкий, многофункциональный и простой в использовании шаблон для админки на bootstrap 3.3.6. Загрузить исходники с <a href="https://github.com/bopoda/ace">github</a> (with minified ace js/css files).
-                      </div>
-                     -->
-
                       <div class="row">
                         <div class="col-xs-offset-6 col-xs-6 col-sm-offset-8 col-sm-4">
                           <a type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#mdlRegistro" onclick="app.agregar()">
@@ -80,11 +53,10 @@ $TITULO_PAGINA = "Gestión de Productos";
                               <table class="table table-striped table-bordered table-hover dataTable dt-responsive"  cellspacing="0" width="100%">
                                   <thead>
                                     <tr>
-                                      <th width="120px">Acción</th>
-                                      <th width="64px">Imagen</th>
+                                      <th width="80px">Acción</th>
+                                      <th width="120px">C.Barras</th>
                                       <th>Nombre</th>
                                       <th width="150px">Marca</th>
-                                      <th width="130px">Unidad Medida</th>
                                       <th width="130px">Precio Venta</th>
                                       <th width="150px">Categoría</th>
                                     </tr>
@@ -100,10 +72,9 @@ $TITULO_PAGINA = "Gestión de Productos";
                                                 <i class="fa fa-trash bigger-130"></i>
                                                 </button>
                                             </td>
-                                            <td class="text-center"><img style="width:64px;" src="{{img_url}}"/></td>
+                                            <td class="text-center">{{codigo_generado}}</td>
                                             <td>{{empresa_especial}} - {{producto}}</td>
                                             <td>{{marca}}</td>
-                                            <td>{{unidad_medida}}</td>
                                             <td>S/ {{precio_unitario}}</td>
                                             <td>{{categoria}}</td>
                                          </tr>
@@ -123,7 +94,7 @@ $TITULO_PAGINA = "Gestión de Productos";
             </div><!-- /.main-content -->
 
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
 
@@ -295,7 +266,7 @@ $TITULO_PAGINA = "Gestión de Productos";
         </div>
 
         <?php  include '_js/main.js.php';?>
-        <script src="js/producto.vista.js?<?php echo time();?>"></script>
+        <script src="js/producto.vista.js"></script>
     </body>
 
 </html>

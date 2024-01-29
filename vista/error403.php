@@ -17,29 +17,27 @@ $TITULO_PAGINA = "Error 403";
     </head>
     <body class="no-skin">
         <div class="loader">
-    <div>            
-        <i class="ace-icon fa fa-spinner fa-spin bigger-225"></i>
-    </div>
-</div>
-              <div id="navbar" class="navbar navbar-default ace-save-state">
-                  <div class="navbar-container ace-save-state" id="navbar-container">
-                              <div class="navbar-header pull-left">
-                                  <a href="#" class="navbar-brand">
-                                      <small>
-                                          <i class="fa fa-fire"></i>
-                                          <?php echo NOMBRE_EMPRESA; ?> - <?php echo SW_NOMBRE_COMPLETO; ?> 
-                                      </small>
-                                  </a>
-                              </div>
-                    </div><!-- /.navbar-container -->
-              </div>
-
+            <div>            
+                <i class="ace-icon fa fa-spinner fa-spin bigger-225"></i>
+            </div>
+        </div>
+        <div id="navbar" class="navbar navbar-default ace-save-state">
+            <div class="navbar-container ace-save-state" id="navbar-container">
+                  <div class="navbar-header pull-left">
+                      <a href="#" class="navbar-brand">
+                          <small>
+                              <i class="fa fa-fire"></i>
+                              <?php echo NOMBRE_EMPRESA; ?> - <?php echo SW_NOMBRE_COMPLETO; ?> 
+                          </small>
+                      </a>
+                  </div>
+              </div><!-- /.navbar-container -->
+        </div>
 
         <div class="main-container ace-save-state" id="main-container">
             <script type="text/javascript">
                 try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-
             <div class="main-content">
               <div class="main-content-inner">
 
@@ -97,10 +95,8 @@ $TITULO_PAGINA = "Error 403";
               </div>
             </div><!-- /.main-content -->
 
-           <?php include 'footer.php'; ?>
-
+           <?php include './partials/_globals/footer.php'; ?>
         </div><!-- /.main-container -->
-
         <?php  include '_js/main.js.php';?>
         <script type="text/javascript">
             localStorage.removeItem(SESSION_NAME);

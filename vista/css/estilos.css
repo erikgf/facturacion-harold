@@ -1,3 +1,7 @@
+.chosen-container-single .chosen-search:after {
+    content: "" !important;
+}
+
 #sidebar.menu-min >  #sidebar-shortcuts > .menu-principal-label{
 	visibility: hidden;
 }

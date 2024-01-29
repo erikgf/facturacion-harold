@@ -12,35 +12,30 @@ $TITULO_PAGINA = "Gestionar Pagos Ventas";
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php  include '_css/main.css.php'; 
-
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-
-          ?>
+          <?php  include '_css/main.css.php'; ?>
+           
+          <style type="text/css">
+              .detalle-rotulo{
+                  font-size: 1.5em;
+                  text-align: center;
+              }
+          </style>
 
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+             <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.transacciones.php' ?>
+                <?php include './partials/_globals/breadcrumb.transacciones.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -75,14 +70,7 @@ $TITULO_PAGINA = "Gestionar Pagos Ventas";
                 </div><!-- /.page-content -->
               </div>
             </div><!-- /.main-content -->
-          
-            <style type="text/css">
-                .detalle-rotulo{
-                   font-size: 1.5em;
-                   text-align: center;
-                }
-            </style>
-
+         
             <div id="mdlDetalleVenta" class="modal fade" tabindex="-1" style="display: none;">
               <div class="modal-dialog modal-lg">
                   <div class="modal-content">
@@ -198,7 +186,7 @@ $TITULO_PAGINA = "Gestionar Pagos Ventas";
               </div>
             </div>
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
 
@@ -210,19 +198,11 @@ $TITULO_PAGINA = "Gestionar Pagos Ventas";
         </script>
             
 
-        <?php  
-
-          include '_js/main.js.php';
-          if (MODO_PRODUCCION == "1"){
-              echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>';
-            } else {
-              echo '<script src="../assets/js/chosen.jquery.min.js"></script>';
-            }
-        ?>
+       <?php include '_js/main.js.php'; ?>
        <script type="text/javascript">
           var ___ad = '<?php echo $_SESSION["usuario"]["cod_rol"] == "1";?>';
        </script>
-       <script src="js/pagos.ventas.vista.js<?php echo '?'.time();?>"></script>
+       <script src="js/pagos.ventas.vista.js"></script>
     </body>
 
 </html>

@@ -1,101 +1,117 @@
-var app = {},
-  _CLASE = "Almacen",
-  DT = null;
+const ReporteMasVendido = function(){
+  this.init = function(){
+    this._DT = null;
 
-app.init = function(){
-  this.setDOM();
-  this.setEventos();
-  this.setTemplate();
-
-  app.cargarDatos();
- // app.listar();
-};
-
-app.setDOM = function(){
-  var DOM = {};
-
-  DOM.listado = $("#listado");
-
-  DOM.btnBuscar = $("#btnbuscar");
-  DOM.btnExcel = $("#btnexcel");
-
-  DOM.cboSucursal = $("#cbosucursal");
-  DOM.cboProducto = $("#cboproducto");
-
-  this.DOM = DOM;
-};
-
-app.setEventos  = function(){
-  var self = this,
-      DOM  = self.DOM;
-
-  DOM.btnBuscar.on("click", function(e){
-    e.preventDefault();
-    self.listar();
-  });
-
-  DOM.btnExcel.on("click", function(e){
-     var DOM = self.DOM,
-        str = "../controlador/reporte.xls.kardex.php?"+
-                    "p_pr="+DOM.cboProducto.val()+"&"+
-                    "p_su="+DOM.cboSucursal.val();
-        window.open(str,'_blank'); 
-  });
-};
-
-app.setTemplate = function(){
-  var tpl8 = {};
-  tpl8.listado = Handlebars.compile($("#tpl8Listado").html());
-  tpl8.productos = Handlebars.compile($("#tpl8Producto").html());
-  tpl8.sucursales = Handlebars.compile($("#tpl8Sucursal").html());
-  this.tpl8 = tpl8;
-};
-
-app.cargarDatos = function(){
-  var DOM = this.DOM,
-      tpl8 = this.tpl8,
-      fn = function(xhr){
-        var datos = xhr.datos;
-        if (datos.rpt){
-          DOM.cboSucursal.html(tpl8.sucursales(datos.data.sucursales));
-          DOM.cboProducto.html(tpl8.productos(datos.data.lista_productos));
-          //DOM.cboCliente.html(tpl8.clientes(datos.data.clientes)).chosen();
-        }
-      };
-
-  new Ajxur.Api({
-    modelo: "Almacen",
-    metodo: "obtenerDataReporteKardex"
-  },fn);
-};
-
-app.listar = function(){
-  var DOM = this.DOM,
-      tpl8 = this.tpl8;
-  var fn = function (xhr){
-    var datos = xhr.datos;
-      if (datos.rpt) {
-        if (DT) { DT.fnDestroy(); DT = null; }
-        DOM.listado.html(tpl8.listado(datos.data));
-        DT = DOM.listado.find("table").dataTable({
-          "aaSorting": [[0, "asc"]],
-          "pageLength": 25
-        });
-
-      }else{
-        swal("Error", datos.msj, "error");
-      }
+    this.setTemplate();
+    this.setDOM();
+    this.setEventos();
+  
+    this.obtenerData();
+  };
+  
+  this.setDOM = function(){
+    this._DOM = {
+      tblLista : $("#tbllista"),
+      cboProducto : $("#cboproducto"),
+      btnBuscar : $("#btnbuscar"),
+      cboSucursal : $("#cbosucursal")
+    };
   };
 
-  new Ajxur.Api({
-    modelo: "Almacen",
-    metodo: "reporteKardex",
-    data_out: [DOM.cboSucursal.val(), DOM.cboProducto.val()]
-  },fn);
+  this.setTemplate = function(){
+    this._tpl8 = {
+      listado : Handlebars.compile($("#tpl8Listado").html()),
+      sucursales : Handlebars.compile($("#tpl8Sucursal").html()),
+      productos : Handlebars.compile($("#tpl8Producto").html()),
+    };
+  };
+
+  this.setEventos  = function(){
+    const DOM = this._DOM;
+  
+    DOM.btnBuscar.on("click", (e) =>{
+      e.preventDefault();
+      this.obtenerKardex();
+    });
+
+  };
+  
+  this.obtenerData = function(){
+    obtenerSucursales();
+    obtenerProductos();
+  };
+
+  const obtenerSucursales = async () => {
+    try {
+        const { data } = await apiAxios.get('sucursales');
+        this._DOM.cboSucursal.html(this._tpl8.sucursales(data));
+    } catch (error) {
+        swal("Error",  "Error al obtener las sucursales.", "error");
+        console.error(error);
+    }
+  };
+
+  const obtenerProductos = async () => {
+    try {
+        const { data } = await apiAxios.get('productos');
+        this._DOM.cboProducto.html(this._tpl8.productos(data)).chosen();
+    } catch (error) {
+        swal("Error",  "Error al obtener los productos.", "error");
+        console.error(error);
+    }
+  };
+
+  this.obtenerKardex = async function(){
+    const DOM = this._DOM;
+
+    try {
+      const sentData = {
+        producto : DOM.cboProducto.val() ?? "",
+        sucursal : DOM.cboSucursal.val() ?? "",
+      };
+
+      const paramsData = new URLSearchParams(sentData);
+      const { data } = await apiAxios.get(`almacen-reportes/kardex?${paramsData.toString()}`);
+
+      this.renderLista(data);
+    } catch (error) {
+        swal("Error", "Ha ocurrido un problema con la consulta.", "error");
+        console.error(error);
+    }
+  };
+
+  this.renderLista = function(data){
+    if (this._DT) {this._DT.destroy(); this._DT = null;}
+    this._DOM.tblLista.find("tbody").html(this._tpl8.listado(data));
+    this._DT = this._DOM.tblLista.DataTable({
+        //aaSorting: [[0, "desc"]],
+        pageLength: 30,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+              extend: 'copy',
+              className: "btn btn-primary",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+            {
+              extend: 'excel',
+              className: "btn btn-success",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+        ],
+        responsive: true
+    });
+  };
+
+  return this.init();
 };
 
 $(document).ready(function(){
   new AccesoAuxiliar(()=>{
-    app.init();
+    objReporteMasVendido = new ReporteMasVendido();
   });
 });

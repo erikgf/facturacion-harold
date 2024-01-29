@@ -1,110 +1,130 @@
-var app = {},
-  _CLASE = "Venta",
-  DT = null;
+const ReporteMasVendido = function(){
+  this.init = function(){
+    this._DT = null;
 
-app.init = function(){
-  this.setDOM();
-  this.setEventos();
-  this.setTemplate();
-
-  app.cargarDatos();
- // app.listar();
-};
-
-app.setDOM = function(){
-  var DOM = {};
-
-  DOM.listado = $("#listado");
-  DOM.resumen = $("#resumen");
-
-  DOM.txtFechaDesde = $("#txtfechadesde");
-  DOM.txtFechaHasta = $("#txtfechahasta");
-  DOM.chkTodos = $("#chktodos");
-  DOM.btnBuscar = $("#btnbuscar");
-  DOM.btnExcel = $("#btnexcel");
-
-  DOM.cboSucursal = $("#cbosucursal");
-
-  this.DOM = DOM;
-};
-
-app.setEventos  = function(){
-  var self = this,
-      DOM  = self.DOM;
-
-  DOM.chkTodos.on("change", function(e){
-    var chked = this.checked;
-    DOM.txtFechaDesde.prop("disabled", chked);
-    DOM.txtFechaHasta.prop("disabled", chked);
-  });
-
-  DOM.btnBuscar.on("click", function(e){
-    e.preventDefault();
-    self.listar();
-  });
-
-  DOM.btnExcel.on("click", function(e){
-     var DOM = self.DOM,
-        str = "../controlador/reporte.xls.mas.vendido.php?"+
-                    "p_tipo="+DOM.chkTodos[0].checked+"&"+
-                    "p_f0="+DOM.txtFechaDesde.val()+"&"+
-                    "p_f1="+DOM.txtFechaHasta.val()+"&"+
-                    "p_su="+DOM.cboSucursal.val();
-        window.open(str,'_blank'); 
-  });
-};
-
-app.setTemplate = function(){
-  var tpl8 = {};
-  tpl8.listado = Handlebars.compile($("#tpl8Listado").html());
-  tpl8.sucursales = Handlebars.compile($("#tpl8Sucursal").html());
-
-  this.tpl8 = tpl8;
-};
-
-app.cargarDatos = function(){
-  var DOM = this.DOM,
-      tpl8 = this.tpl8,
-      fn = function(xhr){
-        var datos = xhr.datos;
-        if (datos.rpt){
-          DOM.cboSucursal.html(tpl8.sucursales(datos.data.sucursales));
-        }
-      };
-
-  new Ajxur.Api({
-    modelo: _CLASE,
-    metodo: "obtenerDataReporteMasVendido"
-  },fn);
-};
-
-app.listar = function(){
-  var DOM = this.DOM,
-      tpl8 = this.tpl8;
-  var fn = function (xhr){
-    var datos = xhr.datos;
-      if (datos.rpt) {
-        if (DT) { DT.fnDestroy(); DT = null; }
-        DOM.listado.html(tpl8.listado(datos.data));
-        DT = DOM.listado.find("table").dataTable({
-          "aaSorting": [[0, "asc"]]
-        });
-
-      }else{
-        swal("Error", datos.msj, "error");
-      }
+    this.setTemplate();
+    this.setDOM();
+    this.setEventos();
+  
+    this.obtenerData();
+  };
+  
+  this.setDOM = function(){
+    this._DOM = {
+      tblLista : $("#tbllista"),
+      txtFechaDesde : $("#txtfechadesde"),
+      txtFechaHasta : $("#txtfechahasta"),
+      chkTodos : $("#chktodos"),
+      btnBuscar : $("#btnbuscar"),
+      cboSucursal : $("#cbosucursal")
+    };
   };
 
-  new Ajxur.Api({
-    modelo: _CLASE,
-    metodo: "reporteMasVendido",
-    data_out: [DOM.txtFechaDesde.val(), DOM.txtFechaHasta.val(), DOM.chkTodos[0].checked, DOM.cboSucursal.val()]
-  },fn);
+  this.setTemplate = function(){
+    this._tpl8 = {
+      listado : Handlebars.compile($("#tpl8Listado").html()),
+      sucursales : Handlebars.compile($("#tpl8Sucursal").html()),
+    };
+  };
+
+  this.setEventos  = function(){
+    const DOM = this._DOM;
+  
+    DOM.chkTodos.on("change", (e) => {
+      const checked = e.currentTarget.checked;
+      DOM.txtFechaDesde.prop("disabled", checked);
+      DOM.txtFechaHasta.prop("disabled", checked);
+    });
+  
+    DOM.btnBuscar.on("click", (e) =>{
+      e.preventDefault();
+      this.obtenerMasVendidos();
+    });
+
+  };
+  
+  this.obtenerData = function(){
+    obtenerSucursales();
+  };
+
+  const obtenerSucursales = async () => {
+    try {
+        const { data } = await apiAxios.get('sucursales');
+        this._DOM.cboSucursal.html(this._tpl8.sucursales(data));
+    } catch (error) {
+        swal("Error",  "Error al obtener las sucursales.", "error");
+        console.error(error);
+    }
+  };
+
+  this.obtenerMasVendidos = async function(){
+    const DOM = this._DOM;
+
+    try {
+      const sentData = {
+        todos : DOM.chkTodos[0].checked ? 1 : 0,
+        sucursal : DOM.cboSucursal.val() ?? "",
+        fecha_desde: DOM.txtFechaDesde.val(), 
+        fecha_hasta: DOM.txtFechaHasta.val()
+      };
+      const paramsData = new URLSearchParams(sentData);
+      const { data } = await apiAxios.get(`ventas-reportes/mas-vendido?${paramsData.toString()}`);
+
+      this.renderLista(data);
+    } catch (error) {
+        swal("Error", "Ha ocurrido un problema con la consulta.", "error");
+        console.error(error);
+    }
+  };
+
+  this.renderLista = function(data){
+    if (this._DT) {this._DT.destroy(); this._DT = null;}
+    this._DOM.tblLista.find("tbody").html(this._tpl8.listado(data));
+    this._DT = this._DOM.tblLista.DataTable({
+        aaSorting: [[0, "desc"]],
+        pageLength: 30,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+              extend: 'copy',
+              className: "btn btn-primary",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+            {
+              extend: 'csv',
+              className: "btn btn-secondary",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+            {
+              extend: 'pdf',
+              className: "btn btn-danger",
+              exportOptions: {
+                columns: ':not(.notexport,.notexportpdf)'
+              }
+            },
+            {
+              extend: 'excel',
+              className: "btn btn-success",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+        ],
+        responsive: true
+    });
+  };
+
+  return this.init();
 };
 
 $(document).ready(function(){
   new AccesoAuxiliar(()=>{
-    app.init();
+    objReporteMasVendido = new ReporteMasVendido();
   });
 });
+  
 

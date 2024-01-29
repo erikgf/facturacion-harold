@@ -1,7 +1,0 @@
-[10-Apr-2019 03:33:15 UTC] PHP Notice:  Undefined index: documento in /home/jupase57/public_html/vista/template/sc/index.php on line 7
-[10-Apr-2019 03:53:22 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116
-[10-Apr-2019 03:54:42 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116
-[10-Apr-2019 04:13:27 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116
-[10-Apr-2019 04:15:16 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116
-[10-Apr-2019 04:16:01 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116
-[10-Apr-2019 04:16:07 UTC] PHP Notice:  Undefined variable: rtn in /home/jupase57/public_html/vista/template/sc/src/sunat.php on line 116

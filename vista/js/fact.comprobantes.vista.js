@@ -154,7 +154,24 @@ app.renderLista = function(data){
   DOM.listadoBody.html(app.tpl8.listado(data.map(mapEstadoGenerado)));
   DT = DOM.listado.find("table").DataTable({
     "aaSorting": [[0, "asc"]],
-    responsive: true
+    responsive: true,
+    dom: 'Bfrtip',
+        buttons: [
+            {
+              extend: 'csv',
+              className: "btn btn-secondary",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+            {
+              extend: 'excel',
+              className: "btn btn-success",
+              exportOptions: {
+                columns: ':not(.notexport)'
+              }
+            },
+        ],
   });
 };
 

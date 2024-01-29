@@ -15,55 +15,27 @@ $TITULO_PAGINA = "Gestión Marca";
           <?php  include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+            <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.mantenimiento.php' ?>
+                <?php include './partials/_globals/breadcrumb.mantenimiento.php' ?>
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
-                      <?php echo $TITULO_PAGINA; ?>
-                      <!--
-                      <small>
-                        <i class="ace-icon fa fa-angle-double-right"></i>
-                        Gestión y mantenimiento
-                      </small>
-                      -->
-                    </h1>
+                      <?php echo $TITULO_PAGINA; ?></h1>
                   </div><!-- /.page-header -->
 
                   <div class="row">
                     <div class="col-sm-12">
-                      <!-- PAGE CONTENT BEGINS -->
-                      <!-- USARE ESTE ALERT PARA DESPUES
-                      <div class="alert alert-block alert-success">
-                        <button type="button" class="close" data-dismiss="alert">
-                          <i class="ace-icon fa fa-times"></i>
-                        </button>
-
-                        <i class="ace-icon fa fa-check green"></i>
-
-                        Welcome to
-                        <strong class="green">
-                          Ace
-                          <small>(v1.4)</small>
-                        </strong>, лёгкий, многофункциональный и простой в использовании шаблон для админки на bootstrap 3.3.6. Загрузить исходники с <a href="https://github.com/bopoda/ace">github</a> (with minified ace js/css files).
-                      </div>
-                     -->
-
                       <div class="row">
                         <div class="col-xs-offset-9 col-xs-3">
                           <a type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#mdlRegistro" onclick="app.agregar()">
@@ -113,7 +85,7 @@ $TITULO_PAGINA = "Gestión Marca";
             </div><!-- /.main-content -->
 
 
-            <?php include 'footer.php'; ?>
+            <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
 

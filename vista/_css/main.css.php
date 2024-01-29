@@ -6,11 +6,17 @@
 -->
   <!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" /> -->
 <?php 
-      include 'bootstrap.css.php';
-      include 'font-awesome.css.php';
-      include 'ace.css.php';
-      include 'dataTable.css.php'; 
-    ?>
+    include 'bootstrap.css.php';
+    include 'font-awesome.css.php';
+    include 'ace.css.php';
+    include 'dataTable.css.php'; 
+
+    if (MODO_PRODUCCION == "1"){
+      echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
+    } else {
+      echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
+    }
+?>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,22 +31,7 @@
         font-family: 'Roboto' !important;
       }
     </style>
-<!--
-    <style>
-      @font-face {
-        font-family: SmartKid;
-        src: url(../assets/fonts/Smart-Kids-Demo-BF64810cec9e5b1.ttf);
-      }
-
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'SmartKid' !important;
-      }
-
-      body {
-        font-family: 'SmartKid' !important;
-      }
-    </style>
--->
+    
     <link rel="stylesheet" href="../assets/alert/dist/sweetalert.css">
     <link rel="stylesheet" type="text/css" href="css/estilos.css">
         <!--

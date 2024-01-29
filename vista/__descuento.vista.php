@@ -18,10 +18,6 @@ $TITULO_PAGINA = "Gestión de Descuentos";
         <?php include 'navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
              <?php include 'menu.php'; ?>
 
             <div class="main-content">
@@ -185,7 +181,7 @@ $TITULO_PAGINA = "Gestión de Descuentos";
         </div>
 
         <?php  include '_js/main.js.php';?>
-        <script src="js/descuento.vista.js<?php echo '?'.time();?>" type="text/javascript"></script>
+        <script src="js/descuento.vista.js" type="text/javascript"></script>
     </body>
 
 </html>

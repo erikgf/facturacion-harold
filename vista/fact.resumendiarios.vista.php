@@ -16,37 +16,30 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-          <?php
-            if (MODO_PRODUCCION == "1"){
-              echo '<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">';
-            } else {
-              echo '<link rel="stylesheet" href="../assets/css/chosen.min.css" />';
-            }
-            include '_css/main.css.php'; 
-          ?>
+          <?php include '_css/main.css.php';  ?>
           <style>
             .table-responsive{
               max-height: 350px;
             }
+            .detalle-rotulo{
+              font-size: 1.5em;
+              text-align: center;
+            }
           </style>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+        <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
-             <script type="text/javascript">
-                try{ace.settings.loadState('main-container')}catch(e){}
-             </script>
-
-             <?php include 'menu.php'; ?>
+             <?php include './partials/_globals/menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
 
-                <?php include 'breadcrumb.reportes.php' ?>
+                <?php include './partials/_globals/breadcrumb.facturacion.php' ?>
 
                 <div class="page-content">
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -335,18 +328,11 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
               </div><!-- /main-content-inner -->
             </div><!-- /.main-content -->
 
-            <style type="text/css">
-                .detalle-rotulo{
-                   font-size: 1.5em;
-                   text-align: center;
-                }
-            </style>
 
-            <?php include 'footer.php'; ?>
+          <?php include './partials/_globals/footer.php'; ?>
         </div><!-- /.main-container -->
 
         <?php  include '_js/main.js.php'; ?>
-        <script src="../assets/js/chosen.jquery.min.js"></script>
         <script src="js/fact.resumendiarios.vista.js" type="text/javascript"></script>
     </body>
 
