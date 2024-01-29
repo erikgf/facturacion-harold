@@ -432,9 +432,9 @@ const RegistrarCompras = function($contenedor, _tpl8){
         bloqueTarjetas[(tipoPago == "T") ? "show" : "hide"]();
     };
   
-    const buscarProducto  = function($tr){
+    const buscarProducto  = ($tr) => {
       _TR_BUSCAR = $tr;
-      self.mdlBuscarProducto.modal("show");
+      this.DOM.mdlBuscarProducto.modal("show");
     };
   
     var seleccionarProductoBuscar = function(itemProducto){
@@ -667,8 +667,6 @@ const RegistrarCompras = function($contenedor, _tpl8){
                   $("#lblrotuloedicion").empty();
                   COD_COMPRA_EDITAR = null;
   
-                  console.log({d: this.DOM});
-                  
                   this.DOM.btnCancelarEdicion.hide();
                   this.DOM.cboSucursal.attr("disabled", false);
                   limpiarCompra();
