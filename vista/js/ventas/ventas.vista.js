@@ -272,7 +272,7 @@ app.calcularComisionista = function(totalDetalle, tipoComision, valorComision) {
 $(document).ready(function(){
   Handlebars.registerHelper("calcularComisionista", app.calcularComisionista);
   new AccesoAuxiliar(()=>{
-    window.___ad = USUARIO?.idRol === 1;
+    window.___ad = USUARIO?.idRol == 1;
     app.init();
   });
 });
