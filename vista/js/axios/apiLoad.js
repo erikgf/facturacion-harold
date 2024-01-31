@@ -1,7 +1,7 @@
 const apiAxios = axios.create({
     baseURL: __URL_API,
     crossDomain: true,
-    timeout: 5000,
+    timeout: 10000,
     headers: {
       'Authorization': `Bearer ${JSON.parse(localStorage.getItem(SESSION_NAME))?.token}`,
       'Accept': 'application/json',
@@ -13,7 +13,7 @@ const apiAxios = axios.create({
   const apiAxiosPublic = axios.create({
     baseURL: __URL_API,
     crossDomain: true,
-    timeout: 5000,
+    timeout: 10000,
     headers: {
       'Accept': 'application/json',
       "Content-Type": "application/json",

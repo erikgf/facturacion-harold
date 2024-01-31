@@ -114,7 +114,7 @@ $TITULO_PAGINA = "Gestión de Productos";
                                 <div class="form-group">
                                     <label class="control-label">Empresa Esp.: (*) </label>
                                     <select name="cboempresaespecial" id="cboempresaespecial" class="form-control" required="">
-                                      <option value="ANK" selected>ANK</option>
+                                      <option value="ABK" selected>ABK</option>
                                       <option value="MJS">MJS</option>
                                     </select>
                                 </div>

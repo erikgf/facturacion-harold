@@ -206,7 +206,7 @@ app.generarSUNAT = async function(btn, idComprobante, nombre_comprobante){
   mostrarAlert("Generando y enviando comprobante: "+nombre_comprobante+"....", "w",nombre_comprobante);
 
   try {
-    const response = await apiAxios.get(`comprobantes/generar-firmar-xml/${idComprobante}`);
+    const response = await apiAxios.post(`comprobantes/generar-firmar-xml/${idComprobante}`);
     const { data } = response;
 
     alertsW[nombre_comprobante].remove();
@@ -253,7 +253,6 @@ app.generarSUNAT = async function(btn, idComprobante, nombre_comprobante){
       if (response?.data?.message){
         mostrarAlert(`${nombre_comprobante} - ${response?.data?.message}`, "e");
       }
-
       console.error(error);
   }
 };
@@ -318,13 +317,65 @@ app.generarEnviarSUNAT = function(codTransaccion, nombre_comprobante, enviandoDe
 };
 
 app.descargarXML = function(xml_filename){
-    const dataurl = xml_filename+".xml";
-    const filename = xml_filename.split("/").pop()+".xml";
+    const dataurl = xml_filename;
+    const filename = xml_filename.split("/").pop();
     const link = document.createElement("a");
     link.href = dataurl;
+    link.target = "_blank";
     link.download = filename;
     link.click();
 };
+
+app.enviarSUNAT = async function(btn, idComprobante, nombre_comprobante){
+  if (idComprobante == null || idComprobante == ""){
+    return;
+  }
+
+  mostrarAlert("Enviando comprobante: "+nombre_comprobante+"....", "w",nombre_comprobante);
+
+  try {
+
+    const response = await apiAxios.post(`comprobantes/enviar/${idComprobante}`);
+    const { data } = response;
+    
+    if (!Array.isArray(data)){
+      mostrarAlert(`${nombre_comprobante} - ${data?.mensaje}.`, "e");
+      throw data?.mensaje;
+    }
+
+    mostrarAlert(`${nombre_comprobante} - Envío correcto.`, "s");
+
+    const $btn = $(btn);
+    const $tr = $btn.parents('tr');
+    const [item] = data;
+
+    let $htmlEstado = "";
+
+    if (item.cod_sunat == 0){
+      $htmlEstado = `<span class="label label-success">Enviado y Aceptado</span>
+                      <br> <small>${item.mensaje}</small>`
+    } else {
+      $htmlEstado = `<span class="label label-danger">Rechazado</span>
+                      <br> <small>${item.mensaje}</small>`
+    }
+
+    $tr.find(".btn-generar-xml").remove();
+    $tr.find(".td-estado").html($htmlEstado);
+    $btn.remove();
+
+  } catch (error) {
+      const { response } = error;
+      if (response?.data?.message){
+        mostrarAlert(`${nombre_comprobante} - ${response?.data?.message}`, "e");
+      }
+      console.error(error);
+  } finally {
+    alertsW[nombre_comprobante].remove();
+    alertsW[nombre_comprobante] = null;
+    delete alertsW[nombre_comprobante];
+  }
+};
+
 
 app.verComprobante = function(idComprobante){
   const sentData = {

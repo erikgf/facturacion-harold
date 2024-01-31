@@ -152,14 +152,9 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
 
                                                         <ul data-id="{{id}}" class="dropdown-menu dropdown-inverse">
                                                           {{#if_ enviar_a_sunat '==' '0'}} 
-                                                          <li>
+                                                          <li class="btn-generar-xml">
                                                             <a href="#" onclick="app.generarSUNAT(this, {{id}},'{{comprobante}}')">Generar XML</a>
-                                                          </li>       
-                                                          <!--
-                                                          <li>
-                                                            <a href="#" onclick="app.generarEnviarSUNAT({{id}},'{{comprobante}}')">Genera XML y Enviar SUNAT</a>
                                                           </li>      
-                                                          -->
                                                           {{/if_}}
                                                           <li>
                                                             <a href="#" onclick="app.verComprobante({{id}})">Ver comprobante</a>
@@ -168,6 +163,11 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
                                                           <li>
                                                             <a href="#" onclick="app.descargarXML('{{xml_filename}}')">Descargar XML</a>
                                                           </li>
+                                                            {{#if_ enviar_a_sunat '==' '0'}} 
+                                                            <li>
+                                                              <a href="#" onclick="app.enviarSUNAT(this, {{id}},'{{comprobante}}')"><b class="text-success">Enviar SUNAT<b></a>
+                                                            </li>
+                                                            {{/if_}}
                                                           {{/if_}}
                                                         </ul>
                                                       </div>
@@ -184,7 +184,7 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
                                                         {{estado_generado.rotulo}}
                                                       </span>
                                                     </td>
-                                                    <td class="text-center">
+                                                    <td class="text-center td-estado">
                                                       {{#if_ enviar_a_sunat '==' '0'}}
                                                         <span class="label">
                                                           No Enviado
@@ -194,12 +194,13 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
                                                           <span class="label label-success">
                                                             Enviado y Aceptado
                                                           </span>
-                                                          {{#fecha_envio_sunat}}<br> <small>Fecha: {{this}}</small>{{/fecha_envio_sunat}} 
+                                                          {{#cdr_descripcion}}<br> <small>{{this}}</small>{{/cdr_descripcion}} 
                                                         {{/if_}}
                                                         {{#if_ cdr_estado '!=' '0'}}
                                                           <span class="label label-danger">
                                                             Rechazado
                                                           </span>
+                                                          {{#cdr_descripcion}}<br> <small>{{this}}</small>{{/cdr_descripcion}} 
                                                         {{/if_}}
                                                       {{/if_}}
                                                     </td>
