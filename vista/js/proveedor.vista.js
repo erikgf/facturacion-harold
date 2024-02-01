@@ -156,7 +156,7 @@ app.eliminar = function(cod){
 };
 
 app.grabar = async function(){
-
+  const DOM = this.DOM;
   try {
 
     const sentData = {
