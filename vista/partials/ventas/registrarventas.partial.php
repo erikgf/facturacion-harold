@@ -203,7 +203,7 @@
 								<button  id="btnagregarproducto"  type="button"  class="btn btn-xs"><span class="fa fa-plus"></span> Agregar Producto</button>
 								<span class="input-icon">
 									<input type="text"  value="" placeholder="Lectora de Barras" id="txtlectora" />
-									<i class="ace-icon fa fa-barcode blue"></i>
+									<i class="ace-icon fa fa-barcode blue" style="line-height: 2.5"></i>
 								</span>
 							</td>
 							<td class="text-right" colspan="4">SUBTOTAL</td>

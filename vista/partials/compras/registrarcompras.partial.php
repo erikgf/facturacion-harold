@@ -156,9 +156,9 @@
 						<tr>
 							<td  colspan="2">
 								<button  id="btnagregarproducto"  type="button"  class="btn btn-xs"><span class="fa fa-plus"></span> Agregar Producto</button>
-								<span class="input-icon">
+								<span class="input-icon hide" >
 									<input type="text"  value="" placeholder="Lectora de Barras" id="txtlectora" />
-									<i class="ace-icon fa fa-barcode blue"></i>
+									<i class="ace-icon fa fa-barcode blue" style="line-height: 2.5"></i>
 								</span>
 							</td>
 							<td class="text-right" colspan="4">TOTAL</td>
@@ -236,89 +236,94 @@
 	</div>
 </form>
 
+
 <div id="mdlBuscarProducto" class="modal fade" tabindex="-1" style="display: none;">
 	<div class="modal-dialog modal-lg">
-                      <form id="frmgrabar">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                <h3 class="smaller lighter blue no-margin">Buscar Producto</h3>
-                              </div>
+		<form id="frmgrabar">
+			<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3 class="smaller lighter blue no-margin">Buscar Producto</h3>
+				</div>
 
-                              <div class="modal-body">
-	                                <div class="row">
-	                                    <div class="col-xs-12">
-	                                      <div class="form-group">
-	                                        <label class="control-label">Busque por NOMBRE de producto. Use un CLICK/TAP al producto para agregarlo a la venta.</label>
-	                                        <span class="input-icon" style="width:100%">
-	                                          <i class="ace-icon fa fa-search blue"></i>
-	                                          <input id="txtbuscar" type="search"  class="form-control"placeholder="Buscar..."/>
-	                                        </span>
-	                                      </div>
-	                                    </div>
-	                                    <div class="col-xs-12 col-sm-6 col-md-3">
-					                      <div class="form-group">
-					                        <label class="control-label">Filtrar por Tipo</label>
-					                        <select id="cbofiltrotipo" class="form-control">
-					                          <option value="">Todos</option>
-					                        </select>
-					                      </div>
-					                    </div>
-					                    <div class="col-xs-12 col-sm-6 col-md-3">
-					                      <div class="form-group">
-					                        <label class="control-label">Filtrar por Categoría</label>
-					                        <select id="cbofiltrocategoria" class="form-control">
-					                          <option value="">Todos</option>
-					                        </select>
-					                      </div>
-					                    </div>
-	                                </div>
-	                              <div class="space-6"></div>
-	                                  
-	                              <div class="row">
-					              	<div class="col-xs-12">
-					              		<table class="table">
-					              			<thead>
-					              				<tr>
-					              					<th>Producto</th>
-					              					<th style="width:160px">Marca</th>
-					              					<th style="width:90px">Precio Unit.</th>
-					              					<th style="width:90px">STOCK</th>
-					              				</tr>
-					              			</thead>
-					              			<tbody  id="blklistaproductos">
-					              				<script id="tpl8ListaProducto" type="handlebars-x">
-							                      {{#.}}
-							                      	<tr data-id="{{id}}">
-							                      		<td>{{nombre_producto}}</td>	
-							                      		<td style="width:160px">{{marca}}</td>
-							                      		<td style="width:90px">S/ {{precio_unitario}}</td>
-							                      		<td style="width:90px"><b>{{stock}}</b></td>
-							                      	</tr>
-							                      {{else}}
-							                      	<tr class="tr-null">
-							                      		<td>
-							                      			<div class="alert alert-info">
-								                            	<strong>No hay PRODUCTOS para mostrar.</strong>
-								                          	</div>
-							                      		</td>
-							                      	</tr>	
-							                      {{/.}}
-							                    </script>
-					              			</tbody>
-					              		</table>
-					              	</div>
-					              </div>
-
-                          		</div>
-                              <div class="modal-footer">
-                                <button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-                                  <i class="ace-icon fa fa-times"></i>
-                                  Cerrar
-                                </button>
-                              </div>
-                            </div><!-- /.modal-content -->
-                      </form>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+							<label class="control-label">Busque por NOMBRE de producto. Use un CLICK/TAP al producto para agregarlo a la venta.</label>
+							<span class="input-icon" style="width:100%">
+								<i class="ace-icon fa fa-search blue"></i>
+								<input id="txtbuscar" type="search"  class="form-control"placeholder="Buscar..."/>
+							</span>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<div class="form-group">
+							<label class="control-label">Filtrar por Tipo</label>
+							<select id="cbofiltrotipo" class="form-control">
+								<option value="">Todos</option>
+							</select>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<div class="form-group">
+							<label class="control-label">Filtrar por Categoría</label>
+							<select id="cbofiltrocategoria" class="form-control">
+								<option value="">Todos</option>
+							</select>
+							</div>
+						</div>
+					</div>
+					<div class="space-6"></div>
+						
+					<h5>Seleccionados: <span id="lblSeleccionados">0</span></h5>
+					<div class="row">
+						<div class="col-xs-12" style="max-height: 400px;overflow-x: scroll;">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Producto</th>
+										<th style="width:160px">Marca</th>
+										<th style="width:90px">Precio Unit.</th>
+										<th style="width:90px">STOCK</th>
+									</tr>
+								</thead>
+								<tbody  id="blklistaproductos">
+									<script id="tpl8ListaProducto" type="handlebars-x">
+										{{#.}}
+										<tr data-id="{{id}}" {{#if seleccionado}}class="seleccionado-tr"{{/if}}>
+											<td>{{nombre_producto}}</td>	
+											<td style="width:160px">{{marca}}</td>
+											<td style="width:90px">S/ {{precio_unitario}}</td>
+											<td style="width:90px"><b>{{stock}}</b></td>
+										</tr>
+										{{else}}
+										<tr class="tr-null">
+											<td colspan="4">
+												<div class="alert alert-info">
+													<strong>No hay PRODUCTOS para mostrar.</strong>
+												</div>
+											</td>
+										</tr>	
+										{{/.}}
+									</script>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						CERRAR
+					</button>
+					<button type="button" class="btn btn-sm btn-primary pull-right" id="btnagregarproductos">
+						<i class="ace-icon fa fa-check"></i>
+						AGREGAR PRODUCTOS
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</form>
 	</div>
 </div>
 

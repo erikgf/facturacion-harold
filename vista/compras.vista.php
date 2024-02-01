@@ -1,5 +1,4 @@
 <?php
-
 include '../datos/local_config_web.php';
 $TITULO_PAGINA = "Gestionar Compras";
 ?>
@@ -170,7 +169,7 @@ $TITULO_PAGINA = "Gestionar Compras";
 
       <?php  include '_js/main.js.php';?>
 
-      <script src="js/compras/RegistrarCompras.js"></script>
+      <script src="js/compras/RegistrarCompras.1.js"></script>
       <script src="js/compras/ListarCompras.js"></script>
       <script src="js/compras/compras.vista.js"></script>
     </body>

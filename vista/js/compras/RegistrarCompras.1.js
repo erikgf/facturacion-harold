@@ -32,7 +32,6 @@ const RegistrarCompras = function($contenedor, _tpl8){
       return _data;
     };
   
-  
     this.setDOM = function(){
       var DOM = _Util.preDOM2DOM($contenedor, 
                       [{"frmRegistro": "#frmregistro"},
@@ -64,6 +63,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
                         {"cboTipo":"#cbofiltrotipo"},
                         {"cboCategoria":"#cbofiltrocategoria"},
                         {"blkListaProductos" : "#blklistaproductos"},
+                        {"btnAgregarProductos": "#btnagregarproductos"}
                     ]);  
     
         DOM.radTipoPago = $("input[name=radtipopago]");
@@ -95,13 +95,15 @@ const RegistrarCompras = function($contenedor, _tpl8){
       DOM.radTipoPago.on("change", function(){
         cambiarTarjeta(this.value, DOM.blkTipoTarjeta);
       });
-  
-      DOM.btnAgregarProducto.on("click", function(){
-        agregarFilaDetalle();
+      
+
+      DOM.btnAgregarProducto.on("click", () => {
+        this.prepararAgregarProductos();
+        //agregarFilaDetalle();
       });
   
       DOM.tblDetalle.on("click", "tr .pointer", function(e){
-        buscarProducto(this.parentElement);
+        //buscarProducto(this.parentElement);
       });
   
       DOM.txtBuscar.on("keyup", function(e){
@@ -110,7 +112,8 @@ const RegistrarCompras = function($contenedor, _tpl8){
   
       DOM.cboTipo.on("change", function(e){
         realizarBusquedaProducto(DOM.txtBuscar.val());
-        cargarCategorias(this.value);
+        obtenerCategorias(this.value);
+        //cargarCategorias(this.value);
       });
   
       DOM.cboCategoria.on("change", function(e){
@@ -139,15 +142,9 @@ const RegistrarCompras = function($contenedor, _tpl8){
             this.value = this.dataset.preval;
             return;
           }
+
           modificarCantidadDetalle($tr, this, null);
       });
-
-      DOM.tblDetalle.on("focusout", "tr .cantidad input", () => {
-        const $txtLectora = this.DOM.txtLectora;
-        $txtLectora.focus();
-        $txtLectora.val("");
-      });
-  
   
       DOM.tblDetalle.on("change", "tr .precio input", function(){
         var valor = this.value,
@@ -162,18 +159,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
             this.value = "0.00";
             return;
           }
-          /*
-          var minstock = this.dataset.minstock ? this.dataset.minstock : "";
-  
-          if (minstock != "" && parseInt(valor) > this.dataset.minstock){
-            this.value = this.dataset.preval;
-            return;
-          }
-  
-          if (parseInt(valor) <= 0){
-            this.value = 1;
-          }*/
-  
+
           this.value = parseFloat(this.value).toFixed(2);
   
           modificarCantidadDetalle($tr, null, this);
@@ -194,20 +180,26 @@ const RegistrarCompras = function($contenedor, _tpl8){
       });
   
       DOM.mdlBuscarProducto.on("shown.bs.modal", function(e){
+        /*
         var txtBuscar = DOM.txtBuscar,
             txtBuscarVal = txtBuscar.val();
   
         txtBuscar.focus();
         txtBuscar[0].setSelectionRange(0, txtBuscarVal.length);
         realizarBusquedaProducto(txtBuscarVal);
+        */
       });
   
-      DOM.blkListaProductos.on("click", "tr:not(.tr-null)", function(e){
+      DOM.blkListaProductos.on("click", "tr:not(.tr-null)", (e) => {
+        e.preventDefault();
+        /*
         var itemProducto = self.getProducto(this.dataset.id);
   
         if (itemProducto.i != -1 && _TR_BUSCAR != null){
           seleccionarProductoBuscar(itemProducto);
         }
+        */
+        this._seleccionarProductoBuscar($(e.currentTarget));
       });
   
       DOM.cboSucursal.on("change", function(){
@@ -224,23 +216,34 @@ const RegistrarCompras = function($contenedor, _tpl8){
           agregarProductoUsandoLectora(codigoBarra);
         }
       });
+
+      DOM.btnAgregarProductos.on("click", (e)=> {
+        e.preventDefault();
+        this._agregarProductosAlDetalle();
+      });
     };
   
+    /*
     const cargarCategorias = function(codTipo){
       var DOM = self.DOM;
       if (codTipo == ""){
         DOM.cboCategoria.html(_tpl8.Combo([]));
         return;
       }
-      DOM.cboCategoria.html(_tpl8.Combo(ArrayUtils.conseguirTodos(_data.categoria_productos,"cod_tipo_categoria", codTipo)));  
+      DOM.cboCategoria.html(_tpl8.Combo(ArrayUtils.conseguirTodos(_data.categoria_productos,"id_tipo_categoria", codTipo)));  
     };
+    */
   
     this.getProducto = function(id_producto){
       return _ArrayUtils.conseguirPID(_data.productos, "id", id_producto);
     };
   
     this.setDataProductos = function(_dataProductos){
-      _data.productos = _dataProductos;
+      _data.productos = _dataProductos.map(p => {
+        return {
+          ...p, seleccionado : false
+        };
+      });
     }
   
     this.getProveedor = function(id_proveedor){
@@ -268,6 +271,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
       obtenerProveedores();
       obtenerSucursales();
       obtenerTipoCategorias();
+      //obtenerCategorias();
     };
   
     const obtenerProveedores = async () => {
@@ -305,6 +309,24 @@ const RegistrarCompras = function($contenedor, _tpl8){
   
       } catch (error) {
           swal("Error",  "Error al obtener los tipo de categorías.", "error");
+          console.error(error);
+      }
+    };
+
+    const obtenerCategorias = async ( idTipo ) => {
+      const DOM = this.DOM;
+      try {
+        
+        if (idTipo == ""){
+          DOM.cboCategoria.html(_tpl8.Combo([]));
+          return;
+        }
+        
+        const { data } = await apiAxios.get(`categorias/tipo/${idTipo}`);
+        DOM.cboCategoria.html(_tpl8.Combo(data));  
+  
+      } catch (error) {
+          swal("Error",  "Error al obtener las categorías de productos.", "error");
           console.error(error);
       }
     };
@@ -497,8 +519,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
       return dataFila;
     };
   
-  
-    var realizarBusquedaProducto = function(cadena){
+    const realizarBusquedaProducto = function(cadena){
       var DOM = self.DOM;
       /*
       if (cadena == ""){
@@ -513,19 +534,20 @@ const RegistrarCompras = function($contenedor, _tpl8){
             mayusculas : true,
             exactitud : false
           },
-          { propiedad : "cod_tipo",
+          { propiedad : "id_tipo_categoria",
             valor : DOM.cboTipo.val(),
             mayusculas: false,
             exactitud : true
           },
-          { propiedad : "cod_categoria",
+          { propiedad : "id_categoria",
             valor : DOM.cboCategoria.val(),
             mayusculas: false,
             exactitud : true
           }
         ];
-       
-       DOM.blkListaProductos.html(_tpl8.ListaProducto(_ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda)));
+
+      const productos = _ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda);
+       DOM.blkListaProductos.html(_tpl8.ListaProducto(productos));
       }
     };
   
@@ -947,6 +969,70 @@ const RegistrarCompras = function($contenedor, _tpl8){
     };
   
     this.limpiarCompra = limpiarCompra;
+
+    this.prepararAgregarProductos = () => {
+      _data.productos = _data.productos.map( p => {
+        return {
+          ...p, seleccionado: false
+        }
+      })
+
+      this.DOM.mdlBuscarProducto.modal("show");
+      this.DOM.txtBuscar.val("");
+      this.DOM.txtBuscar.focus();
+      this.DOM.txtBuscar.select();
+
+      realizarBusquedaProducto("");
+    };
+
+    this._seleccionarProductoBuscar = ($tr) =>{
+      const classNameSeleccionado = "seleccionado-tr";
+      const idSeleccionado = $tr.data("id");
+      const estaSeleccionado = $tr.hasClass(classNameSeleccionado);
+      if (estaSeleccionado){
+        $tr.removeClass(classNameSeleccionado);
+      } else {
+        $tr.addClass(classNameSeleccionado);
+      }
+
+      _data.productos = _data.productos.map( p => {
+        if (p.id === idSeleccionado){
+          return {
+            ...p, seleccionado: !estaSeleccionado
+          }
+        }
+        return p;
+      })
+
+      $("#lblSeleccionados").html(_data.productos.filter(p=>p.seleccionado).length);
+    };
+
+    this._agregarProductosAlDetalle = () => {
+      const productosSeleccionados = _data.productos
+                                        .filter(p => p.seleccionado)
+                                        .map( itemProducto => {
+                                          return {
+                                            id_producto: itemProducto.id,
+                                            nombre_producto: itemProducto.nombre_producto,
+                                            precio_unitario: itemProducto.precio_unitario,
+                                            fecha_vencimiento: itemProducto.fecha_vencimiento,
+                                            lote: itemProducto.lote,
+                                            marca : itemProducto.marca,
+                                            cantidad: 1,
+                                            monto_descuento: null,
+                                            tipo_descuento: null,
+                                            cod_descuento: null,
+                                            subtotal: itemProducto.precio_unitario,
+                                            maxstock : itemProducto.stock
+                                          }
+                                        });
+
+      this.DOM.tblDetalle[!_VACIO ? "append" : "html"](_tpl8.tblDetalle(productosSeleccionados));
+      _VACIO = false;
+      modificarTotalGeneral();
+
+      this.DOM.mdlBuscarProducto.modal("hide");
+    };
   
     return this.init();
   };
