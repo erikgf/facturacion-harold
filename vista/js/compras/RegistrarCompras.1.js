@@ -409,7 +409,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
 
     const agregarProductoUsandoLectora = (codigoBarra) => {
       const itemProducto =  _data.productos.find(item => {
-        return item.codigo_generado === codigoBarra;
+        return item.codigo_generado == codigoBarra.toUpperCase();
       });
 
       if (Boolean(itemProducto)){
