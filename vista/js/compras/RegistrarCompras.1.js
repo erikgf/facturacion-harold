@@ -995,6 +995,8 @@ const RegistrarCompras = function($contenedor, _tpl8){
         $tr.addClass(classNameSeleccionado);
       }
 
+      console.log({$tr});
+
       _data.productos = _data.productos.map( p => {
         if (p.id === idSeleccionado){
           return {
@@ -1002,7 +1004,9 @@ const RegistrarCompras = function($contenedor, _tpl8){
           }
         }
         return p;
-      })
+      });
+
+      console.log({d: _data.productos.filter(p=>p.seleccionado).length});
 
       $("#lblSeleccionados").html(_data.productos.filter(p=>p.seleccionado).length);
     };
