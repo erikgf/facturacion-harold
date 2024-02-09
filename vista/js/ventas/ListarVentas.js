@@ -36,7 +36,9 @@ const ListarVentas = function($contenedor, _tpl8){
   
     this.obtenerVentas = async function(){
       const DOM = this.DOM;
+      const objButtonLoader = new ButtonLoading({$: DOM.btnBuscar[0]});
 
+      objButtonLoader.start();
       try {
         const sentData = {
           id_sucursal : DOM.cboSucursal.val() ?? 1,
@@ -47,8 +49,10 @@ const ListarVentas = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`ventas?${paramsData.toString()}`);
         this.listarVentas(data);
       } catch (error) {
-          swal("Error", JSON.stringify(error), "error");
-          console.error(error);
+        swal("Error", JSON.stringify(error), "error");
+        console.error(error);
+      } finally {
+        objButtonLoader.finish();
       }
     };
   

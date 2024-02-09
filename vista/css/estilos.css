@@ -143,13 +143,19 @@ input.ahp-valor{
 }
 
 .img-logo-izq{
-    width: 72px;
-    height: 72px;
-    display: inline !important;
+    width: 48px;
     margin-right: 16px;
     border-radius: 5em;
+    display: inline !important;
 }
 
+.navbar-header.navbar-buttons {
+    margin-top: 10px;
+}
+
+.user-info {
+    max-width: 180px;
+}
 
 @media (min-width: 992px){
     .img-catalogo-res{
@@ -170,13 +176,37 @@ input.ahp-valor{
         height: 156px;
         max-width: 156px;
     }
+
+    .img-logo-izq{
+        margin: auto;
+    }
 }
 
 
+@media (max-width:  768px){
+    .trademark-extra{
+        display: none;
+    }
+
+    .user-info {
+        max-width: 100px;
+    }
+}
+
 @media (max-width:  420px){
-    .img-logo-izq{
-        display: block !important;
-        margin: auto;
+    .navbar-header.navbar-buttons {
+        margin-top: 0px !important;
+    }
+
+    .navbar .navbar-brand {
+        font-size: 18px;
+    }
+
+    #navbar-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
     }
 }
 
@@ -217,7 +247,7 @@ input.ahp-valor{
 }
 
 .navbar-fixed-top+.main-container {
-    padding-top: 90px;
+    padding-top: 60px;
 }
 .no-skin .sidebar-shortcuts {
     background-color: var(--secondary-color);

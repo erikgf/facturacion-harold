@@ -157,7 +157,11 @@ app.eliminar = function(cod){
 
 app.grabar = async function(){
   const DOM = this.DOM;
+  const objButtonLoading = new ButtonLoading({$: DOM.frmGrabar.find("button[type=submit]")[0]});
+
   try {
+
+    objButtonLoading.start();
 
     const sentData = {
       id_tipo_documento : DOM.cboTipoDocumento.val(),
@@ -180,6 +184,8 @@ app.grabar = async function(){
   } catch (error) {
     swal("Error", JSON.stringify(error), "error");
     console.error(error);
+  } finally {
+    objButtonLoading.finish();
   }
 };
 

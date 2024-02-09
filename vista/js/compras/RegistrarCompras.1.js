@@ -546,8 +546,8 @@ const RegistrarCompras = function($contenedor, _tpl8){
           }
         ];
 
-      const productos = _ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda);
-       DOM.blkListaProductos.html(_tpl8.ListaProducto(productos));
+        const productos = _ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda);
+        DOM.blkListaProductos.html(_tpl8.ListaProducto(productos));
       }
     };
   

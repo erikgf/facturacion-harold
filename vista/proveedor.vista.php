@@ -196,7 +196,7 @@ $TITULO_PAGINA = "Gestión de Proveedores";
         </div>
 
         <?php  include '_js/main.js.php'; ?>
-        <script src="js/proveedor.vista.js"></script>
+        <script src="js/proveedor.vista.1.js"></script>
     </body>
 
 </html>

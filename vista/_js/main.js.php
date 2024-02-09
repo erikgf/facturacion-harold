@@ -29,4 +29,8 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="js/axios/apiLoad.js"></script>
 <script src="js/sesion/AccesoAuxiliar.js"></script>
+
 <script src="../assets/Ajxur.js"></script>
+
+<!-- Componentes -->
+<script src="js/components/ButtonLoading.js"></script>

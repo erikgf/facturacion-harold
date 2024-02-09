@@ -217,7 +217,7 @@ $TITULO_PAGINA = "Gestión de Clientes";
         </div>
 
         <?php  include '_js/main.js.php'; ?>
-        <script src="js/cliente.vista.js" type="text/javascript"></script>
+        <script src="js/cliente.vista.1.js" type="text/javascript"></script>
     </body>
 </html>
 

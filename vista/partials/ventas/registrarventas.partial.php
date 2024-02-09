@@ -20,8 +20,8 @@
 					<div class="form-group">
 						<label class="control-label">Comprobante</label>
 						<select class="form-control" id="cbotipocomprobante" required>
-							<option selected value="00">Ticket</option>
-							<option value="03">Boleta</option>
+							<option value="00">Ticket</option>
+							<option selected value="03">Boleta</option>
 							<option value="01">Factura</option>
 						</select>
 					</div>
@@ -66,13 +66,13 @@
 		<div class="col-sm-4 col-xs-12">
 			<div class="form-group">
 				<label class="control-label">Nombre Cliente</label>
-				<input class="form-control" readonly id="txtcliente" placeholder="Nombre cliente" maxlength="300"/>		
+				<input class="form-control" id="txtcliente" placeholder="Nombre cliente" maxlength="300"/>		
 			</div>
 		</div>
 		<div class="col-sm-4 col-xs-12">
 			<div class="form-group">
 				<label class="control-label">Apellidos Cliente</label>
-				<input class="form-control" readonly id="txtapellidos" placeholder="Apellidos cliente" maxlength="300"/>		
+				<input class="form-control" id="txtapellidos" placeholder="Apellidos cliente" maxlength="300"/>		
 			</div>
 		</div>
 	</div>
@@ -80,19 +80,19 @@
 		<div class="col-sm-6">
 			<div class="form-group">
 				<label class="control-label">Dirección</label>
-				<input class="form-control" readonly id="txtdireccion" placeholder="Dirección" maxlength="40"/>
+				<input class="form-control"  id="txtdireccion" placeholder="Dirección" maxlength="40"/>
 			</div>
 		</div>
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label class="control-label">Celular</label>
-				<input class="form-control" readonly id="txtcelular" placeholder="Celular" maxlength="10"/>
+				<input class="form-control"  id="txtcelular" placeholder="Celular" maxlength="10"/>
 			</div>
 		</div>
 		<div class="col-sm-3">
 			<div class="form-group">
 				<label class="control-label">Correo</label>
-				<input class="form-control" readonly id="txtcorreo" placeholder="Correo" maxlength="40"/>
+				<input class="form-control"  id="txtcorreo" placeholder="Correo" maxlength="40"/>
 			</div>
 		</div>
 	</div>
@@ -159,7 +159,7 @@
 						{{#.}}
 							<tr >
 								<td class="text-center"><button class="btn-danger btn-xs btn eliminar"><i class="fa fa-close"></i></button></td>
-								<td class="text-left pointer" data-codproducto="{{cod_producto}}" data-producto="{{cod_producto}}{{fecha_vencimiento}}{{lote}}">
+								<td class="text-left" data-codproducto="{{cod_producto}}" data-producto="{{cod_producto}}{{fecha_vencimiento}}{{lote}}">
 									{{#cod_producto}}
 										<span>{{../nombre_producto}}</span>
 									{{else}}
@@ -331,82 +331,53 @@
 						</div>
 					</div>
 					<div class="space-6"></div>
+					<h5>Seleccionados: <span id="lblSeleccionados">0</span></h5>
 					<div class="row">
-					<div class="col-xs-12">
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Producto</th>
-									<th style="width:160px">Marca</th>
-									<th style="width:120px">Lote</th>
-									<th style="width:90px">Precio Unit.</th>
-									<th style="width:90px">STOCK</th>
-								</tr>
-							</thead>
-							<tbody  id="blklistaproductos">
-								<script id="tpl8ListaProducto" type="handlebars-x">
-									{{#.}}
-									<tr data-id="{{codigo_unico_producto}}" data-stock={{stock}} {{#if_ stock '==' '0'}}style="color:red;"{{/if_}}>
-										<td>{{nombre_producto}}</td>	
-										<td style="width:160px">{{marca}}</td>
-										<td style="width:120px">{{lote}}</td>
-										<td style="width:90px">S/ {{precio_unitario}}</td>
-										<td style="width:90px"><b>{{stock}}</b></td>
+						<div class="col-xs-12" style="max-height: 400px;overflow-x: scroll;">
+							<table class="table tbl-detalle" id="tbldetalle">
+								<thead>
+									<tr>
+										<th>Producto</th>
+										<th style="width:160px">Marca</th>
+										<th style="width:120px">Lote</th>
+										<th style="width:90px">Precio Unit.</th>
+										<th style="width:90px">STOCK</th>
 									</tr>
-									{{else}}
-									<tr class="tr-null">
-										<td>
-											<div class="alert alert-info">
-												<strong>No hay PRODUCTOS para mostrar.</strong>
-											</div>
-										</td>
-									</tr>	
-									{{/.}}
-								</script>
-							</tbody>
-						</table>
+								</thead>
+								<tbody id="blklistaproductos">
+									<script id="tpl8ListaProducto" type="handlebars-x">
+										{{#.}}
+										<tr class="pointer" data-id="{{codigo_unico_producto}}" data-stock={{stock}} {{#if_ stock '==' '0'}}style="color:red;"{{/if_}}>
+											<td>{{nombre_producto}}</td>	
+											<td style="width:160px">{{marca}}</td>
+											<td style="width:120px">{{lote}}</td>
+											<td style="width:90px">S/ {{precio_unitario}}</td>
+											<td style="width:90px"><b>{{stock}}</b></td>
+										</tr>
+										{{else}}
+										<tr class="tr-null">
+											<td>
+												<div class="alert alert-info">
+													<strong>No hay PRODUCTOS para mostrar.</strong>
+												</div>
+											</td>
+										</tr>	
+										{{/.}}
+									</script>
+								</tbody>
+							</table>
+						</div>
 					</div>
-					</div>
-					<!--
-					<div class="row" id="blklistaproductos">
-						<script id="tpl8ListaProducto" type="handlebars-x">
-							{{#.}}
-							{{#if_ stock '>' 0}}
-								<div class="col-xs-12 col-sm-6 col-md-4">
-								<div class="widget-box widget-color-blue">
-									<div class="widget-header text-center">
-									<h6 class="widget-title bigger lighter ">{{nombre_producto}}</h6>
-									</div>
-									<div class="widget-body" data-id="{{cod_producto}}">
-									<div class="widget-main text-center">
-										<img src="../imagenes/productos/{{img_url}}" class="img-catalogo-res" data-holder-rendered="true">
-										<hr>
-										<div class="price">
-										S/ {{precio_unitario}}
-										</div>
-										<div class="stock">
-										Stock: {{stock}}
-										</div>
-									</div>
-									</div>
-								</div>
-								</div>
-								{{/if_}}
-							{{else}}
-								<div class="alert alert-info">
-								<strong>No hay PRODUCTOS para mostrar.</strong>
-								</div>
-							{{/.}}
-						</script>
-					</div>
-					-->
-
 				</div>
 				<div class="modal-footer">
-				<button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-					<i class="ace-icon fa fa-times"></i>
-					Cerrar
-				</button>
+					<button class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
+						<i class="ace-icon fa fa-times"></i>
+						CERRAR
+					</button>
+					<button type="button" class="btn btn-sm btn-primary pull-right" id="btnagregarproductos">
+						<i class="ace-icon fa fa-check"></i>
+						AGREGAR PRODUCTOS
+					</button>
 				</div>
 			</div><!-- /.modal-content -->
 		</form>

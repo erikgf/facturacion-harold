@@ -232,9 +232,14 @@ var Util = {
                     </form>`);
 
     $("body").append($form);
-    $form.submit();
-    $form.remove();  
-  }
+
+    setTimeout(()=>{
+      $form.submit();
+      $form.remove();
+    }, 330);
+    //$form.remove();  
+  },
+  STR_CARGANDO: `<i class="fa fa-spin fa-spinner"></i> <span> CARGANDO...</span>`,
 };
 
 var ArrayUtils = {

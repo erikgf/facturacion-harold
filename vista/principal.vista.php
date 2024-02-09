@@ -39,7 +39,7 @@ $TITULO_PAGINA = "Inicio";
                   </div><!-- /.page-header -->
 
                   <div class="text-center img">
-                    <img src="../imagenes/logo_grande.jpeg" alt="">
+                    <img src="../imagenes/logo_grande.jpeg" alt="" class="img-responsive">
                   </div>
           
                 </div><!-- /.page-content -->

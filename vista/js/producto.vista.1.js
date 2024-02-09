@@ -29,6 +29,7 @@ app.setDOM = function(){
   DOM.mdlHeader = DOM.modal.find(".modal-header h3");
 
   DOM.cboEmpresaEspecial = DOM.frmGrabar.find("#cboempresaespecial");
+  DOM.txtCodigoUnico = DOM.frmGrabar.find("#txtcodigounico");
   DOM.txtNombre = DOM.frmGrabar.find("#txtnombre");
   DOM.txtDescripcion = DOM.frmGrabar.find("#txtdescripcion");
   DOM.txtPrecioUnitario = DOM.frmGrabar.find("#txtpreciounitario");
@@ -127,6 +128,7 @@ app.editar = async function(idVenta){
     const { data } = await apiAxios.get(`productos/${idVenta}`);
     
     DOM.cboEmpresaEspecial.val(data.empresa_especial);
+    DOM.txtCodigoUnico.val(data.codigo_generado);
     DOM.txtNombre.val(data.nombre);
     DOM.txtDescripcion.val(data.descripcion);
     DOM.cboMarca.val(data.id_marca);
@@ -174,13 +176,12 @@ app.eliminar = function(cod){
 };
 
 app.grabar = async function(){
-      const DOM = this.DOM,
-            buttonFrm = DOM.frmGrabar.find("button[type=submit]"),
-            datosFrm = new FormData();
-
+      const DOM = this.DOM, datosFrm = new FormData();
+      const objButtonLoading = new ButtonLoading({$: DOM.frmGrabar.find("button[type=submit]")[0]});
       const objDatosFormulario = Object.fromEntries(new FormData(DOM.frmGrabar[0]));
 
       datosFrm.append("empresa_especial", objDatosFormulario.cboempresaespecial);
+      datosFrm.append("codigo_unico", objDatosFormulario.txtcodigounico);
       datosFrm.append("tallas", objDatosFormulario.txttallas);
       datosFrm.append("nombre", objDatosFormulario.txtnombre);
       datosFrm.append("descripcion", objDatosFormulario.txtdescripcion);
@@ -199,9 +200,7 @@ app.grabar = async function(){
         }
       };
 
-   //   datos_frm.append("p_img_url",DOM.txtImgUrl[0].files[0]);
-
-      buttonFrm[0].disabled = true;
+      objButtonLoading.start();
 
       try {
         const headersApiAxios =  {
@@ -226,7 +225,7 @@ app.grabar = async function(){
         }
         console.error(error);
       } finally {
-        buttonFrm[0].disabled = false;
+        objButtonLoading.finish();
       }
 };
 
@@ -247,7 +246,6 @@ app.listar = async function(){
     console.error(error);
   }
 };
-
 
 app.obtenerMarcas = async () => {
   const DOM = app.DOM, tpl8 = app.tpl8.combo;
@@ -363,10 +361,6 @@ app.llenarTabs = function(dataImagenes){
   DOM.tabContent.html(tpl8.tabPane(tabPanes));
 };
 
-app.resetTabs = function(i){
-
-};
-
 app.cambiarImagen = function(dis, i){
    var $this = $(dis),
         parent = $this.parent(),
@@ -386,7 +380,6 @@ app.cambiarImagen = function(dis, i){
         reader.readAsDataURL(dis.files[0]);
       }
 };
-
 
 app.setImagenAccion = function(dis, i, tipoAccion){
   //TipoAccion: 0 =>setDefecto, 1=>AnteriorImagen

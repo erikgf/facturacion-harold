@@ -333,7 +333,7 @@ $pdf->SetFont($FONT,'', 5.5 + $aumento_font);
 $pdf->MultiCell($ANCHO_TICKET - ($MARGENES_LATERALES * 2),$ALTO_LINEA - 1, utf8_decode("Se le recomienda conservar este TICKET. ".F_NOMBRE_COMERCIAL_TICKET." no se hace responsable de la pérdida de este y es de carácter OBLIGATORIO que sea presentado para gestionar devoluciones y/u otros procesos requeridos por el cliente."),$BORDES,"C");
 */
 
-//$pdf->AutoPrint();
+$pdf->AutoPrint();
 $pdf->Output();
 
 ob_end_flush();

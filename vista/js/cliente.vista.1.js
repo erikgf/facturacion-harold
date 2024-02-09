@@ -240,8 +240,10 @@ app.eliminar =  function(cod){
 
 app.grabar = async function(){
   const DOM = this.DOM;
-  try {
+  const objButtonLoading = new ButtonLoading({$: DOM.frmGrabar.find("button[type=submit]")[0]});
 
+  try {
+    objButtonLoading.start();
     const idTipoDocumento =  DOM.cboTipoDocumento.val();
 
     const sentData = {
@@ -272,6 +274,8 @@ app.grabar = async function(){
   } catch (error) {
     swal("Error", JSON.stringify(error), "error");
     console.error(error);
+  } finally{
+    objButtonLoading.finish();
   }
 };
 

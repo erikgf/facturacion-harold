@@ -28,6 +28,7 @@
  define("F_TELEFONO_COTIZACION","Telf. 074-503180");
 
  define("F_SERVER_API","http://server.andreitababykids.com/public/api/");
+ //define("F_SERVER_API","http://localhost/andreitababy-server/public/api/");
 
  define("F_ENVIAR_CORREOS","0");//0: no, 1: si
  define("F_CORREO","");

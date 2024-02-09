@@ -119,6 +119,12 @@ $TITULO_PAGINA = "Gestión de Productos";
                                     </select>
                                 </div>
                               </div>
+                              <div class="col-xs-4 col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Código Único</label>
+                                    <input name="txtcodigounico" maxlength="20" placeholder="Código Único" id="txtcodigounico" class="form-control"/>
+                                </div>
+                              </div>
                         </div>
 
                         <div class="row">
@@ -266,7 +272,7 @@ $TITULO_PAGINA = "Gestión de Productos";
         </div>
 
         <?php  include '_js/main.js.php';?>
-        <script src="js/producto.vista.js"></script>
+        <script src="js/producto.vista.1.js"></script>
     </body>
 
 </html>

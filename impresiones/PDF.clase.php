@@ -1,9 +1,8 @@
 <?php
 
-require "../plugins/fpdf/fpdf.php";
+require "./PDF_Javascript.php";
 
-class PDF extends FPDF{
-
+class PDF extends PDF_JavaScript{
     public $show_footer = false;
     public $EXTRA_FOOTER_TEXT = "";
 
@@ -61,6 +60,7 @@ class PDF extends FPDF{
         $text = rtrim($text);
         return $count;
     }
+    
     function CellFit($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='', $scale=false, $force=true)
     {
         //Get string width
@@ -125,8 +125,7 @@ class PDF extends FPDF{
         $this->CellFit($w,$h,$txt,$border,$ln,$align,$fill,$link,false,true);
     }
 
-    function Footer()
-        {
+    function Footer(){
             // Position at 1.5 cm from bottom
             if ($this->show_footer == true){
                 $this->SetY(-15);
@@ -135,5 +134,9 @@ class PDF extends FPDF{
                 // Page number
                 $this->Cell(0,10, utf8_decode('Pág. ').$this->PageNo().'/{nb}'.' '.$this->EXTRA_FOOTER_TEXT,0,0,'C');
             }
-        }
+    }
+
+    function AutoPrint(){
+        $this->IncludeJS("print();");
+    }
 }

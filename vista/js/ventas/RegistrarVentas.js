@@ -49,52 +49,53 @@ const RegistrarVentas = function($contenedor, _tpl8){
     };
   
     this.setDOM = function(){
-      var DOM = _Util.preDOM2DOM($contenedor, 
-                      [{"frmRegistro": "#frmregistro"},
-                        {"cboClienteBuscar": "#cboclientebuscar"},
-                        {"cboTipoComprobante": "#cbotipocomprobante"},
-                        {"blkComprobante": "#blkcomprobante"},
-                        {"txtSerie": "#txtserie"},
-                        {"txtCorrelativo": "#txtcorrelativo"},
-                        {"cboTipoDocumento": "#cbotipodocumento"},
-                        {"blkNumeroDocumento": "#blknumerodocumento"},
-                        {"txtNumeroDocumento": "#txtnumerodocumento"},
-                        {"txtCliente": "#txtcliente"},
-                        {"txtApellidos": "#txtapellidos"},
-                        {"txtDireccion": "#txtdireccion"},
-                        {"txtCelular": "#txtcelular"},
-                        {"txtCorreo": "#txtcorreo"},
-                        {"cboSucursal": "#cbosucursal"},
-                        {"txtObservaciones" : "#txtobservaciones"},
-                        {"txtFechaVenta": "#txtfechaventa"},
-                        {"txtHoraVenta": "#txthoraventa"},
-                        {"btnActualizar": "#btnactualizar"},
-                        {"tblDetalle": "#tbldetallebody"},
-                        {"btnAgregarProducto": "#btnagregarproducto"},
-                        {"txtLectora" : "#txtlectora"},
-                        {"lblSubTotal": "#lblsubtotal"},
-                        {"txtDescuentoGlobal": "#txtdescuentoglobal"},
-                        //{"lblDescuento": "#lbldescuento"},
-                        {"lblTotal": "#lbltotal"},
-                        {"txtMontoEfectivo": "#txtefectivo"},
-                        {"txtMontoTarjeta": "#txttarjeta"},
-                        {"txtMontoCredito": "#txtcredito"},
-                        {"txtMontoYape": "#txtyape"},
-                        {"txtMontoPlin": "#txtplin"},
-                        {"txtMontoBanco": "#txtbanco"},
-                        //{"blkTipoTarjeta": "#blktipotarjetas"},
-                        {"btnCancelarEdicion": "#btncancelaredicion"},
-                        {"btnGuardar": "#btnguardar"},
-                        {"mdlBuscarProducto": "#mdlBuscarProducto"},
-                        {"txtBuscar":"#txtbuscar"},
-                        {"cboTipo":"#cbofiltrotipo"},
-                        {"cboCategoria":"#cbofiltrocategoria"},
-                        {"blkListaProductos" : "#blklistaproductos"}
-                        ]);  
-  
+      var DOM = _Util.preDOM2DOM($contenedor, [
+                      {"frmRegistro": "#frmregistro"},
+                      {"cboClienteBuscar": "#cboclientebuscar"},
+                      {"cboTipoComprobante": "#cbotipocomprobante"},
+                      {"blkComprobante": "#blkcomprobante"},
+                      {"txtSerie": "#txtserie"},
+                      {"txtCorrelativo": "#txtcorrelativo"},
+                      {"cboTipoDocumento": "#cbotipodocumento"},
+                      {"blkNumeroDocumento": "#blknumerodocumento"},
+                      {"txtNumeroDocumento": "#txtnumerodocumento"},
+                      {"txtCliente": "#txtcliente"},
+                      {"txtApellidos": "#txtapellidos"},
+                      {"txtDireccion": "#txtdireccion"},
+                      {"txtCelular": "#txtcelular"},
+                      {"txtCorreo": "#txtcorreo"},
+                      {"cboSucursal": "#cbosucursal"},
+                      {"txtObservaciones" : "#txtobservaciones"},
+                      {"txtFechaVenta": "#txtfechaventa"},
+                      {"txtHoraVenta": "#txthoraventa"},
+                      {"btnActualizar": "#btnactualizar"},
+                      {"tblDetalle": "#tbldetallebody"},
+                      {"btnAgregarProducto": "#btnagregarproducto"},
+                      {"txtLectora" : "#txtlectora"},
+                      {"lblSubTotal": "#lblsubtotal"},
+                      {"txtDescuentoGlobal": "#txtdescuentoglobal"},
+                      //{"lblDescuento": "#lbldescuento"},
+                      {"lblTotal": "#lbltotal"},
+                      {"txtMontoEfectivo": "#txtefectivo"},
+                      {"txtMontoTarjeta": "#txttarjeta"},
+                      {"txtMontoCredito": "#txtcredito"},
+                      {"txtMontoYape": "#txtyape"},
+                      {"txtMontoPlin": "#txtplin"},
+                      {"txtMontoBanco": "#txtbanco"},
+                      //{"blkTipoTarjeta": "#blktipotarjetas"},
+                      {"btnCancelarEdicion": "#btncancelaredicion"},
+                      {"btnGuardar": "#btnguardar"},
+                      {"mdlBuscarProducto": "#mdlBuscarProducto"},
+                      {"txtBuscar":"#txtbuscar"},
+                      {"cboTipo":"#cbofiltrotipo"},
+                      {"cboCategoria":"#cbofiltrocategoria"},
+                      {"lblSeleccionados":"#lblSeleccionados"},
+                      {"blkListaProductos" : "#blklistaproductos"},
+                      {"btnAgregarProductos": "#btnagregarproductos"}
+                    ]);  
+
       // DOM.radTipoPago = $("input[name=radtipopago]");
-        DOM.radTipoTarjeta = $("input[name=radtipotarjeta]");
-  
+      // DOM.radTipoTarjeta = $("input[name=radtipotarjeta]");
         this.DOM = DOM;
     };
   
@@ -103,6 +104,8 @@ const RegistrarVentas = function($contenedor, _tpl8){
           DOM = self.DOM;
   
       DOM.cboTipoComprobante.on("change", function(){
+        const keyStorageTipoComprobante = NOMBRE_LOCALSTORAGE+"tipocomprobante";
+        localStorage.setItem(keyStorageTipoComprobante, this.value);
         cargarCorrelativo(this.value);
       });
   
@@ -160,8 +163,6 @@ const RegistrarVentas = function($contenedor, _tpl8){
           }
           
           const keyStorageComprobante = NOMBRE_LOCALSTORAGE+"correlativo"+tipoComprobante+serie;
-
-          console.log("{seitem}",correlativo,"with key", keyStorageComprobante)
           localStorage.setItem(keyStorageComprobante, correlativo);
       });
   
@@ -230,12 +231,13 @@ const RegistrarVentas = function($contenedor, _tpl8){
         equilibrarMontoPago("B");
       });
   
-      DOM.btnAgregarProducto.on("click", function(){
-        agregarFilaDetalle();
+      DOM.btnAgregarProducto.on("click", () => {
+        this.prepararAgregarProductos();
+        //agregarFilaDetalle();
       });
   
       DOM.tblDetalle.on("click", "tr .pointer", function(e){
-        buscarProducto(this.parentElement);
+        //buscarProducto(this.parentElement);
       });
   
       DOM.txtBuscar.on("keyup", function(e){
@@ -257,9 +259,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
   
       DOM.frmRegistro.on("submit", function(e){
         e.preventDefault();
-        if (_SAVING == false){
-          grabarVenta();  
-        }
+        grabarVenta();  
       });
   
       DOM.tblDetalle.on("change", "tr .cantidad input", function(){
@@ -291,9 +291,9 @@ const RegistrarVentas = function($contenedor, _tpl8){
       });
 
       DOM.tblDetalle.on("focusout", "tr .cantidad input", () => {
-        const $txtLectora = this.DOM.txtLectora;
-        $txtLectora.focus();
-        $txtLectora.val("");
+        //const $txtLectora = this.DOM.txtLectora;
+        //$txtLectora.focus();
+        //$txtLectora.val("");
       });
   
       DOM.tblDetalle.on("change", "tr .precio-unitario input", function(){
@@ -335,19 +335,24 @@ const RegistrarVentas = function($contenedor, _tpl8){
       });
   
       DOM.mdlBuscarProducto.on("shown.bs.modal", function(e){
+        /*
         var txtBuscar = DOM.txtBuscar,
             txtBuscarVal = txtBuscar.val();
   
         txtBuscar.focus();
         txtBuscar[0].setSelectionRange(0, txtBuscarVal.length);
         realizarBusquedaProducto(txtBuscarVal);
+        */
       });
   
-      DOM.blkListaProductos.on("click", "tr:not(.tr-null)", function(e){
+      DOM.blkListaProductos.on("click", "tr:not(.tr-null)", (e) => {
+        /*
         const itemProducto = self.getProducto(this.dataset.id);
         if (itemProducto.i != -1 && _TR_BUSCAR != null){
           seleccionarProductoBuscar(itemProducto);
         }
+        */
+        this._seleccionarProductoBuscar($(e.currentTarget));
       });
 
       DOM.txtDescuentoGlobal.on("focusin", function(e){
@@ -391,20 +396,34 @@ const RegistrarVentas = function($contenedor, _tpl8){
       });
 
       DOM.txtLectora.on("change", (e)=>{
-        const codigoBarra = e.currentTarget.value;
+        const codigoBarra = e.currentTarget.value.trim();
         if (codigoBarra.length >= CARACTERES_LECTORA){
           agregarProductoUsandoLectora(codigoBarra);
         }
       });
 
+      DOM.txtLectora.on("keypress", (e)=>{
+        if (e.charCode === 13){
+          e.preventDefault();
+          const codigoBarra = e.currentTarget.value.trim();
+          if (codigoBarra.length >= CARACTERES_LECTORA){
+            agregarProductoUsandoLectora(codigoBarra);
+          }
+        }
+      });
+
+      DOM.btnAgregarProductos.on("click", (e)=> {
+        e.preventDefault();
+        this._agregarProductosAlDetalle();
+      });
+
       /*
-      const observer = new MutationObserver(function(mutationsList, observer) {
+      const observer = new MutationObserver(functiona(mutationsList, observer) {
         console.log(mutationsList);
       });
       observer.observe(document.getElementById("lbltotal"), {characterData: false, childList: true, attributes: false});
       */
-
-      cargarCorrelativo('00');
+      cargarCorrelativo(DOM.cboTipoComprobante.val());
     };
   
     const cargarCategorias = function(codTipo){
@@ -582,8 +601,18 @@ const RegistrarVentas = function($contenedor, _tpl8){
     };
   
     this.setDataProductos = function(_dataProductos){
+      _data.productos = _dataProductos.map(p => {
+        return {
+          ...p, seleccionado : false
+        };
+      });
+    }
+
+    /*
+    this.setDataProductos = function(_dataProductos){
       _data.productos = _dataProductos;
     }
+    */
   
     this.obtenerDataProductos = async function(deboEliminarCarrito = true, fnPostStocked = undefined ){
         const idSucursal = this.DOM.cboSucursal.val();
@@ -708,11 +737,10 @@ const RegistrarVentas = function($contenedor, _tpl8){
     };
   
     const obtenerCliente = (idCliente, DOM) => {
-        const objCliente = _ArrayUtils.conseguir(_data.clientes, "id", idCliente);
-  
-      DOM.cboTipoDocumento.val(objCliente.id_tipo_documento);
-  
-      if (objCliente.id == "0"){
+      const objCliente = _ArrayUtils.conseguir(_data.clientes, "id", idCliente);
+      
+      if (objCliente === -1){
+        DOM.cboTipoDocumento.val("0");
         DOM.txtNumeroDocumento.val(null);
         DOM.blkNumeroDocumento.hide();
         DOM.txtCliente.val(null);
@@ -720,8 +748,11 @@ const RegistrarVentas = function($contenedor, _tpl8){
         DOM.txtDireccion.val(null);
         DOM.txtCorreo.val(null);
         DOM.txtCelular.val(null);
+        cambiarTipoDocumento(DOM.cboTipoDocumento.val(), DOM.blkNumeroDocumento, DOM.txtNumeroDocumento);
         return;
       }
+
+      DOM.cboTipoDocumento.val(objCliente.id_tipo_documento);
   
       if (objCliente.id_tipo_documento != "0"){
         DOM.txtNumeroDocumento.val(objCliente.numero_documento);
@@ -730,34 +761,53 @@ const RegistrarVentas = function($contenedor, _tpl8){
         DOM.txtNumeroDocumento.val(null);
         DOM.blkNumeroDocumento.hide();
       }
+
       DOM.txtCliente.val(objCliente.nombres);
       DOM.txtApellidos.val(objCliente.apellidos);
       DOM.txtDireccion.val(objCliente.direccion);
       DOM.txtCelular.val(objCliente.celular);
       DOM.txtCorreo.val(objCliente.correo);
+
+      cambiarTipoDocumento(DOM.cboTipoDocumento.val(), DOM.blkNumeroDocumento, DOM.txtNumeroDocumento);
     };
   
     const cambiarTipoDocumento = (tipoDocumento, bloqueNumeroDocumento, txtNumeroDocumento) => {
+      let maxLength;
       switch(tipoDocumento){
         case "0":
           bloqueNumeroDocumento.hide();
+          maxLength = 0;
         break;
         case "1":
           bloqueNumeroDocumento.show();
-          txtNumeroDocumento[0].maxLength = 8;
+          maxLength = 8;
         break;
         case "4":
         case "7":
           bloqueNumeroDocumento.show();
-          txtNumeroDocumento[0].maxLength = 12;
+          maxLength = 12;
         break;
         case "6":
           bloqueNumeroDocumento.show();
-          txtNumeroDocumento[0].maxLength = 11;
+          maxLength = 11;
         break;
       }
-  
-      txtNumeroDocumento[0].value = "";
+
+      const DOM = this.DOM;
+      const blkCliente = DOM.txtCliente.parents(".col-xs-12");
+      const blkApellidos = DOM.txtApellidos.parents(".col-xs-12");
+      if (tipoDocumento == "6"){
+        blkApellidos.hide();
+        blkCliente.removeClass("col-sm-4").addClass("col-sm-8");
+        blkCliente.find(".control-label").html("Razón Social");
+      } else {
+        blkApellidos.show();
+        blkCliente.addClass("col-sm-4").removeClass("col-sm-8");
+        blkCliente.find(".control-label").html("Nombre cliente");
+      }
+
+      txtNumeroDocumento[0].maxLength = maxLength;
+      txtNumeroDocumento[0].value = txtNumeroDocumento[0].value.substr(0, maxLength);
     };
 
     const buscarProducto  = ($tr) => {
@@ -861,19 +911,21 @@ const RegistrarVentas = function($contenedor, _tpl8){
             mayusculas : true,
             exactitud : false
           },
-          { propiedad : "cod_tipo",
+          { propiedad : "id_tipo_categoria",
             valor : DOM.cboTipo.val(),
             mayusculas: false,
             exactitud : true
           },
-          { propiedad : "cod_categoria",
+          { propiedad : "id_categoria",
             valor : DOM.cboCategoria.val(),
             mayusculas: false,
             exactitud : true
           }
         ];
-       
-       DOM.blkListaProductos.html(_tpl8.ListaProducto(_ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda)));
+
+        const productos = _ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda);
+        DOM.blkListaProductos.html(_tpl8.ListaProducto(productos));
+       //DOM.blkListaProductos.html(_tpl8.ListaProducto(_ArrayUtils.buscarTodos(_data.productos, parametrosBusqueda)));
       }
     };
   
@@ -918,9 +970,10 @@ const RegistrarVentas = function($contenedor, _tpl8){
         return {viejo: stock, exceso: exceso, nuevo: nuevoStock};
     };
   
-    const modificarCantidadDetalle = ($tr, $cantidad) => {
+    const modificarCantidadDetalle = ($tr, $cantidad_) => {
       /*obtener producto, actualizarse la cantidad, mdoifcar subtotal, modificar gran sub total*/
       const index = _INDEX,
+          $cantidad = ($cantidad_ == null ? arregloTD[index.cantidad].children[0] : $cantidad_),
           cantidadAnterior = $cantidad.dataset.preval, 
           cantidadNueva = $cantidad.value,
           arregloTD = [].slice.call($tr.children);
@@ -954,6 +1007,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
           
       const subtotal = precioNuevo * valorCantidad;
       $precio.dataset.preval = precioNuevo;
+      $precio.value = parseFloat($precio.value).toFixed(2);
       modificarSubTotalDetalle( subtotal, $subtotal);
     };
   
@@ -989,104 +1043,106 @@ const RegistrarVentas = function($contenedor, _tpl8){
     };
   
     const grabarVenta = () => {
-      const objVenta = verificarVenta(),
-          fnConfirm = async (isConfirm) => {
-              if(!isConfirm){
-                return;
-              }
-  
-              if (_SAVING == true){
-                return;
-              }
-  
-              try {
-                const cabecera = objVenta.datos.cabecera,
-                      detalle  = objVenta.datos.detalle;
-  
-                _SAVING = true;
-  
-                const sentData = {
-                  id_tipo_comprobante : cabecera.id_tipo_comprobante,
-                  serie: cabecera.serie,
-                  correlativo: cabecera.correlativo,
-                  id_cliente: cabecera.id_cliente,
-                  /*
-                  id_tipo_documento : cabecera.id_tipo_documento,
-                  numero_documento : cabecera.numero_documento,
-                  nombre_cliente : cabecera.nombre_cliente,
-                  apellidos_cliente : cabecera.apellidos_cliente,
-                  correo_envio : cabecera.correo_envio,
-                  celular_cliente : cabecera.celular_cliente,
-                  */
-                  monto_efectivo: cabecera.monto_efectivo,
-                  monto_tarjeta: cabecera.monto_tarjeta,
-                  monto_credito : cabecera.monto_credito,
-                  monto_yape: cabecera.monto_yape,
-                  monto_plin : cabecera.monto_plin,
-                  monto_transferencia : cabecera.monto_transferencia,
-                  descuento_global : cabecera.descuento_global,
-                  importe_total : cabecera.importe_total,
-                  fecha_venta : cabecera.fecha_venta,
-                  hora_venta: cabecera.hora_venta,
-                  id_sucursal : cabecera.id_sucursal,
-                  observaciones: cabecera.observaciones,
-                  productos: detalle
-                };
-            
-                const {data} = MODO === '+' 
-                                ? await apiAxios.post('ventas', sentData)
-                                : await apiAxios.put(`ventas/${COD_VENTA_EDITAR}`, sentData);
-  
-                swal("Éxito", "Registrado con éxito.", "success");
-  
-                if (cabecera.id_tipo_comprobante != ""){
-                  const serie = this.DOM.txtSerie.val(),
-                        tipoComprobante = this.DOM.cboTipoComprobante.val();
-                        
-                  const keyStorageComprobante = NOMBRE_LOCALSTORAGE+"correlativo"+tipoComprobante+serie;
-                  const correlativoNuevo = parseInt(localStorage.getItem(keyStorageComprobante)) + 1;
-                  localStorage.setItem(keyStorageComprobante, correlativoNuevo );
-                  this.DOM.txtCorrelativo.val(_Util.completarNumero(correlativoNuevo, 6));
-                }
-  
-                app.ListarVentas.verDetalle(data.id);
-    
-                COD_VENTA_EDITAR = null;
-                this.DOM.btnCancelarEdicion.hide();
-                this.DOM.cboSucursal.attr("disabled",false);
-                this.DOM.btnActualizar.show();
-                $("#lblrotuloedicion").empty();
-                limpiarVenta();
-                //$('.nav-tabs a[href="#tabListadoVentas"]').tab('show');
-                //ListarVentas.listarVentas(data.lista_ventas);
-                MODO = "+";
-                
-                const idTipoComprobante =  data.id_tipo_comprobante;
-                if (idTipoComprobante == ""){
-                    app.ListarVentas.verAtencion(data.id);
-                } else {
-                    app.ListarVentas.verComprobante(data.id_documento_electronico);
-                }
-      
-              } catch (error) {
-                const { response } = error;
-                if (Boolean(response?.data?.message)){
-                  swal("Error", response.data.message, "error");
-                  return;
-                }
+      const objButtonLoading = new ButtonLoading({$: this.DOM.btnGuardar[0]});
+      const objVenta = verificarVenta();
+      const fnConfirm = async (isConfirm) => {
+            if(!isConfirm){
+              return;
+            }
 
-                swal("Error", "Problema con el registro de la venta.", "error");
-                console.error(error);
-              } finally {
-                _SAVING = false;
+            objButtonLoading.start();
+
+            try {
+              const cabecera = objVenta.datos.cabecera,
+                    detalle  = objVenta.datos.detalle;
+
+              const sentData = {
+                id_tipo_comprobante : cabecera.id_tipo_comprobante,
+                serie: cabecera.serie,
+                correlativo: cabecera.correlativo,
+                id_cliente: Boolean(cabecera.id_cliente) ? cabecera.id_cliente : null,
+                cliente_id_tipo_documento : cabecera.id_tipo_documento_cliente,
+                cliente_numero_documento : cabecera.numero_documento_cliente,
+                cliente_nombres : cabecera.nombre_cliente,
+                cliente_apellidos : cabecera.apellidos_cliente,
+                cliente_direccion : cabecera.direccion_cliente,
+                cliente_celular : cabecera.celular_cliente,
+                cliente_correo : cabecera.correo_cliente,
+                monto_efectivo: cabecera.monto_efectivo,
+                monto_tarjeta: cabecera.monto_tarjeta,
+                monto_credito : cabecera.monto_credito,
+                monto_yape: cabecera.monto_yape,
+                monto_plin : cabecera.monto_plin,
+                monto_transferencia : cabecera.monto_transferencia,
+                descuento_global : cabecera.descuento_global,
+                importe_total : cabecera.importe_total,
+                fecha_venta : cabecera.fecha_venta,
+                hora_venta: cabecera.hora_venta,
+                id_sucursal : cabecera.id_sucursal,
+                observaciones: cabecera.observaciones,
+                productos: detalle
+              };
+          
+              const {data} = MODO === '+' 
+                              ? await apiAxios.post('ventas', sentData)
+                              : await apiAxios.put(`ventas/${COD_VENTA_EDITAR}`, sentData);
+
+              //swal("Éxito", "Registrado con éxito.", "success");
+
+              if (cabecera.id_tipo_comprobante != ""){
+                const serie = this.DOM.txtSerie.val(),
+                      tipoComprobante = this.DOM.cboTipoComprobante.val();
+                      
+                const keyStorageComprobante = NOMBRE_LOCALSTORAGE+"correlativo"+tipoComprobante+serie;
+                const correlativoNuevo = parseInt(localStorage.getItem(keyStorageComprobante)) + 1;
+                localStorage.setItem(keyStorageComprobante, correlativoNuevo );
+                this.DOM.txtCorrelativo.val(_Util.completarNumero(correlativoNuevo, 6));
               }
-          };
+
+              //app.ListarVentas.verDetalle(data.id);
+  
+              COD_VENTA_EDITAR = null;
+              this.DOM.btnCancelarEdicion.hide();
+              this.DOM.cboSucursal.attr("disabled",false);
+              this.DOM.btnActualizar.show();
+              $("#lblrotuloedicion").empty();
+              limpiarVenta();
+              //$('.nav-tabs a[href="#tabListadoVentas"]').tab('show');
+              //ListarVentas.listarVentas(data.lista_ventas);
+              MODO = "+";
+              
+              const idTipoComprobante =  data.id_tipo_comprobante;
+              if (idTipoComprobante == ""){
+                  app.ListarVentas.verAtencion(data.id);
+              } else {
+                  app.ListarVentas.verComprobante(data.id_documento_electronico);
+              }
+    
+            } catch (error) {
+              const { response } = error;
+              if (Boolean(response?.data?.message)){
+                swal("Error", response.data.message, "error");
+                return;
+              }
+
+              swal("Error", "Problema con el registro de la venta.", "error");
+              console.error(error);
+            } finally {
+              objButtonLoading.finish();
+            }
+        };
   
       if (!objVenta.rpt){
         swal("Error", objVenta.msj, "error");
         return;
       }
-  
+          
+      if (Boolean(objButtonLoading.isLoading)){
+        return;
+      }
+
+      fnConfirm(true);
+      /*
       swal({
             title: "Confirme",
             text: "¿Esta seguro de grabar los datos ingresados?",
@@ -1098,6 +1154,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
             closeOnCancel: true,
             imageUrl: "../images/pregunta.png"
           }, fnConfirm);
+      */
     };
   
     const verificarVenta = () => {
@@ -1121,13 +1178,13 @@ const RegistrarVentas = function($contenedor, _tpl8){
           serie = DOM.txtSerie.val(),
           correlativo = parseInt(DOM.txtCorrelativo.val()),
           id_cliente = DOM.cboClienteBuscar.val(),
-          id_tipo_documento = DOM.cboTipoDocumento.val(),
-          numero_documento = DOM.txtNumeroDocumento.val(),
+          id_tipo_documento_cliente = DOM.cboTipoDocumento.val(),
+          numero_documento_cliente = DOM.txtNumeroDocumento.val(),
           nombre_cliente = DOM.txtCliente.val(),
           apellidos_cliente = DOM.txtApellidos.val(),
           direccion_cliente = DOM.txtDireccion.val(),
-          correo = DOM.txtCorreo.val(),
-          celular = DOM.txtCelular.val(),
+          correo_cliente = DOM.txtCorreo.val(),
+          celular_cliente = DOM.txtCelular.val(),
           fecha_venta = DOM.txtFechaVenta.val(),
           hora_venta = DOM.txtHoraVenta.val(),
           //tipoPago = DOM.radTipoPago[0].checked ? 'E' : 'T', /*0: EFECTIVO, 1: TARJETA*/     
@@ -1142,17 +1199,17 @@ const RegistrarVentas = function($contenedor, _tpl8){
           descuento_global = DOM.txtDescuentoGlobal.val(),
           importe_total = DOM.lblTotal.html(),
           observaciones = DOM.txtObservaciones.val(),
-          numeroDocumentoLength = numero_documento.length;
+          numeroDocumentoLength = numero_documento_cliente.length;
   
       if (nombre_cliente.length < 0){
         return {rpt: false, msj: "Ingrese nombre de cliente."};
       }
   
-      if (id_tipo_documento == '1' && (numeroDocumentoLength != 8 && numeroDocumentoLength != 0)) {
+      if (id_tipo_documento_cliente == '1' && (numeroDocumentoLength != 8 && numeroDocumentoLength != 0)) {
         return {rpt: false, msj: "Ingrese un número de DNI válido."};
       }
   
-      if (id_tipo_documento == '6' && (numeroDocumentoLength != 11 && numeroDocumentoLength != 0)) {
+      if (id_tipo_documento_cliente == '6' && (numeroDocumentoLength != 11 && numeroDocumentoLength != 0)) {
         return {rpt: false, msj: "Ingrese un número de RUC válido."};
       }
   
@@ -1181,13 +1238,13 @@ const RegistrarVentas = function($contenedor, _tpl8){
           serie,
           correlativo,
           id_cliente,
-          id_tipo_documento,
-          numero_documento,
+          id_tipo_documento_cliente,
+          numero_documento_cliente,
           nombre_cliente,
           apellidos_cliente,
           direccion_cliente,
-          correo_envio: correo,
-          celular_cliente : celular,
+          correo_cliente,
+          celular_cliente,
           fecha_venta,
           hora_venta,
           monto_efectivo,
@@ -1413,6 +1470,78 @@ const RegistrarVentas = function($contenedor, _tpl8){
       self.DOM.btnCancelarEdicion.hide();
   
       limpiarVenta();
+    };
+
+    this.prepararAgregarProductos = () => {
+      _data.productos = _data.productos.map( p => {
+        return {
+          ...p, seleccionado: false
+        }
+      })
+
+      this.DOM.mdlBuscarProducto.modal("show");
+      this.DOM.txtBuscar.val("");
+      this.DOM.txtBuscar.focus();
+      this.DOM.txtBuscar.select();
+
+      realizarBusquedaProducto("");
+    };
+
+    this._seleccionarProductoBuscar = ($tr) =>{
+      const classNameSeleccionado = "seleccionado-tr";
+      const idSeleccionado = $tr.data("id");
+      const stock = $tr.data("stock");
+      const estaSeleccionado = $tr.hasClass(classNameSeleccionado);
+
+      if (stock <= 0){
+        const nombreProducto = $tr.children()[0].innerText;
+        swal("Error", `El producto ${nombreProducto} no tiene STOCK disponible.`);
+        return;
+      }
+
+      if (estaSeleccionado){
+        $tr.removeClass(classNameSeleccionado);
+      } else {
+        $tr.addClass(classNameSeleccionado);
+      }
+
+      _data.productos = _data.productos.map( p => {
+        if (p.codigo_unico_producto == idSeleccionado){
+          return {
+            ...p, seleccionado: !estaSeleccionado
+          }
+        }
+        return p;
+      });
+
+      this.DOM.lblSeleccionados.html(_data.productos.filter(p=>p.seleccionado).length);
+    };
+
+    this._agregarProductosAlDetalle = () => {
+      const productosSeleccionados = _data.productos
+                                        .filter(p => p.seleccionado)
+                                        .map( itemProducto => {
+                                          return {
+                                            cod_producto: itemProducto.id,
+                                            nombre_producto: itemProducto.nombre_producto,
+                                            precio_unitario: itemProducto.precio_unitario,
+                                            fecha_vencimiento: itemProducto.fecha_vencimiento,
+                                            lote: itemProducto.lote,
+                                            marca : itemProducto.marca,
+                                            cantidad: 1,
+                                            monto_descuento: null,
+                                            tipo_descuento: null,
+                                            cod_descuento: null,
+                                            subtotal: itemProducto.precio_unitario,
+                                            maxstock : itemProducto.stock
+                                          }
+                                        });
+
+      this.DOM.tblDetalle[!_VACIO ? "append" : "html"](_tpl8.tblDetalle(productosSeleccionados));
+      _VACIO = false;
+      modificarTotalGeneral();
+
+      this.DOM.mdlBuscarProducto.modal("hide");
     };
   
     return this.init();
