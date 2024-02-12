@@ -120,7 +120,7 @@ app.listar = async function(){
       estado: DOM.cboEstado.val()
     };
     const paramsData = new URLSearchParams(sentData);
-    const { data } = await apiAxios.get(`comprobantes/generacion?${paramsData.toString()}`);
+    const { data } = await apiAxios.get(`comprobantes/generacion/listar?${paramsData.toString()}`);
     app.renderLista(data);
   } catch (error) {
     swal("Error", JSON.stringify(error), "error");
