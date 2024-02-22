@@ -345,26 +345,32 @@ $fechaHoy = date('Y-m-d');
               </div>
             </div>
 
-            <script id="tpl8Combo" type="handlebars-x">
-                <option value="">Todos</option>
-                {{#.}}
-                <option value='{{id}}'>{{nombre}}</option>
-                {{/.}}
-            </script> 
+        <script id="tpl8Combo" type="handlebars-x">
+            <option value="">Todos</option>
+            {{#.}}
+            <option value='{{id}}'>{{nombre}}</option>
+            {{/.}}
+        </script>
 
-            <script id="tpl8Sucursal" type="handlebars-x">
-                {{#.}}
-                <option value='{{id}}'>{{nombre}}</option>
-                {{/.}}
-            </script>   
+        <script id="tpl8Sucursal" type="handlebars-x">
+            {{#.}}
+            <option value='{{id}}'>{{nombre}}</option>
+            {{/.}}
+        </script> 
+        
+        <script id="tpl8Series" type="handlebars-x">
+            {{#.}}
+            <option value="{{serie}}" data-correlativo="{{correlativo}}"">{{serie}}</option>
+            {{/.}}
+        </script> 
 
         <?php include './partials/_globals/footer.php'; ?>
            
         </div><!-- /.main-container -->
        <?php  include '_js/main.js.php'; ?>
-       <script src="js/ventas/RegistrarVentas.js"></script>
-       <script src="js/ventas/ListarVentas.js"></script>
-       <script src="js/ventas/ventas.vista.js"></script>
+       <script src="js/ventas/RegistrarVentas.2.js"></script>
+       <script src="js/ventas/ListarVentas.2.js"></script>
+       <script src="js/ventas/ventas.vista.2.js"></script>
     </body>
 
 </html>

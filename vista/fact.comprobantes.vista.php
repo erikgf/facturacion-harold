@@ -81,6 +81,19 @@ $fechaHaceSemana = date("Y-m-d", strtotime("- 7 days"));
                         </div>
                       </div>
                     </div>
+
+                    <div class="col-xs-6 col-sm-3 col-md-2">
+                      <div class="control-group">
+                        <label class="control-label">T. Comprobante</label>
+                        <select  class="form-control" id="cbotipocomprobante">
+                          <option value="*" selected>TODOS</option>
+                          <option value="01">FACTURAS</option>
+                          <option value="03">BOLETAS</option>
+                          <option value="07">N. CRÉDITOS</option>
+                          <option value="08">N. DÉBITOS</option>
+                        </select>
+                      </div>
+                    </div>
                     
                     <div class="col-xs-6 col-sm-3 col-md-2">
                       <div class="control-group">

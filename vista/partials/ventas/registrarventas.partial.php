@@ -30,13 +30,14 @@
 					<div class="col-xs-4">
 						<div class="form-group">
 							<label class="control-label">Serie</label>
-							<input style="background: #ded2d2;color: darkred;" class="form-control text-center" id="txtserie" maxlength="4"/>
+							<select style="background: #ded2d2;color: darkred;" class="form-control text-center" id="txtserie" required>
+							</select>
 						</div>
 					</div>
 					<div class="col-sm-4">
 						<div class="form-group">
 							<label class="control-label">Correlativo</label>
-							<input class="form-control text-center" id="txtcorrelativo" maxlength="6"/>
+							<input class="form-control text-center" readonly id="txtcorrelativo" maxlength="6"/>
 						</div>
 					</div>
 				</div>
@@ -333,7 +334,7 @@
 					<div class="space-6"></div>
 					<h5>Seleccionados: <span id="lblSeleccionados">0</span></h5>
 					<div class="row">
-						<div class="col-xs-12" style="max-height: 400px;overflow-x: scroll;">
+						<div class="col-xs-12" style="max-height: 280px;overflow-x: scroll;">
 							<table class="table tbl-detalle" id="tbldetalle">
 								<thead>
 									<tr>

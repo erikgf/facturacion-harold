@@ -148,6 +148,12 @@ $fechaHoy = date('Y-m-d');
             {{#.}}
             <option value='{{id}}'>{{nombre}}</option>
             {{/.}}
+        </script>
+
+        <script id="tpl8Series" type="handlebars-x">
+            {{#.}}
+            <option value="{{serie}}" data-correlativo="{{correlativo}}"">{{serie}}</option>
+            {{/.}}
         </script> 
 
         <?php include './partials/_globals/footer.php'; ?>

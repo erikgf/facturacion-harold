@@ -93,7 +93,7 @@ $fechaHoy = date('Y-m-d');
                     <div class="space-6"></div>
                     <div class="row">
                       <div class="col-xs-12">
-                          <div  class="table-responsive">    
+                          <div class="table-responsive">    
                               <table class="table tbl-detalle">
                                 <thead>
                                   <tr>
@@ -155,6 +155,12 @@ $fechaHoy = date('Y-m-d');
             <option value="">Todos</option>
             {{#.}}
             <option value='{{id}}'>{{nombre}}</option>
+            {{/.}}
+        </script>
+
+        <script id="tpl8Series" type="handlebars-x">
+            {{#.}}
+            <option value="{{serie}}" data-correlativo="{{correlativo}}"">{{serie}}</option>
             {{/.}}
         </script> 
 

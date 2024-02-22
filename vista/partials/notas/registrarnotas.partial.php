@@ -20,8 +20,8 @@
 					<div class="form-group">
 						<label class="control-label">Comprobante</label>
 						<select class="form-control" id="cbotipocomprobante" required>
-							<option selected value="03">Boleta</option>
-							<option value="01">Factura</option>
+							<option selected value="07">N. Crédito</option>
+							<option value="08">N. Débito</option>
 						</select>
 					</div>
 				</div>

@@ -21,6 +21,7 @@ app.setDOM = function(){
   DOM.txtFechaDesde = $("#txtfechadesde");
   DOM.txtFechaHasta = $("#txtfechahasta");
   DOM.chkTodos = $("#chktodos");
+  DOM.cboTipoComprobante = $("#cbotipocomprobante");
   DOM.cboEstado = $("#cboestado");
   DOM.btnBuscar = $("#btnbuscar");
   DOM.btnExcel = $("#btnexcel");
@@ -117,6 +118,7 @@ app.listar = async function(){
       todas_fechas: DOM.chkTodos[0].checked ? 1 : 0,
       fecha_inicio: DOM.txtFechaDesde.val(), 
       fecha_fin: DOM.txtFechaHasta.val(),
+      id_tipo_comprobante : DOM.cboTipoComprobante.val(),
       estado: DOM.cboEstado.val()
     };
     const paramsData = new URLSearchParams(sentData);

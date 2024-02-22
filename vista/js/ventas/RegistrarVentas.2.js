@@ -1,31 +1,28 @@
-const RegistrarFacturas = function($contenedor, _tpl8){
+const RegistrarVentas = function($contenedor, _tpl8){
   const CARACTERES_LECTORA = 16;
     var _Util = Util,
         _ArrayUtils = ArrayUtils,
         _INDEX = {
           "eliminar": 0,
           "producto": 1,
-          "precio_unitario": 2,
-          "cantidad": 3,
-          "subtotal": 4
+          "marca": 2,
+          "precio_unitario": 3,
+          "lote": 4,
+          "cantidad": 5,
+          "descuento": 6,
+          "subtotal": 7
         },
         _VACIO = true,
         _TR_BUSCAR = null,
         _data = {
-          series : [],
+          series: [],
           productos: [],
           clientes : [],
           tipo_categorias : [],
           categoria_productos : []
         },
-        NOMBRE_LOCALSTORAGE = "___jp",
         MODO = "+",
-        COD_EDITAR = null;
-  
-    const MAP_COMPROBANTE_VENTA = {
-        '01' : 'F',
-        '03' : 'B'
-    };
+        COD_VENTA_EDITAR = null;
 
     this.init = function(){
       this.setDOM();
@@ -44,9 +41,13 @@ const RegistrarFacturas = function($contenedor, _tpl8){
     this.setDataClientes = function(_clientes){
       _data.clientes = _clientes;
     };
-  
+
+    this.setDataSeries = (_series) => {
+      _data.series = _series;
+    };
+
     this.setDOM = function(){
-      var DOM = _Util.preDOM2DOM($contenedor, [
+        const DOM = _Util.preDOM2DOM($contenedor, [
                       {"frmRegistro": "#frmregistro"},
                       {"cboClienteBuscar": "#cboclientebuscar"},
                       {"cboTipoComprobante": "#cbotipocomprobante"},
@@ -56,21 +57,31 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                       {"cboTipoDocumento": "#cbotipodocumento"},
                       {"blkNumeroDocumento": "#blknumerodocumento"},
                       {"txtNumeroDocumento": "#txtnumerodocumento"},
-                      {"txtCliente": "#txtclientedescripcion"},
-                      {"txtDireccion": "#txtclientedireccion"},
-                      {"txtFechaEmision": "#txtfechaemision"},
-                      {"txtHoraEmision": "#txthoraemision"},
-                      {"txtFechaVencimiento": "#txtfechavencimiento"},
-                      {"txtMoneda": "#txtmoneda"},
+                      {"txtCliente": "#txtcliente"},
+                      {"txtApellidos": "#txtapellidos"},
+                      {"txtDireccion": "#txtdireccion"},
+                      {"txtCelular": "#txtcelular"},
+                      {"txtCorreo": "#txtcorreo"},
+                      {"cboSucursal": "#cbosucursal"},
+                      {"txtObservaciones" : "#txtobservaciones"},
+                      {"txtFechaVenta": "#txtfechaventa"},
+                      {"txtHoraVenta": "#txthoraventa"},
+                      {"btnActualizar": "#btnactualizar"},
                       {"tblDetalle": "#tbldetallebody"},
                       {"btnAgregarProducto": "#btnagregarproducto"},
                       {"txtLectora" : "#txtlectora"},
                       {"lblSubTotal": "#lblsubtotal"},
                       {"txtDescuentoGlobal": "#txtdescuentoglobal"},
+                      //{"lblDescuento": "#lbldescuento"},
                       {"lblTotal": "#lbltotal"},
-                      {"txtObservaciones": "#txtobservaciones"},
-                      {"cboCondicionPago": "#cbocondicionpago"},
-                      {"txtDelivery": "#txtdelivery"},
+                      {"txtMontoEfectivo": "#txtefectivo"},
+                      {"txtMontoTarjeta": "#txttarjeta"},
+                      {"txtMontoCredito": "#txtcredito"},
+                      {"txtMontoYape": "#txtyape"},
+                      {"txtMontoPlin": "#txtplin"},
+                      {"txtMontoBanco": "#txtbanco"},
+                      //{"blkTipoTarjeta": "#blktipotarjetas"},
+                      {"btnCancelarEdicion": "#btncancelaredicion"},
                       {"btnGuardar": "#btnguardar"},
                       {"mdlBuscarProducto": "#mdlBuscarProducto"},
                       {"txtBuscar":"#txtbuscar"},
@@ -80,6 +91,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                       {"blkListaProductos" : "#blklistaproductos"},
                       {"btnAgregarProductos": "#btnagregarproductos"}
                     ]);  
+
       // DOM.radTipoPago = $("input[name=radtipopago]");
       // DOM.radTipoTarjeta = $("input[name=radtipotarjeta]");
         this.DOM = DOM;
@@ -89,7 +101,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       var self = this,
           DOM = self.DOM;
   
-      DOM.cboTipoComprobante.on("change", function(e){
+      DOM.cboTipoComprobante.on("change", (e) => {
         const idTipoComprobante = e.currentTarget.value;
         cargarSeriesPorTipoComprobante(idTipoComprobante);
       });
@@ -100,17 +112,17 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         }
         return;
       });
-  
+      
       DOM.txtCorrelativo.on("change", function(e){
-        const correlativo = this.value;
-        if (correlativo.length === 0){
-          return;
-        }
-
-        if (correlativo.length < 6){
-            this.value = _Util.completarNumero(correlativo, 6);
+          const correlativo = this.value;
+          if (correlativo.length === 0){
             return;
-        }
+          }
+
+          if (correlativo.length < 6){
+              this.value = _Util.completarNumero(correlativo, 6);
+              return;
+          }
       });
   
       DOM.cboClienteBuscar.on("change", function(){
@@ -121,27 +133,63 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         cambiarTipoDocumento(this.value, DOM.blkNumeroDocumento, DOM.txtNumeroDocumento);
       });
   
-      var soloNumerosDecimales = function(e){
+      const soloNumerosDecimales = function(e){
         if (!_Util.soloNumerosDecimales(e)){
           e.preventDefault(); return;
         }
         return;
       };
   
-      /*
       DOM.txtMontoEfectivo.on("keypress", soloNumerosDecimales);
       DOM.txtMontoTarjeta.on("keypress", soloNumerosDecimales);
       DOM.txtMontoCredito.on("keypress", soloNumerosDecimales);
-      */
+      DOM.txtMontoYape.on("keypress", soloNumerosDecimales);
+      DOM.txtMontoPlin.on("keypress", soloNumerosDecimales);
+      DOM.txtMontoBanco.on("keypress", soloNumerosDecimales);
       DOM.txtDescuentoGlobal.on("keypress", soloNumerosDecimales);
-      /*
+  
       DOM.txtMontoEfectivo.on("change", function(){
         if (this.value == ""){
           this.value = "0.00";
         }
         equilibrarMontoPago("E");
       });
-      */
+  
+      DOM.txtMontoTarjeta.on("change", function(){
+        if (this.value == ""){
+          this.value = "0.00";
+        }
+        equilibrarMontoPago("T");
+      });
+  
+      DOM.txtMontoCredito.on("change", function(){
+        if (this.value == ""){
+          this.value = "0.00";
+        }
+        equilibrarMontoPago("C");
+      });
+  
+      DOM.txtMontoYape.on("change", function(){
+        if (this.value == ""){
+          this.value = "0.00";
+        }
+        equilibrarMontoPago("Y");
+      });
+  
+      DOM.txtMontoPlin.on("change", function(){
+        if (this.value == ""){
+          this.value = "0.00";
+        }
+        equilibrarMontoPago("P");
+      });
+  
+      DOM.txtMontoBanco.on("change", function(){
+        if (this.value == ""){
+          this.value = "0.00";
+        }
+        equilibrarMontoPago("B");
+      });
+  
       DOM.btnAgregarProducto.on("click", () => {
         this.prepararAgregarProductos();
         //agregarFilaDetalle();
@@ -170,7 +218,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
       DOM.frmRegistro.on("submit", function(e){
         e.preventDefault();
-        grabar();  
+        grabarVenta();  
       });
   
       DOM.tblDetalle.on("change", "tr .cantidad input", function(){
@@ -187,11 +235,18 @@ const RegistrarFacturas = function($contenedor, _tpl8){
           return;
         }
   
-        if (parseInt(valor) <= 0){
-          this.value = 1;
-        }
-
-        modificarCantidadDetalle($tr, this);
+        const maxstock = this.dataset.maxstock ? this.dataset.maxstock : "";
+  
+          if (maxstock != "" && parseInt(valor) > maxstock){
+            this.value = this.dataset.preval;
+            return;
+          }
+  
+          if (parseInt(valor) <= 0){
+            this.value = 1;
+          }
+  
+          modificarCantidadDetalle($tr, this);
       });
 
       DOM.tblDetalle.on("focusout", "tr .cantidad input", () => {
@@ -224,7 +279,38 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         return;
       });
   
+      DOM.tblDetalle.on("keyup", "tr .descuento input", function(e){
+        var valor = this.value,
+            $tr = [].slice.call(this.parentElement.parentElement.children);
+  
+        if ($tr[_INDEX.producto].dataset.producto == ""){
+          this.value = "";
+          return;
+        }
+  
+        if (valor.length >= 6){
+          buscarDescuento(valor, "detalle", $tr);
+        }
+      });
+  
+      DOM.mdlBuscarProducto.on("shown.bs.modal", function(e){
+        /*
+        var txtBuscar = DOM.txtBuscar,
+            txtBuscarVal = txtBuscar.val();
+  
+        txtBuscar.focus();
+        txtBuscar[0].setSelectionRange(0, txtBuscarVal.length);
+        realizarBusquedaProducto(txtBuscarVal);
+        */
+      });
+  
       DOM.blkListaProductos.on("click", "tr:not(.tr-null)", (e) => {
+        /*
+        const itemProducto = self.getProducto(this.dataset.id);
+        if (itemProducto.i != -1 && _TR_BUSCAR != null){
+          seleccionarProductoBuscar(itemProducto);
+        }
+        */
         this._seleccionarProductoBuscar($(e.currentTarget));
       });
 
@@ -233,6 +319,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       });
   
       DOM.txtDescuentoGlobal.on("change", function(e){
+        console.log(this.value)
         if (this.value == ""){
           this.value = "0.00";
         }
@@ -250,10 +337,23 @@ const RegistrarFacturas = function($contenedor, _tpl8){
           descuento = subTotal;
         }
 
-        this.value = descuento.toFixed(2);
         DOM.lblTotal.html(parseFloat(subTotal - descuento).toFixed(2));
+        equilibrarMontoPago();
       });
   
+      DOM.cboSucursal.on("change", function(){
+        self.obtenerDataProductos();
+      });
+  
+      DOM.btnActualizar.on("click", function(e){
+        e.preventDefault();
+        self.obtenerDataProductos(false, reafirmarStock);
+      });
+  
+      DOM.btnCancelarEdicion.on("click", function(){
+        self.cancelarEdicion();
+      });
+
       DOM.txtLectora.on("change", (e)=>{
         const codigoBarra = e.currentTarget.value.trim();
         if (codigoBarra.length >= CARACTERES_LECTORA){
@@ -265,9 +365,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         if (e.charCode === 13){
           e.preventDefault();
           const codigoBarra = e.currentTarget.value.trim();
-          if (codigoBarra.length >= CARACTERES_LECTORA){
-            agregarProductoUsandoLectora(codigoBarra);
-          }
+          agregarProductoUsandoLectora(codigoBarra);
         }
       });
 
@@ -282,6 +380,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       });
       observer.observe(document.getElementById("lbltotal"), {characterData: false, childList: true, attributes: false});
       */
+      //cargarCorrelativo(DOM.cboTipoComprobante.val());
     };
   
     const cargarCategorias = function(codTipo){
@@ -327,9 +426,11 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         this.DOM.tblDetalle[!_VACIO ? "append" : "html"]($nuevoDetalle);
         const $precio = $nuevoDetalle.find(".precio-unitario input");
         this.DOM.txtLectora.val("");
-        $precio.focus();
-        $precio.select();
+        //$precio.focus();
+        //$precio.select();
+        this.DOM.txtLectora.focus();
 
+        modificarStockProducto({o: itemProducto, i: indexItemProducto}, 1, "-");
         modificarTotalGeneral();
 
         _VACIO = false;
@@ -341,8 +442,120 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       this.DOM.txtLectora.focus();
     };
   
-    this.getProducto = function(id){
-      return _ArrayUtils.conseguirPID(_data.productos, "id", id);
+    const reafirmarStock = () => {
+      const DOM = this.DOM,
+          //arrDataProductos = _data.productos,
+          arregloTR = DOM.tblDetalle.find("tr:not(.tr-null)").toArray();
+  
+        swal("Éxito", "Stock actualizado...", "success");
+        for (let i = 0; i < arregloTR.length; i++) {
+          const $tds = [].slice.call(arregloTR[i].children),
+              id_producto = $tds[_INDEX.producto].dataset.producto,
+              cantidad = $tds[_INDEX.cantidad].children[0].value;
+  
+            if (id_producto != undefined && id_producto != "0000-00-00"){
+              const item = self.getProducto(id_producto);
+              _data.productos[item.i].stock = item.o.stock - cantidad;
+            }
+        };
+    };    
+  
+    const equilibrarMontoPago = (txtAccion = "E", montoTotal) => {
+      /*Obtener monto 1 y monto 2,*/
+      const DOM = this.DOM;
+      const $efectivo = DOM.txtMontoEfectivo,
+            $tarjeta = DOM.txtMontoTarjeta,
+            $credito = DOM.txtMontoCredito,
+            $yape = DOM.txtMontoYape,
+            $plin = DOM.txtMontoPlin,
+            $banco = DOM.txtMontoBanco;
+  
+      let   efectivo = $efectivo.val(),
+            tarjeta = $tarjeta.val(),
+            credito = $credito.val(),
+            yape = $yape.val(),
+            plin = $plin.val(),
+            banco = $banco.val(),
+            total = (montoTotal == undefined ? parseFloat(DOM.lblTotal.html())  : montoTotal);
+  
+          switch(txtAccion){
+            case "E":
+              efectivo = total;            
+              tarjeta = "0.00";
+              credito = "0.00";
+              yape = "0.00";
+              plin = "0.00";
+              banco = "0.00";
+            break;
+            case "T":
+              efectivo = total - tarjeta - credito - yape - plin - banco;
+              if (efectivo < 0.00){
+                efectivo = "0.00";
+                tarjeta = total;
+                credito = "0.00";
+                yape = "0.00";
+                plin = "0.00";
+                banco = "0.00";
+              }
+            break;
+            case "C":
+              efectivo = total - tarjeta - credito - yape - plin - banco;
+              if (efectivo < 0.00){
+                efectivo = "0.00";
+                tarjeta = "0.00";
+                credito = total;
+                yape = "0.00";
+                plin = "0.00";
+                banco = "0.00";
+              }
+            break;
+            case "Y":
+              efectivo = total - tarjeta - credito - yape - plin - banco;
+              if (efectivo < 0.00){
+                efectivo = "0.00";
+                tarjeta = "0.00";
+                credito = "0.00";
+                yape = total;
+                plin = "0.00";
+                banco = "0.00";
+              }
+            break;
+            case "P":
+              efectivo = total - tarjeta - credito - yape - plin - banco;
+              if (efectivo < 0.00){
+                efectivo = "0.00";
+                tarjeta = "0.00";
+                credito = "0.00";
+                yape = "0.00";
+                plin = total;
+                banco = "0.00";
+              }
+            break;
+            case "B":
+              efectivo = total - tarjeta - credito - yape - plin - banco;
+              if (efectivo < 0.00){
+                efectivo = "0.00";
+                tarjeta = "0.00";
+                credito = "0.00";
+                yape = "0.00";
+                plin = "0.00";
+                banco = total;
+              }
+            break;
+          }
+         
+          //cambiarTarjeta( (tarjeta > 0 ? "T" : "E"), DOM.blkTipoTarjeta);
+  
+          $tarjeta.val(parseFloat(tarjeta).toFixed(2));
+          $efectivo.val(parseFloat(efectivo).toFixed(2));
+          $credito.val(parseFloat(credito).toFixed(2));
+          $yape.val(parseFloat(yape).toFixed(2));
+          $plin.val(parseFloat(plin).toFixed(2));
+          $banco.val(parseFloat(banco).toFixed(2));
+    };
+  
+    this.getProducto = function(codigo_unico_producto){
+      return _ArrayUtils.conseguirPID(_data.productos, "codigo_unico_producto", codigo_unico_producto);
     };
   
     this.setDataProductos = function(_dataProductos){
@@ -351,21 +564,25 @@ const RegistrarFacturas = function($contenedor, _tpl8){
           ...p, seleccionado : false
         };
       });
-    };
+    }
 
-    this.setDataSeries = (_series) => {
-      _data.series = _series;
-    };
-
-    const obtenerDataProductos = async (deboEliminarCarrito = true, fnPostStocked = undefined ) => {
+    /*
+    this.setDataProductos = function(_dataProductos){
+      _data.productos = _dataProductos;
+    }
+    */
+  
+    this.obtenerDataProductos = async function(deboEliminarCarrito = true, fnPostStocked = undefined ){
+        const idSucursal = this.DOM.cboSucursal.val();
         try {
-          const { data } = await apiAxios.get(`productos`);
+          const { data } = await apiAxios.get(`ventas-productos/${idSucursal}`);
           this.setDataProductos(data);
+  
         } catch (error) {
-          swal("Error", "Error al obtener los productos.", "error");
+          swal("Error", "Error al obtener los productos para Venta.", "error");
           console.error(error);
         }
-
+  
         if (deboEliminarCarrito){
           eliminarTodoCarrito();
         }
@@ -377,8 +594,8 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
     this.obtenerData = function(){
       obtenerClientes();
+      obtenerSucursales();
       obtenerTipoCategorias();
-      obtenerDataProductos();
       obtenerSeries();
     };
   
@@ -390,6 +607,22 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
       } catch (error) {
           swal("Error", "Error al obtener los clientes.", "error");
+          console.error(error);
+      }
+    };
+  
+    const obtenerSucursales = async () => {
+      try {
+          const { data } = await apiAxios.get('sucursales');
+          const sucursalHTML = _tpl8.Sucursal(data);
+  
+          app.ListarVentas.DOM.cboSucursal.html(sucursalHTML);
+          this.DOM.cboSucursal.html(sucursalHTML);
+  
+          this.obtenerDataProductos();
+  
+      } catch (error) {
+          swal("Error",  "Error al obtener las sucursales.", "error");
           console.error(error);
       }
     };
@@ -423,16 +656,30 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         return {serie, correlativo};
       })));
     };
-  
-    const eliminarTodoCarrito = () => {
+
+    const eliminarTodoCarrito = (resetearStock) => {
       /*Clean up, sub total 0, descuento vacío, total 0, descuentos 0, eliminar dscuent globaal*/
       /*Reseetar stock si y solo si se eliminó todo el carrito sin haber regitrado nada */
-      const DOM = this.DOM;
+      const DOM = this.DOM, index = _INDEX;
+      let arregloTR;
   
       _VACIO = true;
       DOM.lblSubTotal.html("0.00");
       DOM.lblTotal.html("0.00"); 
       DOM.txtDescuentoGlobal.val("0.00");
+  
+      if (resetearStock == true){   
+        arregloTR = DOM.tblDetalle.find("tr:not(.tr-null)").toArray();
+        $.each(arregloTR, function(i,o){
+          var arregloTD = [].slice.call(o.children),
+            $producto = arregloTD[index.producto].dataset.producto,
+            $cantidad = arregloTD[index.cantidad].children[0];
+            if ($producto != "0000-00-00"){
+              modificarStockProducto(self.getProducto($producto), $cantidad.value, "+");
+            }
+  
+        });
+      } 
   
       //cancelarDescuento("global");
       DOM.tblDetalle.html(_tpl8.tblDetalle([]));
@@ -446,7 +693,10 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         DOM.txtNumeroDocumento.val(null);
         DOM.blkNumeroDocumento.hide();
         DOM.txtCliente.val(null);
+        DOM.txtApellidos.val(null);
         DOM.txtDireccion.val(null);
+        DOM.txtCorreo.val(null);
+        DOM.txtCelular.val(null);
         cambiarTipoDocumento(DOM.cboTipoDocumento.val(), DOM.blkNumeroDocumento, DOM.txtNumeroDocumento);
         return;
       }
@@ -461,8 +711,11 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         DOM.blkNumeroDocumento.hide();
       }
 
-      DOM.txtCliente.val(`${objCliente.nombres} ${objCliente.apellidos}`.trim());
+      DOM.txtCliente.val(objCliente.nombres);
+      DOM.txtApellidos.val(objCliente.apellidos);
       DOM.txtDireccion.val(objCliente.direccion);
+      DOM.txtCelular.val(objCliente.celular);
+      DOM.txtCorreo.val(objCliente.correo);
 
       cambiarTipoDocumento(DOM.cboTipoDocumento.val(), DOM.blkNumeroDocumento, DOM.txtNumeroDocumento);
     };
@@ -489,6 +742,19 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         break;
       }
 
+      const DOM = this.DOM;
+      const blkCliente = DOM.txtCliente.parents(".col-xs-12");
+      const blkApellidos = DOM.txtApellidos.parents(".col-xs-12");
+      if (tipoDocumento == "6"){
+        blkApellidos.hide();
+        blkCliente.removeClass("col-sm-4").addClass("col-sm-8");
+        blkCliente.find(".control-label").html("Razón Social");
+      } else {
+        blkApellidos.show();
+        blkCliente.addClass("col-sm-4").removeClass("col-sm-8");
+        blkCliente.find(".control-label").html("Nombre cliente");
+      }
+
       txtNumeroDocumento[0].maxLength = maxLength;
       txtNumeroDocumento[0].value = txtNumeroDocumento[0].value.substr(0, maxLength);
     };
@@ -499,7 +765,13 @@ const RegistrarFacturas = function($contenedor, _tpl8){
     };
   
     const seleccionarProductoBuscar = (itemProducto) => {
-      const objProducto = itemProducto.o;
+      const objProducto = itemProducto.o,
+            stock = objProducto.stock;
+  
+      if (stock <= 0){
+        swal("Error", `El producto ${objProducto.nombre_producto} no tiene STOCK disponible.`);
+        return;
+      }
   
       const index = _INDEX,
           arregloTD = [].slice.call(_TR_BUSCAR.children),
@@ -514,6 +786,11 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       let cantidadDefault, subtotal;
   
       this.DOM.mdlBuscarProducto.modal("hide");
+  
+      /*Si hubo un producto seleccionad con anteiorirdad regresar sus datos a como estaban antes de cagarla.*/
+      if ($producto.dataset.producto != "0000-00-00"){
+        modificarStockProducto(this.getProducto($producto.dataset.producto), $cantidad.value, "+");  
+      }
   
       $producto.dataset.codproducto = objProducto.id;
       $producto.dataset.producto = objProducto.codigo_unico_producto;
@@ -532,6 +809,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
       subtotal = valorPrecio * cantidadDefault;
   
+      modificarStockProducto(itemProducto, cantidadDefault, "-");
       modificarSubTotalDetalle( subtotal, $subtotal);
   
       $precio.focus();
@@ -577,7 +855,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       */
       if (cadena == "" || cadena.length >= 3){
         const parametrosBusqueda = [{
-            propiedad: "producto",
+            propiedad: "nombre_producto",
             valor: cadena,
             mayusculas : true,
             exactitud : false
@@ -612,7 +890,11 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
       arregloTR= tblDetalle.find("tr:not(.tr-null)").toArray();
   
-      const numFila = arregloTR.length;
+      if (itemProducto.i >= 0){
+        modificarStockProducto(itemProducto,cantidad, "+");  
+      }
+  
+      var numFila = arregloTR.length;
       if (numFila <= 0){
         _VACIO = true;
         tblDetalle.html(_tpl8.tblDetalle());
@@ -620,17 +902,42 @@ const RegistrarFacturas = function($contenedor, _tpl8){
   
       modificarTotalGeneral(arregloTR);
     };
-
+  
+    const modificarStockProducto = (itemProducto, cantidad, tipo) => {
+      /*tipo == + / -*/
+        const objProducto = itemProducto.o,
+            stock = objProducto.stock,
+            nuevoStock  = parseInt(stock) + parseInt(cantidad  * (tipo == "+" ? 1 : -1)),
+            exceso = 0;
+  
+        if (nuevoStock < 0){
+          exceso = nuevoStock * -1;
+          nuevoStock = 0;  
+        }
+  
+        _data.productos[itemProducto.i].stock = nuevoStock;
+        return {viejo: stock, exceso: exceso, nuevo: nuevoStock};
+    };
+  
     const modificarCantidadDetalle = ($tr, $cantidad_) => {
       /*obtener producto, actualizarse la cantidad, mdoifcar subtotal, modificar gran sub total*/
       const index = _INDEX,
           $cantidad = ($cantidad_ == null ? arregloTD[index.cantidad].children[0] : $cantidad_),
+          cantidadAnterior = $cantidad.dataset.preval, 
           cantidadNueva = $cantidad.value,
           arregloTD = [].slice.call($tr.children);
   
-      const $subtotal = arregloTD[index.subtotal],
-            $precio_unitario = arregloTD[index.precio_unitario].children[0],
-            valorPrecio = parseFloat($precio_unitario.value).toFixed(2);
+      const itemProducto = this.getProducto(arregloTD[index.producto].dataset.producto),
+          $subtotal = arregloTD[index.subtotal],
+          $precio_unitario = arregloTD[index.precio_unitario].children[0],
+          valorPrecio = parseFloat($precio_unitario.value).toFixed(2),
+          cantidadVender = cantidadNueva - cantidadAnterior,
+          stockModificado = modificarStockProducto(itemProducto, cantidadVender, "-");
+  
+      if (stockModificado.nuevo < 0){
+        cantidadNueva = cantidadNueva - stockModificado.exceso;
+        $cantidad.value = cantidadNueva;
+      }
   
       const subtotal = valorPrecio * cantidadNueva;
       $cantidad.dataset.preval = cantidadNueva;
@@ -680,13 +987,13 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         DOM.lblTotal.html(total);
         DOM.txtDescuentoGlobal.val("0.00");
 
-        //equilibrarMontoPago("E", total);
+        equilibrarMontoPago("E", total);
 
     };
   
-    const grabar = () => {
+    const grabarVenta = () => {
       const objButtonLoading = new ButtonLoading({$: this.DOM.btnGuardar[0]});
-      const objComprobante = verificar();
+      const objVenta = verificarVenta();
       const fnConfirm = async (isConfirm) => {
             if(!isConfirm){
               return;
@@ -695,8 +1002,8 @@ const RegistrarFacturas = function($contenedor, _tpl8){
             objButtonLoading.start();
 
             try {
-              const cabecera = objComprobante.datos.cabecera,
-                    detalle  = objComprobante.datos.detalle;
+              const cabecera = objVenta.datos.cabecera,
+                    detalle  = objVenta.datos.detalle;
 
               const sentData = {
                 id_tipo_comprobante : cabecera.id_tipo_comprobante,
@@ -705,50 +1012,57 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                 id_cliente: Boolean(cabecera.id_cliente) ? cabecera.id_cliente : null,
                 cliente_id_tipo_documento : cabecera.id_tipo_documento_cliente,
                 cliente_numero_documento : cabecera.numero_documento_cliente,
-                cliente_descripcion : cabecera.descripcion_cliente,
+                cliente_nombres : cabecera.nombre_cliente,
+                cliente_apellidos : cabecera.apellidos_cliente,
                 cliente_direccion : cabecera.direccion_cliente,
+                cliente_celular : cabecera.celular_cliente,
+                cliente_correo : cabecera.correo_cliente,
+                monto_efectivo: cabecera.monto_efectivo,
+                monto_tarjeta: cabecera.monto_tarjeta,
+                monto_credito : cabecera.monto_credito,
+                monto_yape: cabecera.monto_yape,
+                monto_plin : cabecera.monto_plin,
+                monto_transferencia : cabecera.monto_transferencia,
                 descuento_global : cabecera.descuento_global,
                 importe_total : cabecera.importe_total,
-                fecha_emision : cabecera.fecha_emision,
-                hora_emision: cabecera.hora_emision,
-                fecha_vencimiento : cabecera.fecha_vencimiento,
-                id_tipo_moneda : cabecera.id_tipo_moneda,
+                fecha_venta : cabecera.fecha_venta,
+                hora_venta: cabecera.hora_venta,
+                id_sucursal : cabecera.id_sucursal,
                 observaciones: cabecera.observaciones,
-                condicion_pago: cabecera.condicion_pago,
-                es_delivery: cabecera.es_delivery,
                 productos: detalle
               };
-              
+          
               const {data} = MODO === '+' 
-                              ? await apiAxios.post('comprobantes/registrar-factura', sentData)
-                              : await apiAxios.put(`comprobantes/registrar-factura/${COD_EDITAR}`, sentData);
+                              ? await apiAxios.post('ventas', sentData)
+                              : await apiAxios.put(`ventas/${COD_VENTA_EDITAR}`, sentData);
 
               //swal("Éxito", "Registrado con éxito.", "success");
-
-              if (cabecera.id_tipo_comprobante != ""){
-                const serie = this.DOM.txtSerie.val(),
-                      tipoComprobante = this.DOM.cboTipoComprobante.val();
-                      
-                const keyStorageComprobante = NOMBRE_LOCALSTORAGE+"correlativo"+tipoComprobante+serie;
-                const correlativoNuevo = parseInt(localStorage.getItem(keyStorageComprobante)) + 1;
-                localStorage.setItem(keyStorageComprobante, correlativoNuevo );
-                this.DOM.txtCorrelativo.val(_Util.completarNumero(correlativoNuevo, 6));
-              }
               //app.ListarVentas.verDetalle(data.id);
-              COD_EDITAR = null;
-              //this.DOM.btnCancelarEdicion.hide();
+  
+              COD_VENTA_EDITAR = null;
+              this.DOM.btnCancelarEdicion.hide();
+              this.DOM.cboSucursal.attr("disabled",false);
+              this.DOM.btnActualizar.show();
               $("#lblrotuloedicion").empty();
-              limpiarComprobante();
+              limpiarVenta();
               //$('.nav-tabs a[href="#tabListadoVentas"]').tab('show');
               //ListarVentas.listarVentas(data.lista_ventas);
               MODO = "+";
-              app.ListarFacturas.verComprobante(data.id);
+              
+              const idTipoComprobante =  this.DOM.cboTipoComprobante.val();
+              if (idTipoComprobante == "00"){
+                  app.ListarVentas.verAtencion(data.id);
+              } else {
+                  app.ListarVentas.verComprobante(data.id_documento_electronico);
+              }
+    
             } catch (error) {
               const { response } = error;
               if (Boolean(response?.data?.message)){
                 swal("Error", response.data.message, "error");
                 return;
               }
+
               swal("Error", "Problema con el registro de la venta.", "error");
               console.error(error);
             } finally {
@@ -756,8 +1070,8 @@ const RegistrarFacturas = function($contenedor, _tpl8){
             }
         };
   
-      if (!objComprobante.rpt){
-        swal("Error", objComprobante.msj, "error");
+      if (!objVenta.rpt){
+        swal("Error", objVenta.msj, "error");
         return;
       }
           
@@ -781,7 +1095,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       */
     };
   
-    const verificar = () => {
+    const verificarVenta = () => {
       const objVerificarCabecera = verificarCabecera();
   
       if (!objVerificarCabecera.rpt){
@@ -804,21 +1118,28 @@ const RegistrarFacturas = function($contenedor, _tpl8){
           id_cliente = DOM.cboClienteBuscar.val(),
           id_tipo_documento_cliente = DOM.cboTipoDocumento.val(),
           numero_documento_cliente = DOM.txtNumeroDocumento.val(),
-          descripcion_cliente = DOM.txtCliente.val(),
+          nombre_cliente = DOM.txtCliente.val(),
+          apellidos_cliente = DOM.txtApellidos.val(),
           direccion_cliente = DOM.txtDireccion.val(),
-          fecha_emision = DOM.txtFechaEmision.val(),
-          hora_emision = DOM.txtHoraEmision.val(),
-          fecha_vencimiento = DOM.txtFechaVencimiento.val(),
-          id_tipo_moneda = DOM.txtMoneda.val(),
+          correo_cliente = DOM.txtCorreo.val(),
+          celular_cliente = DOM.txtCelular.val(),
+          fecha_venta = DOM.txtFechaVenta.val(),
+          hora_venta = DOM.txtHoraVenta.val(),
           //tipoPago = DOM.radTipoPago[0].checked ? 'E' : 'T', /*0: EFECTIVO, 1: TARJETA*/     
+          monto_efectivo = DOM.txtMontoEfectivo.val(),
+          monto_tarjeta = DOM.txtMontoTarjeta.val(), 
+          //tipoTarjeta = DOM.radTipoTarjeta[0].checked ? 'C' : 'D',
+          monto_credito = DOM.txtMontoCredito.val(), 
+          monto_yape = DOM.txtMontoYape.val(), 
+          monto_plin = DOM.txtMontoPlin.val(), 
+          monto_transferencia = DOM.txtMontoBanco.val(), 
+          id_sucursal = DOM.cboSucursal.val(),
           descuento_global = DOM.txtDescuentoGlobal.val(),
           importe_total = DOM.lblTotal.html(),
           observaciones = DOM.txtObservaciones.val(),
-          condicion_pago = DOM.cboCondicionPago.val(),
-          es_delivery = DOM.txtDelivery.val(),
           numeroDocumentoLength = numero_documento_cliente.length;
   
-      if (descripcion_cliente.length < 0){
+      if (nombre_cliente.length < 0){
         return {rpt: false, msj: "Ingrese nombre de cliente."};
       }
   
@@ -830,16 +1151,12 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         return {rpt: false, msj: "Ingrese un número de RUC válido."};
       }
   
-      if (fecha_emision == ""){
-        return {rpt: false, msj: "Ingrese fecha de emisión."};
+      if (fecha_venta == ""){
+        return {rpt: false, msj: "Ingrese fecha de venta."};
       }
 
-      if (hora_emision == ""){
-        return {rpt: false, msj: "Ingrese hora de emisión."};
-      }
-
-      if (fecha_vencimiento == ""){
-        return {rpt: false, msj: "Ingrese fecha de vencimiento."};
+      if (hora_venta == ""){
+        return {rpt: false, msj: "Ingrese hora de venta."};
       }
   
       if (id_tipo_comprobante.length > 0){
@@ -861,17 +1178,23 @@ const RegistrarFacturas = function($contenedor, _tpl8){
           id_cliente,
           id_tipo_documento_cliente,
           numero_documento_cliente,
-          descripcion_cliente,
+          nombre_cliente,
+          apellidos_cliente,
           direccion_cliente,
-          fecha_emision,
-          hora_emision,
-          fecha_vencimiento,
-          id_tipo_moneda,
+          correo_cliente,
+          celular_cliente,
+          fecha_venta,
+          hora_venta,
+          monto_efectivo,
+          monto_tarjeta,
+          monto_credito,
+          monto_yape,
+          monto_plin,
+          monto_transferencia,
+          id_sucursal,
           descuento_global,
           importe_total,
-          observaciones,
-          condicion_pago,
-          es_delivery
+          observaciones
         }
       };
     };
@@ -893,7 +1216,9 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                 producto = arregloTD[index.producto].dataset.producto,
                 id_producto = arregloTD[index.producto].dataset.codproducto,
                 precio_unitario = arregloTD[index.precio_unitario].children[0].value,
-                cantidad = arregloTD[index.cantidad].children[0].value;
+                cantidad = arregloTD[index.cantidad].children[0].value,
+                fecha_vencimiento = '0000-00-00',
+                lote = arregloTD[index.lote].innerHTML;
   
               if (producto == ""){
                 return {rpt: false, msj: "Fila "+n+" sin producto válido."};
@@ -911,6 +1236,8 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                 datos: {
                    producto,
                    id_producto,
+                   fecha_vencimiento,
+                   lote,
                    precio_unitario,
                    cantidad
                   }
@@ -932,7 +1259,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         return {rpt: true, datos: objDetalles};
     };  
   
-    const limpiarComprobante = () => {
+    const limpiarVenta = () => {
       /*formulario, descuentos, detalle*/ 
       const DOM = this.DOM;
   
@@ -940,9 +1267,18 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       DOM.cboTipoDocumento.val("0");
       DOM.blkNumeroDocumento.hide();
       DOM.txtCliente.val(null);
+      DOM.txtApellidos.val(null);
       DOM.txtDireccion.val(null);
+      DOM.txtCelular.val(null);
+      DOM.txtCorreo.val(null);
       DOM.txtObservaciones.val(null);
   
+      DOM.txtMontoTarjeta.val("0.00");
+      DOM.txtMontoEfectivo.val("0.00");
+      DOM.txtMontoCredito.val("0.00");
+      DOM.txtMontoYape.val("0.00");
+      DOM.txtMontoPlin.val("0.00");
+      DOM.txtMontoBanco.val("0.00");
       DOM.txtDescuentoGlobal.val("0.00");
   
       eliminarTodoCarrito(MODO == "*");
@@ -972,7 +1308,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                     $("#lblrotuloedicion").html("EDITANDO VENTA: "+cabecera.x_cod_transaccion);
   
   
-                    COD_EDITAR = cabecera.cod_transaccion;
+                    COD_VENTA_EDITAR = cabecera.cod_transaccion;
   
                     DOM.cboClienteBuscar.val(cabecera.cod_cliente).change().trigger("chosen:updated");
   
@@ -1044,7 +1380,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                     DOM.txtMontoTarjeta.val(cabecera.monto_tarjeta);
                     DOM.txtMontoCredito.val(cabecera.monto_credito);
   
-                   $('.nav-tabs a[href="#tabRegistrarFacturas"]').tab('show');
+                   $('.nav-tabs a[href="#tabRegistrarVentas"]').tab('show');
   
                    DOM.btnCancelarEdicion.show();
                
@@ -1063,7 +1399,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
     };
   
     this.cancelarEdicion = function(){
-      COD_EDITAR = null;
+      COD_VENTA_EDITAR = null;
       ARREGLO_DESCUENTOS_TEMPORAL_EDITANDO = [];
       MODO = "+";
       $("#lblrotuloedicion").empty();
@@ -1071,7 +1407,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       self.DOM.btnActualizar.show();
       self.DOM.btnCancelarEdicion.hide();
   
-      limpiarComprobante();
+      limpiarVenta();
     };
 
     this.prepararAgregarProductos = () => {
@@ -1092,7 +1428,14 @@ const RegistrarFacturas = function($contenedor, _tpl8){
     this._seleccionarProductoBuscar = ($tr) =>{
       const classNameSeleccionado = "seleccionado-tr";
       const idSeleccionado = $tr.data("id");
+      const stock = $tr.data("stock");
       const estaSeleccionado = $tr.hasClass(classNameSeleccionado);
+
+      if (stock <= 0){
+        const nombreProducto = $tr.children()[0].innerText;
+        swal("Error", `El producto ${nombreProducto} no tiene STOCK disponible.`);
+        return;
+      }
 
       if (estaSeleccionado){
         $tr.removeClass(classNameSeleccionado);
@@ -1101,7 +1444,7 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       }
 
       _data.productos = _data.productos.map( p => {
-        if (p.id == idSeleccionado){
+        if (p.codigo_unico_producto == idSeleccionado){
           return {
             ...p, seleccionado: !estaSeleccionado
           }
@@ -1118,14 +1461,17 @@ const RegistrarFacturas = function($contenedor, _tpl8){
                                         .map( itemProducto => {
                                           return {
                                             cod_producto: itemProducto.id,
-                                            producto: itemProducto.producto,
+                                            nombre_producto: itemProducto.nombre_producto,
                                             precio_unitario: itemProducto.precio_unitario,
+                                            fecha_vencimiento: itemProducto.fecha_vencimiento,
+                                            lote: itemProducto.lote,
                                             marca : itemProducto.marca,
                                             cantidad: 1,
                                             monto_descuento: null,
                                             tipo_descuento: null,
                                             cod_descuento: null,
-                                            subtotal: itemProducto.precio_unitario
+                                            subtotal: itemProducto.precio_unitario,
+                                            maxstock : itemProducto.stock
                                           }
                                         });
 
