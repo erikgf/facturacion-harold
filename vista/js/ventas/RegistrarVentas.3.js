@@ -354,17 +354,19 @@ const RegistrarVentas = function($contenedor, _tpl8){
         self.cancelarEdicion();
       });
 
+      /*
       DOM.txtLectora.on("change", (e)=>{
         const codigoBarra = e.currentTarget.value.trim();
         if (codigoBarra.length >= CARACTERES_LECTORA){
           agregarProductoUsandoLectora(codigoBarra);
         }
       });
+      */
 
       DOM.txtLectora.on("keypress", (e)=>{
         if (e.charCode === 13){
           e.preventDefault();
-          const codigoBarra = e.currentTarget.value.trim();
+          const codigoBarra = e.currentTarget.value.toUpperCase().trim();
           agregarProductoUsandoLectora(codigoBarra);
         }
       });

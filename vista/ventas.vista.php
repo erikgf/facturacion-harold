@@ -368,7 +368,7 @@ $fechaHoy = date('Y-m-d');
            
         </div><!-- /.main-container -->
        <?php  include '_js/main.js.php'; ?>
-       <script src="js/ventas/RegistrarVentas.2.js"></script>
+       <script src="js/ventas/RegistrarVentas.3.js"></script>
        <script src="js/ventas/ListarVentas.2.js"></script>
        <script src="js/ventas/ventas.vista.2.js"></script>
     </body>

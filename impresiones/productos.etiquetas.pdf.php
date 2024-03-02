@@ -91,9 +91,9 @@ $dataProductos = [
 */
 
 
-$pdf = new PDF_Code128($orientation='L', $unit='mm', array(50.8,25.4));
-$pdf->SetMargins(3, 1.25);
-$pdf->SetAutoPageBreak(false);
+$pdf = new PDF_Code128('L', 'mm', array(50.8,25.4));
+$pdf->SetMargins(3, 1.25, 3);
+$pdf->SetAutoPageBreak(true, 0);
 $pdf->AddFont('ArialBlack','','arial_black.php');
 $pdf->AddFont('Helvetica','','helvetica.php');
 
@@ -104,7 +104,7 @@ foreach ($datos as $key => $producto) {
     for ($i=0; $i < $numeroCopias; $i++) { 
         $pdf->AddPage();
         $pdf->SetFont('Helvetica','B', 10);
-        $pdf->CellFitScale($anchoTope, 3.5, $producto["empresa_especial"]." - ".utf8_decode($producto["categoria"]["nombre"]), $BORDES, 1,'C');
+        $pdf->CellFitScale($anchoTope, 3.5, $producto["empresa_especial"]." - ".utf8_decode($producto["marca"]["nombre"]), $BORDES, 1,'C');
         $pdf->SetFont('Helvetica','', 8);
         $pdf->CellFitScale($anchoTope, 3.5, utf8_decode($producto["nombre"]), $BORDES, 1,'C');
         $pdf->SetFont('Arial','B', 6.5);
