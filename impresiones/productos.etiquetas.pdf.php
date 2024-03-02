@@ -102,7 +102,7 @@ $BORDES = 0;
 foreach ($datos as $key => $producto) {
     $numeroCopias = $producto["veces"];
     for ($i=0; $i < $numeroCopias; $i++) { 
-        $pdf->AddPage();
+        $pdf->AddPage('L');
         $pdf->SetFont('Helvetica','B', 10);
         $pdf->CellFitScale($anchoTope, 3.5, $producto["empresa_especial"]." - ".utf8_decode($producto["marca"]["nombre"]), $BORDES, 1,'C');
         $pdf->SetFont('Helvetica','', 8);
