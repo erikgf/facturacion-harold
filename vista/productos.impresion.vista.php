@@ -13,6 +13,7 @@ $TITULO_PAGINA = "Impresión de Productos";
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
           <?php  include '_css/main.css.php'; ?>
+          <?php  include '_css/dataTableButtons.css.php'; ?>
     </head>
     <body class="no-skin">
         <?php include './partials/_globals/navbar.php'; ?>
@@ -39,10 +40,7 @@ $TITULO_PAGINA = "Impresión de Productos";
                     <div class="col-ms-12">
                       <div class="row">
                         <div class="col-xs-offset-6 col-xs-6 col-sm-offset-8 col-sm-4 text-right">
-                          <a id="btn-agregar" type="button" class="btn btn-primary">
-                          <i class="fa fa-plus bigger-120 white"></i> AGREGAR</a>
-                          <a id="btn-imprimir" type="button" class="btn btn-secondary">
-                          <i class="fa fa-print bigger-120 white"></i> IMPRIMIR</a>
+                          <a id="btn-agregar" type="button" class="btn btn-primary"><i class="fa fa-plus bigger-120 white"></i> AGREGAR</a>
                         </div>
                       </div><!-- /.row -->
 
@@ -55,12 +53,12 @@ $TITULO_PAGINA = "Impresión de Productos";
                                 <table id="tbl-listado" class="table table-striped table-bordered table-hover dataTable dt-responsive"  cellspacing="0" width="100%">
                                     <thead>
                                       <tr>
-                                        <th width="45px"></th>
-                                        <th width="70px">Cantidad</th>
+                                        <th class="not-export" width="45px"></th>
                                         <th width="90px">C.Barras</th>
                                         <th>Nombre Producto</th>
                                         <th width="150px">Categoría</th>
                                         <th width="150px">Marca</th>
+                                        <th width="150px">Talla</th>
                                         <th width="100px">P. Venta</th>
                                       </tr>
                                     </thead>
@@ -68,17 +66,17 @@ $TITULO_PAGINA = "Impresión de Productos";
                                           <script id="tpl8Listado" type="handlebars-x">
                                           {{#.}}
                                               <tr data-id="{{id}}">
-                                                  <td>
+                                                  <td class="not-export">
                                                       <button class="btn btn-xs btn-danger btn-quitar">
                                                           <i class="fa fa-remove bigger-130"></i>
                                                       </button>
                                                   </td>
-                                                  <td><input type="numeric" class="form-control text-right txt-cantidad" value="1"/></td>
                                                   <td class="text-center">{{codigo_generado}}</td>
                                                   <td>{{empresa_especial}} - {{producto}}</td>
                                                   <td>{{categoria}}</td>
                                                   <td>{{marca}}</td>
-                                                  <td>S/ {{precio_unitario}}</td>
+                                                  <td>{{talla}}</td>
+                                                  <td>{{precio_unitario}}</td>
                                               </tr>
                                           {{/.}}
                                           </script>                                    
@@ -177,6 +175,7 @@ $TITULO_PAGINA = "Impresión de Productos";
       </div>
 
         <?php  include '_js/main.js.php';?>
+        <?php  include '_js/dataTableButtons.js.php'; ?>
         <script src="js/producto.impresion.vista.js"></script>
     </body>
 

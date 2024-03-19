@@ -91,14 +91,15 @@ $dataProductos = [
 */
 
 
-$pdf = new PDF_Code128('L', 'mm', array(50.8,25.4));
-$pdf->SetMargins(3, 1.25, 3);
+$pdf = new PDF_Code128('L', 'mm',  array(25.4, 50.8)); //25.4
+$pdf->SetMargins(3, 2.5, 3);
 $pdf->SetAutoPageBreak(true, 0);
 $pdf->AddFont('ArialBlack','','arial_black.php');
 $pdf->AddFont('Helvetica','','helvetica.php');
 
 $anchoTope = 45.8;
-$BORDES = 0;
+$BORDES = 1;
+$cantidad = count($datos);
 foreach ($datos as $key => $producto) {
     $numeroCopias = $producto["veces"];
     for ($i=0; $i < $numeroCopias; $i++) { 
@@ -115,7 +116,7 @@ foreach ($datos as $key => $producto) {
         $x = $pdf->GetX();
         $y = $pdf->GetY();
         $w = $anchoTope;
-        $h = 7;
+        $h = 6;
 
         $pdf->Code128($x,$y,$producto["codigo_generado"],$w,$h);
         $pdf->SetXY($x + 2.5, $y + $h + .25);

@@ -85,6 +85,7 @@ const app = function() {
       });
 
       this.blkListaProductos.html(this.tpl8.ListaProducto(productosFiltrados));
+      
     };
 
     this._seleccionarProductoBuscar = ($tr) =>{
@@ -115,6 +116,24 @@ const app = function() {
       console.log({productosSeleccionados})
       this.tblListado.find("tbody").html(this.tpl8.Listado(productosSeleccionados));
       this.mdlRegistro.modal("hide");
+
+      if (this._DT) {this._DT.destroy(); this._DT = null;}
+      this._DT = this.tblListado.DataTable({
+          aaSorting: [[0, "desc"]],
+          pageLength: 20,
+          dom: 'Bfrtip',
+          buttons: [
+              {
+                extend: 'excel',
+                className: "btn btn-success",
+                title: '',
+                exportOptions: {
+                  columns: ':not(.notexport)'
+                }
+              },
+          ],
+          responsive: true
+      });
     };
 
     this.imprimir = () => {
@@ -136,6 +155,8 @@ const app = function() {
         key : JSON.parse(localStorage.getItem(SESSION_NAME)).token
       };
       
+
+
       Util.downloadPDFUsingPost({
         url: "../impresiones/productos.etiquetas.pdf.php",
         variableName: "p_data", 
