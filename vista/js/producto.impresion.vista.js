@@ -62,8 +62,8 @@ const app = function() {
     this.obtenerDataProductos = async () => {
       try {
         const { data } = await apiAxios.get(`productos`);
-        this.productosFiltrados = data;
 
+        this.productosFiltrados = data;
       } catch (error) {
         swal("Error", "Error al obtener los productos.", "error");
         console.error(error);
@@ -116,24 +116,6 @@ const app = function() {
       console.log({productosSeleccionados})
       this.tblListado.find("tbody").html(this.tpl8.Listado(productosSeleccionados));
       this.mdlRegistro.modal("hide");
-
-      if (this._DT) {this._DT.destroy(); this._DT = null;}
-      this._DT = this.tblListado.DataTable({
-          aaSorting: [[0, "desc"]],
-          pageLength: 20,
-          dom: 'Bfrtip',
-          buttons: [
-              {
-                extend: 'excel',
-                className: "btn btn-success",
-                title: '',
-                exportOptions: {
-                  columns: ':not(.notexport)'
-                }
-              },
-          ],
-          responsive: true
-      });
     };
 
     this.imprimir = () => {

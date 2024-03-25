@@ -41,6 +41,7 @@ $TITULO_PAGINA = "Impresión de Productos";
                       <div class="row">
                         <div class="col-xs-offset-6 col-xs-6 col-sm-offset-8 col-sm-4 text-right">
                           <a id="btn-agregar" type="button" class="btn btn-primary"><i class="fa fa-plus bigger-120 white"></i> AGREGAR</a>
+                          <a id="btn-imprimir" type="button" class="btn btn-secondary"><i class="fa fa-print bigger-120 white"></i> IMPRIMIR</a>
                         </div>
                       </div><!-- /.row -->
 
@@ -54,6 +55,7 @@ $TITULO_PAGINA = "Impresión de Productos";
                                     <thead>
                                       <tr>
                                         <th class="not-export" width="45px"></th>
+                                        <th width="50px">Cantidad</th>
                                         <th width="90px">C.Barras</th>
                                         <th>Nombre Producto</th>
                                         <th width="150px">Categoría</th>
@@ -71,6 +73,7 @@ $TITULO_PAGINA = "Impresión de Productos";
                                                           <i class="fa fa-remove bigger-130"></i>
                                                       </button>
                                                   </td>
+                                                  <td width="50px"><input type="numeric" class="form-control text-right txt-cantidad" value="1"/></td>
                                                   <td class="text-center">{{codigo_generado}}</td>
                                                   <td>{{empresa_especial}} - {{producto}}</td>
                                                   <td>{{categoria}}</td>

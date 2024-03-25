@@ -98,7 +98,7 @@ $pdf->AddFont('ArialBlack','','arial_black.php');
 $pdf->AddFont('Helvetica','','helvetica.php');
 
 $anchoTope = 45.8;
-$BORDES = 1;
+$BORDES = 0;
 $cantidad = count($datos);
 foreach ($datos as $key => $producto) {
     $numeroCopias = $producto["veces"];
@@ -115,10 +115,10 @@ foreach ($datos as $key => $producto) {
         
         $x = $pdf->GetX();
         $y = $pdf->GetY();
-        $w = $anchoTope;
-        $h = 6;
+        $w = $anchoTope *.75;
+        $h = 8;
 
-        $pdf->Code128($x,$y,$producto["codigo_generado"],$w,$h);
+        $pdf->Code128($x + 5,$y,$producto["codigo_generado"],$w,$h);
         $pdf->SetXY($x + 2.5, $y + $h + .25);
         $pdf->Ln(0);
         
