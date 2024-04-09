@@ -1,3 +1,8 @@
+.btn-primary, .btn-primary.focus, .btn-primary:focus {
+    background-color: #2b00ac !important;
+    border-color: #112d96  !important;
+}
+
 .chosen-container-single .chosen-search:after {
     content: "" !important;
 }

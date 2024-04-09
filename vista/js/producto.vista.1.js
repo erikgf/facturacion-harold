@@ -55,6 +55,16 @@ app.setEventos  = function(){
   var self = this,
       DOM  = self.DOM;
 
+
+  DOM.txtPrecioUnitario.on("change",function(e){
+    const precio = parseFloat(DOM.txtPrecioUnitario.val()).toFixed(2);
+    DOM.txtPrecioUnitario.val(precio);
+  });
+
+  DOM.txtPrecioUnitario.on("click",function(e){
+    DOM.txtPrecioUnitario.select();
+  });
+
   DOM.modal.on("hidden.bs.modal",function(e){
     e.preventDefault();
     self.limpiar();
@@ -237,7 +247,8 @@ app.listar = async function(){
     if (DT) { DT.fnDestroy(); DT = null; }
       DOM.listado.html(tpl8Listado(data));
       DT = DOM.listado.find("table").dataTable({
-        "aaSorting": [[0, "asc"]],
+        "aaSorting": [[0, "DESC"]],
+        columnDefs: [{ type: 'num', targets: 4 }],
         responsive:true
       });
 

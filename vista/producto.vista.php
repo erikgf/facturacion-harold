@@ -57,6 +57,7 @@ $TITULO_PAGINA = "Gestión de Productos";
                                       <th width="120px">C.Barras</th>
                                       <th>Nombre</th>
                                       <th width="150px">Marca</th>
+                                      <th width="120px">Talla</th>
                                       <th width="130px">Precio Venta</th>
                                       <th width="150px">Categoría</th>
                                     </tr>
@@ -65,6 +66,7 @@ $TITULO_PAGINA = "Gestión de Productos";
                                       {{#this}}
                                         <tr>
                                             <td>
+                                              {{id}}
                                                 <button class="btn btn-xs btn-warning" onclick ="app.editar({{id}})" data-toggle="modal" data-target="#mdlRegistro">
                                                 <i class="fa fa-edit bigger-130"></i>
                                                 </button>
@@ -73,9 +75,10 @@ $TITULO_PAGINA = "Gestión de Productos";
                                                 </button>
                                             </td>
                                             <td class="text-center">{{codigo_generado}}</td>
-                                            <td>{{empresa_especial}} - {{producto}}</td>
+                                            <td>{{producto}}</td>
                                             <td>{{marca}}</td>
-                                            <td>S/ {{precio_unitario}}</td>
+                                            <td>{{tallas}}</td>
+                                            <td>{{precio_unitario}}</td>
                                             <td>{{categoria}}</td>
                                          </tr>
                                       {{/this}}

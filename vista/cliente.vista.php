@@ -55,11 +55,12 @@ $TITULO_PAGINA = "Gestión de Clientes";
                               <table class="table table-striped table-bordered table-hover dataTable dt-responsive"  cellspacing="0" width="100%">
                                   <thead>
                                     <tr>
-                                      <th width="100px">Acción</th>
+                                      <th width="80px">Acción</th>
                                       <th width="100px">Documento</th>
                                       <th>Razón Social</th>
+                                      <th width="150px">Dirección</th>
                                       <th width="120px">Celular / Núm. Contacto</th>
-                                      <th width="200px">Correo</th>
+                                      <th width="160px">Correo</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -75,6 +76,7 @@ $TITULO_PAGINA = "Gestión de Clientes";
                                             </td>
                                             <td class="text-center">{{#if_ id_tipo_documento '==' '0'}} SIN DOCUMENTO {{else}} {{tipo_documento.abrev}} - [{{numero_documento}}]{{/if_}}</td>
                                             <td>{{razon_social}}</td>
+                                            <td>{{direccion}}</td>
                                             <td>{{celular}}</td>
                                             <td>{{correo}}</td>
                                          </tr>
