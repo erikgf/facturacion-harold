@@ -681,7 +681,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
                   const {data} = MODO === '+' 
                                   ? await apiAxios.post('compras', sentData)
                                   : await apiAxios.put(`compras/${COD_COMPRA_EDITAR}`, sentData);
-  
+
                   swal("Éxito", "Registrado con éxito.", "success");
   
                   app.ListarCompras.verDetalle(data.id);
@@ -698,8 +698,15 @@ const RegistrarCompras = function($contenedor, _tpl8){
                   //ListarCompras.listarCompras(data.lista_compras);
                   //app.ListarCompras.obtenerCompras();
                 } catch (error) {
-                  swal("Error", JSON.stringify(error), "error");
                   console.error(error);
+                  const { response } = error;
+                  if (response?.data){
+                    swal("Error", response?.data?.message, "error");
+                    return
+                  }
+
+                  swal("Error", JSON.stringify(error), "error");
+                  
                 } finally {
                   _SAVING = false;
                 }
@@ -1027,9 +1034,12 @@ const RegistrarCompras = function($contenedor, _tpl8){
                                           }
                                         });
 
-      this.DOM.tblDetalle[!_VACIO ? "append" : "html"](_tpl8.tblDetalle(productosSeleccionados));
-      _VACIO = false;
-      modificarTotalGeneral();
+
+      if (productosSeleccionados.length){
+        this.DOM.tblDetalle[!_VACIO ? "append" : "html"](_tpl8.tblDetalle(productosSeleccionados));
+        _VACIO = false;
+        modificarTotalGeneral();
+      }
 
       this.DOM.mdlBuscarProducto.modal("hide");
     };

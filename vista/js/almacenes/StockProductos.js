@@ -179,7 +179,7 @@ const StockProductos = function({$, tpl8, sucursales}){
           continue;
         }
 
-        if (lastProducto.producto.nombre == objProducto.producto.nombre){
+        if (lastProducto?.producto?.nombre == objProducto?.producto?.nombre){
           /*Es un producto repetido.*/
           fnProducto(objProducto, false);
         } else {

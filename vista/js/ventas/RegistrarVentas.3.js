@@ -1040,7 +1040,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
 
               //swal("Éxito", "Registrado con éxito.", "success");
               //app.ListarVentas.verDetalle(data.id);
-  
+             
               COD_VENTA_EDITAR = null;
               this.DOM.btnCancelarEdicion.hide();
               this.DOM.cboSucursal.attr("disabled",false);
