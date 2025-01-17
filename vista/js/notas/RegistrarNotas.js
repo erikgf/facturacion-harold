@@ -15,7 +15,8 @@ const RegistrarNotas = function($contenedor, _tpl8){
           productos: [],
           clientes : [],
           tipo_categorias : [],
-          categoria_productos : []
+          categoria_productos : [],
+          series : []
         },
         NOMBRE_LOCALSTORAGE = "___jp",
         MODO = "+",
@@ -25,6 +26,7 @@ const RegistrarNotas = function($contenedor, _tpl8){
       this.setDOM();
       this.setEventos();
       this.obtenerData();
+      this.obtenerSeries();
     };
   
     this.getData = function(){
@@ -42,6 +44,10 @@ const RegistrarNotas = function($contenedor, _tpl8){
     this.setDOM = function(){
       var DOM = _Util.preDOM2DOM($contenedor, [
                       {"frmRegistro": "#frmregistro"},
+                      {"cboTipoComprobanteMod" : "#cbotipocomprobantemodificar"},
+                      {"blkComprobanteMod": "#blkcomprobantemod"},
+                      {"txtSerieMod" : "#txtseriemodificar"},
+                      {"txtCorrelativoMod" : "#txtcorrelativomodificar"},
                       {"cboClienteBuscar": "#cboclientebuscar"},
                       {"cboTipoComprobante": "#cbotipocomprobante"},
                       {"blkComprobante": "#blkcomprobante"},
@@ -82,11 +88,38 @@ const RegistrarNotas = function($contenedor, _tpl8){
     this.setEventos = function(){
       var self = this,
           DOM = self.DOM;
+
+      DOM.txtSerieMod.on("change", (e) => {
+        const value = e.currentTarget.value;
+        const primeraLetraSerie = value.charAt(0);
+        if ( this.DOM.cboTipoComprobanteMod.val() === "03" && primeraLetraSerie != "B"){
+          alert("La serie ingresada no es válida para una BOLETA.")
+          this.DOM.txtSerieMod.val("");
+          this.DOM.txtCorrelativoMod.val("");
+          return;
+        }
+
+        if ( this.DOM.cboTipoComprobanteMod.val() === "01" && primeraLetraSerie != "F"){
+          alert("La serie ingresada no es válida para una FACTURA.")
+          this.DOM.txtSerieMod.val("");
+          this.DOM.txtCorrelativoMod.val("");
+          return;
+        }
+
+        e.currentTarget.value = value.substr(0, 4);
+      });
+
+      DOM.txtCorrelativoMod.on("change", (e) => {
+        this.buscarComprobanteModificar({
+          serie: this.txtSerieMod.val(),
+          correlativo: this.txtCorrelativoMod.val()
+        });
+      }); 
   
       DOM.cboTipoComprobante.on("change", function(){
         const keyStorageTipoComprobante = NOMBRE_LOCALSTORAGE+"tipocomprobante";
         localStorage.setItem(keyStorageTipoComprobante, this.value);
-        cargarCorrelativo(this.value);
+        //cargarCorrelativo(this.value);
       });
   
       DOM.txtCorrelativo.on("keypress", function(e){
@@ -98,7 +131,9 @@ const RegistrarNotas = function($contenedor, _tpl8){
       
       DOM.txtSerie.on("change", function(e){
           const tipoComprobante = DOM.cboTipoComprobante.val();
-          const primeraLetraRecomendada = MAP_COMPROBANTE_VENTA[tipoComprobante];
+
+
+
           const keyStorageSerie = NOMBRE_LOCALSTORAGE+"serie"+tipoComprobante;
           let serie = this.value;    
   
@@ -126,6 +161,9 @@ const RegistrarNotas = function($contenedor, _tpl8){
       });
   
       DOM.txtCorrelativo.on("change", function(e){
+
+        return;
+
           const correlativo = this.value;
           if (correlativo.length < 6){
               this.value = _Util.completarNumero(correlativo, 6);
@@ -449,6 +487,7 @@ const RegistrarNotas = function($contenedor, _tpl8){
     };
   
     const cargarCorrelativo =  (tipoComprobante) => {
+      return ;
       const primeraLetraRecomendada = MAP_COMPROBANTE_VENTA[tipoComprobante];
       const keyStorageSerie = NOMBRE_LOCALSTORAGE+"serie"+tipoComprobante;
       let serie = localStorage.getItem(keyStorageSerie);
@@ -987,132 +1026,7 @@ const RegistrarNotas = function($contenedor, _tpl8){
   
       eliminarTodoCarrito(MODO == "*");
     };
-  
-    this.editar = function(cod_transaccion){
-      /*1.- Obtener los datosa asociados a lad venta
-      cabecera
-      detalle
-      imprimir cabecera
-      imprimir detalle
-        set teb stock
-      */
-       var self = this, 
-           DOM  = self.DOM,
-           sucursalAnterior = DOM.cboSucursal.val(),
-            fn = function (xhr){
-                var datos = xhr.datos,
-                    cabecera,
-                    detalle;
-  
-                  if (datos.rpt) {  
-                    MODO = "*";
-  
-                    cabecera = datos.data.cabecera;
-                    detalle = datos.data.detalle;
-                    $("#lblrotuloedicion").html("EDITANDO VENTA: "+cabecera.x_cod_transaccion);
-  
-  
-                    COD_EDITAR = cabecera.cod_transaccion;
-  
-                    DOM.cboClienteBuscar.val(cabecera.cod_cliente).change().trigger("chosen:updated");
-  
-                    DOM.cboTipoComprobante.val(cabecera.cod_tipo_comprobante);//.change();
-  
-                    if (cabecera.cod_tipo_comprobante != ""){
-                      DOM.txtSerie.val(cabecera.serie);
-                      DOM.txtCorrelativo.val(cabecera.correlativo).change();
-                      DOM.blkComprobante.show();
-                    } else {
-                      DOM.blkComprobante.hide();
-                    }
-                    
-                    DOM.txtFechaVenta.val(cabecera.fecha_transaccion);
-  
-                    if (cabecera.tipo_tarjeta !=  null){
-                      DOM.radTipoTarjeta[0].checked = cabecera.tipo_tarjeta == "C";
-                      DOM.blkTipoTarjeta.show();  
-                    } else {
-                      DOM.blkTipoTarjeta.hide();  
-                    }
-                    
-                    DOM.cboSucursal.attr("disabled", true);
-                    DOM.btnActualizar.hide();
-  
-                    eliminarTodoCarrito(MODO == "+");
-  
-                    for (var i = 0, len = detalle.length; i < len ;i++) {
-                      var objDetalle = detalle[i];
-                       agregarFilaDetalle({
-                          cod_producto: objDetalle.cod_producto,
-                          nombre_producto: objDetalle.nombre_producto,
-                          img_url: objDetalle.img_url,
-                          precio_unitario: objDetalle.precio_unitario,
-                          cantidad: objDetalle.cantidad,
-                          codigo_descuento : objDetalle.codigo_descuento,
-                          cod_descuento : objDetalle.cod_descuento,
-                          monto_descuento: objDetalle.monto_descuento,
-                          tipo_descuento: objDetalle.tipo_descuento,
-                          rotulo_descuento: objDetalle.rotulo_descuento,
-                          subtotal: objDetalle.subtotal,
-                          fecha_vencimiento: objDetalle.fecha_vencimiento,
-                          lote : objDetalle.lote,
-                          marca : objDetalle.marca
-                        });
-  
-                    };
-  
-                    DOM.lblSubTotal.html(cabecera.importe_total_venta);
-  
-                    if (cabecera.cod_descuento_global != null){
-                        DOM.txtDescuentoGlobal[0].dataset.id =
-                                cabecera.cod_descuento_global+"_"+cabecera.monto_descuento+"_"+cabecera.tipo_descuento+"_"+cabecera.rotulo_descuento+"_"+cabecera.codigo_descuento_global;
-  
-                        DOM.txtDescuentoGlobal.html(cabecera.rotulo_descuento+'<br><small>'+cabecera.codigo_descuento_global+'</small><br><a class="descuento-cancelar" href="javascript:;" style="font-size: 14px;">Cancelar</a>');         
-                        DOM.lblDescuento.html(cabecera.total_descuentos);
-  
-                    } else {
-                       DOM.txtDescuentoGlobal[0].dataset.id ="";
-  
-                       DOM.txtDescuentoGlobal.html('<label><small>Código</small></label><input style="width:85px;text-align: center;" class=""><br>');         
-                       DOM.lblDescuento.html("0.00");
-                    }
-  
-                    ARREGLO_DESCUENTOS_TEMPORAL_EDITANDO = datos.data.descuentos_usados;
-                    
-                    DOM.lblTotal.html(cabecera.importe_total_venta);
-                    DOM.txtMontoEfectivo.val(cabecera.monto_efectivo);
-                    DOM.txtMontoTarjeta.val(cabecera.monto_tarjeta);
-                    DOM.txtMontoCredito.val(cabecera.monto_credito);
-  
-                   $('.nav-tabs a[href="#tabRegistrarNotas"]').tab('show');
-  
-                   DOM.btnCancelarEdicion.show();
-               
-                  }else{
-                    console.error(datos.msj);
-                  }
-            };
-  
-        new _Ajxur.Api({
-          modelo: "Venta",
-          metodo: "leerVentaEditar",
-          data_in : {
-            p_codTransaccion : cod_transaccion
-          }
-        },fn);
-    };
-  
-    this.cancelarEdicion = function(){
-      COD_EDITAR = null;
-      ARREGLO_DESCUENTOS_TEMPORAL_EDITANDO = [];
-      MODO = "+";
-      $("#lblrotuloedicion").empty();
-      self.DOM.cboSucursal.attr("disabled",false);       
-      self.DOM.btnActualizar.show();
-      self.DOM.btnCancelarEdicion.hide();
-  
-      limpiarComprobante();
-    };
+
 
     this.prepararAgregarProductos = () => {
       _data.productos = _data.productos.map( p => {
@@ -1175,6 +1089,44 @@ const RegistrarNotas = function($contenedor, _tpl8){
 
       this.DOM.mdlBuscarProducto.modal("hide");
     };
+
+    this.obtenerSeries = async () => {
+      try {
+          const { data } = await apiAxios.get(`serie-documentos`);
+          _data.series = data;
+
+          cargarSeriesPorTipoComprobante(this.DOM.cboTipoComprobante.val());
+      } catch (error) {
+          swal("Error", "Error al obtener los series.", "error");
+          console.error(error);
+      }
+    };
+
+    const cargarSeriesPorTipoComprobante = (idTipoComprobante) => {
+      const seriesPorTC = _data.series.filter(s => s.id_tipo_comprobante == idTipoComprobante);
+      this.DOM.txtSerie.html(_tpl8.Series(seriesPorTC.map(({serie, correlativo})=> {
+        return {serie, correlativo};
+      })));
+    };
+
+    this.buscarComprobanteModificar = async ({ serie, correlativo}) => {
+      try{
+
+        const {data} = await apiAxios.get(`comprobantes-sc/${serie}-${correlativo}`);
+        if (Boolean(data)){
+
+          return;
+        }
+
+        
+
+      } catch (error){
+        swal("Error", "Error al obtener comprobante a modificar.", "error");
+        console.error(error);
+      } finally {
+
+      }
+    }
   
     return this.init();
 };

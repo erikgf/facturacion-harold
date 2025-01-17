@@ -22,11 +22,6 @@ const RegistrarFacturas = function($contenedor, _tpl8){
         MODO = "+",
         COD_EDITAR = null;
   
-    const MAP_COMPROBANTE_VENTA = {
-        '01' : 'F',
-        '03' : 'B'
-    };
-
     this.init = function(){
       this.setDOM();
       this.setEventos();
@@ -946,120 +941,6 @@ const RegistrarFacturas = function($contenedor, _tpl8){
       DOM.txtDescuentoGlobal.val("0.00");
   
       eliminarTodoCarrito(MODO == "*");
-    };
-  
-    this.editar = function(cod_transaccion){
-      /*1.- Obtener los datosa asociados a lad venta
-      cabecera
-      detalle
-      imprimir cabecera
-      imprimir detalle
-        set teb stock
-      */
-       var self = this, 
-           DOM  = self.DOM,
-           sucursalAnterior = DOM.cboSucursal.val(),
-            fn = function (xhr){
-                var datos = xhr.datos,
-                    cabecera,
-                    detalle;
-  
-                  if (datos.rpt) {  
-                    MODO = "*";
-  
-                    cabecera = datos.data.cabecera;
-                    detalle = datos.data.detalle;
-                    $("#lblrotuloedicion").html("EDITANDO VENTA: "+cabecera.x_cod_transaccion);
-  
-  
-                    COD_EDITAR = cabecera.cod_transaccion;
-  
-                    DOM.cboClienteBuscar.val(cabecera.cod_cliente).change().trigger("chosen:updated");
-  
-                    DOM.cboTipoComprobante.val(cabecera.cod_tipo_comprobante);//.change();
-  
-                    if (cabecera.cod_tipo_comprobante != ""){
-                      DOM.txtSerie.val(cabecera.serie);
-                      DOM.txtCorrelativo.val(cabecera.correlativo).change();
-                      DOM.blkComprobante.show();
-                    } else {
-                      DOM.blkComprobante.hide();
-                    }
-                    
-                    DOM.txtFechaVenta.val(cabecera.fecha_transaccion);
-  
-                    if (cabecera.tipo_tarjeta !=  null){
-                      DOM.radTipoTarjeta[0].checked = cabecera.tipo_tarjeta == "C";
-                      DOM.blkTipoTarjeta.show();  
-                    } else {
-                      DOM.blkTipoTarjeta.hide();  
-                    }
-                    
-                    DOM.cboSucursal.attr("disabled", true);
-                    DOM.btnActualizar.hide();
-  
-                    eliminarTodoCarrito(MODO == "+");
-  
-                    for (var i = 0, len = detalle.length; i < len ;i++) {
-                      var objDetalle = detalle[i];
-                       agregarFilaDetalle({
-                          cod_producto: objDetalle.cod_producto,
-                          nombre_producto: objDetalle.nombre_producto,
-                          img_url: objDetalle.img_url,
-                          precio_unitario: objDetalle.precio_unitario,
-                          cantidad: objDetalle.cantidad,
-                          codigo_descuento : objDetalle.codigo_descuento,
-                          cod_descuento : objDetalle.cod_descuento,
-                          monto_descuento: objDetalle.monto_descuento,
-                          tipo_descuento: objDetalle.tipo_descuento,
-                          rotulo_descuento: objDetalle.rotulo_descuento,
-                          subtotal: objDetalle.subtotal,
-                          fecha_vencimiento: objDetalle.fecha_vencimiento,
-                          lote : objDetalle.lote,
-                          marca : objDetalle.marca
-                        });
-  
-                    };
-  
-                    DOM.lblSubTotal.html(cabecera.importe_total_venta);
-  
-                    if (cabecera.cod_descuento_global != null){
-                        DOM.txtDescuentoGlobal[0].dataset.id =
-                                cabecera.cod_descuento_global+"_"+cabecera.monto_descuento+"_"+cabecera.tipo_descuento+"_"+cabecera.rotulo_descuento+"_"+cabecera.codigo_descuento_global;
-  
-                        DOM.txtDescuentoGlobal.html(cabecera.rotulo_descuento+'<br><small>'+cabecera.codigo_descuento_global+'</small><br><a class="descuento-cancelar" href="javascript:;" style="font-size: 14px;">Cancelar</a>');         
-                        DOM.lblDescuento.html(cabecera.total_descuentos);
-  
-                    } else {
-                       DOM.txtDescuentoGlobal[0].dataset.id ="";
-  
-                       DOM.txtDescuentoGlobal.html('<label><small>Código</small></label><input style="width:85px;text-align: center;" class=""><br>');         
-                       DOM.lblDescuento.html("0.00");
-                    }
-  
-                    ARREGLO_DESCUENTOS_TEMPORAL_EDITANDO = datos.data.descuentos_usados;
-                    
-                    DOM.lblTotal.html(cabecera.importe_total_venta);
-                    DOM.txtMontoEfectivo.val(cabecera.monto_efectivo);
-                    DOM.txtMontoTarjeta.val(cabecera.monto_tarjeta);
-                    DOM.txtMontoCredito.val(cabecera.monto_credito);
-  
-                   $('.nav-tabs a[href="#tabRegistrarFacturas"]').tab('show');
-  
-                   DOM.btnCancelarEdicion.show();
-               
-                  }else{
-                    console.error(datos.msj);
-                  }
-            };
-  
-        new _Ajxur.Api({
-          modelo: "Venta",
-          metodo: "leerVentaEditar",
-          data_in : {
-            p_codTransaccion : cod_transaccion
-          }
-        },fn);
     };
   
     this.cancelarEdicion = function(){

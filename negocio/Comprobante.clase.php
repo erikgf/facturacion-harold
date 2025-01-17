@@ -173,7 +173,6 @@ class Comprobante extends Conexion {
         }
     }
 
-
     public function generarEnviarSunat(){
         try{
             /*  
@@ -514,6 +513,52 @@ class Comprobante extends Conexion {
                 return array("rpt"=>true,"msj"=>"Correo enviado.");
             }
 
+        } catch (Exception $exc) {
+            return array("rpt"=>false,"msj"=>$exc->getMessage());
+        }
+    }
+
+    public function obtenerComprobantePorSerieCorrelativo($serie, $correlativo)
+    {
+        try{
+
+            $sql = "SELECT  
+                    t.cod_transaccion,,
+                    t.cod_tipo_comprobante as tipo_comprobante,
+                    v.cod_cliente,
+                    CONCAT(c.nombres,' ',COALESCE(c.apellidos,'')) as nombre_cliente,
+                    c.direccion as direccion_cliente,
+                    t.fecha_transaccion as fecha_emision,
+                    tdoc.abrev as tipo_documento,
+                    tdoc.cod_tipo_documento as cod_tipo_documento,
+                    c.numero_documento as numero_documento,
+                    tm.abrev as moneda
+                    FROM transaccion t
+                    INNER JOIN venta v ON t.cod_transaccion = v.cod_transaccion
+                    INNER JOIN tipo_documento tdoc ON t.cod_tipo_documento = tdoc.cod_tipo_documento
+                    INNER JOIN tipo_moneda tm ON tm.cod_tipo_moneda = v.cod_tipo_moneda
+                    INNER JOIN cliente c ON c.cod_cliente = v.cod_cliente
+                    WHERE t.estado = 1 AND CONCAT(tcomp.abrev,t.serie) = :0 AND t.correlativo = :1";
+            $cabecera = $this->consultarFila($sql, [$serie, $correlativo]);
+
+            $sql = "SELECT 
+                    item,
+                    p.nombre as nombre_producto ,
+                    valor_unitario,
+                    valor_venta_bruto,
+                    valor_venta,
+                    precio_venta_unitario,
+                    cantidad_item,
+                    um.codigo_ece as unidad_medida,
+                    FROM venta_detalle vd
+                    INNER JOIN venta v ON v.cod_venta = vd.cod_venta
+                    INNER JOIN unidad_medida um ON um.cod_unidad_medida = vd.cod_unidad_medida
+                    INNER JOIN producto p ON p.cod_producto = vd.cod_producto
+                    WHERE v.cod_transaccion = :0";
+
+            $detalle = $this->consultarFilas($sql, [$cabecera["cod_transaccion"]]);
+
+            return ["cabecera"=>$cabecera, "detalle"=>$detalle];
         } catch (Exception $exc) {
             return array("rpt"=>false,"msj"=>$exc->getMessage());
         }
