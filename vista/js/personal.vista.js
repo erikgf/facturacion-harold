@@ -78,6 +78,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabar();
           }
@@ -98,6 +99,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabarCambioClave();
           }
@@ -166,7 +168,7 @@ app.editar = async function(cod){
     DOM.chkAcceso[0].checked = data.acceso_sistema == "1";
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 
@@ -193,7 +195,7 @@ app.eliminar = function(cod){
               app.listar();
             
             } catch (error) {
-              swal("Error", JSON.stringify(error), "error");
+              swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
               console.error(error);
             }
           }
@@ -227,7 +229,7 @@ app.grabar = async function(){
     DOM.modal.modal("hide");
 
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 
@@ -247,7 +249,7 @@ app.grabarCambioClave = async function(){
     DOM.modalCambiarClave.modal("hide");
   
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 
@@ -276,7 +278,7 @@ app.listar = async function(){
     });
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };
@@ -297,7 +299,7 @@ app.llenarCargosRoles = async function(){
       }), rotulo: "rol"}));
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };

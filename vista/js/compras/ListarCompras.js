@@ -1,6 +1,5 @@
 const ListarCompras = function($contenedor, _tpl8){
     var _Util = Util,
-        _Ajxur = Ajxur,
         DT = null;
   
     this.init = function(){
@@ -52,7 +51,7 @@ const ListarCompras = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`compras?${paramsData.toString()}`);
         this.listarCompras(data);
       } catch (error) {
-          swal("Error", JSON.stringify(error), "error");
+          swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
           console.error(error);
       }
     };
@@ -79,8 +78,9 @@ const ListarCompras = function($contenedor, _tpl8){
         closeOnConfirm: false,
         closeOnCancel: true,
         imageUrl: "../images/pregunta.png"
-      }, async (respuesta)=>{
-          if (!respuesta){
+      }, async (isConfirm)=>{
+          $(".confirm").attr('disabled', 'disabled');
+          if (!isConfirm){
             return;
           }
 
@@ -106,7 +106,7 @@ const ListarCompras = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`compras/${idCompra}`);
         renderCompra(data);
       } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
       }
     };

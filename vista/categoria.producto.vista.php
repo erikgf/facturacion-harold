@@ -10,6 +10,7 @@ $TITULO_PAGINA = "Gestión Categoría de Productos";
           <meta charset="utf-8" />
           <title><?php echo $TITULO_PAGINA ?></title>
           <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+          <link rel="icon" type="image/jpeg" href="../imagenes/logo_peque.jpg" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
           <?php  include '_css/main.css.php'; ?>

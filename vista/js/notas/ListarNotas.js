@@ -42,7 +42,7 @@ const ListarNotas = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`comprobantes?${paramsData.toString()}`);
         this.listarNotas(data);
       } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
       } finally {
         objButtonLoader.finish();
@@ -88,7 +88,7 @@ const ListarNotas = function($contenedor, _tpl8){
               swal("Error", response.data.message, "error");
               return;
             }
-            swal("Error", JSON.stringify(error), "error");
+            swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
             console.error(error);
           }
       });
@@ -99,7 +99,7 @@ const ListarNotas = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`comprobantes/${idComprobante}`);
         renderFactura(data);
       } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
       }
     };

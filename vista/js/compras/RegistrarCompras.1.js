@@ -1,6 +1,7 @@
 const RegistrarCompras = function($contenedor, _tpl8){
+    const storager = new Storager();
     const CARACTERES_LECTORA = 16;
-    var _Util = Util,
+    let _Util = Util,
         _ArrayUtils = ArrayUtils,
         _INDEX = {
           "eliminar": 0,
@@ -13,7 +14,6 @@ const RegistrarCompras = function($contenedor, _tpl8){
         },
         _VACIO = true,
         _TR_BUSCAR = null,
-        _Ajxur = Ajxur,
         MODO = "+",
         _data = {
           productos: [],
@@ -21,6 +21,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
         },
         COD_COMPRA_EDITAR,
         self = this;
+    let sucursalAnterior;
   
     this.init = function(){
       this.setDOM();
@@ -99,7 +100,6 @@ const RegistrarCompras = function($contenedor, _tpl8){
 
       DOM.btnAgregarProducto.on("click", () => {
         this.prepararAgregarProductos();
-        //agregarFilaDetalle();
       });
   
       DOM.tblDetalle.on("click", "tr .pointer", function(e){
@@ -203,6 +203,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
       });
   
       DOM.cboSucursal.on("change", function(){
+        storager.setValue("sucursal", DOM.cboSucursal.val());
         self.obtenerDataProductos();
       });
   
@@ -231,7 +232,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
         return;
       }
       DOM.cboCategoria.html(_tpl8.Combo(ArrayUtils.conseguirTodos(_data.categoria_productos,"id_tipo_categoria", codTipo)));  
-    };
+    };e
     */
   
     this.getProducto = function(id_producto){
@@ -293,7 +294,13 @@ const RegistrarCompras = function($contenedor, _tpl8){
   
           app.ListarCompras.DOM.cboSucursal.html(sucursalHTML);
           this.DOM.cboSucursal.html(sucursalHTML);
-  
+        
+          const cachedSucursal = storager.getValue("sucursal");
+          if (cachedSucursal){
+            this.DOM.cboSucursal.val(cachedSucursal);
+            app.ListarCompras.DOM.cboSucursal.val(cachedSucursal);
+          }
+          
           this.obtenerDataProductos();
   
       } catch (error) {
@@ -510,13 +517,47 @@ const RegistrarCompras = function($contenedor, _tpl8){
           cantidad: 1,
           subtotal: "0.00"
         };
-      }
+      };
   
       const $nuevoDetalle = $(_tpl8.tblDetalle(dataFila));
       DOM.tblDetalle[!_VACIO ? "append" : "html"]($nuevoDetalle);
       $nuevoDetalle.find(".pointer").click();
       _VACIO = false;
       return dataFila;
+    };
+
+    const agregarFilaDetalles = function(dataFilas){
+      const DOM = self.DOM;
+      let htmlDetalle = ``;
+
+      if (!Boolean(dataFilas)){
+        return;
+      }
+
+      dataFilas
+        .map( item => {
+          return {
+            id_producto: item.id_producto,
+            nombre_producto: item.producto?.nombre,
+            precio_unitario: item.precio_unitario,
+            fecha_vencimiento: item.fecha_vencimiento,
+            lote: item.lote,
+            cantidad: item.cantidad,
+            marca: item.producto?.marca.nombre,
+            monto_descuento: null,
+            tipo_descuento: null,
+            cod_descuento: null,
+            subtotal:  item.subtotal,
+            maxstock: item.stock
+          }
+        })
+        .forEach(item => {
+          htmlDetalle += _tpl8.tblDetalle(item)
+        });
+
+      DOM.tblDetalle.html(htmlDetalle);
+      modificarTotalGeneral();
+      _VACIO = false;
     };
   
     const realizarBusquedaProducto = function(cadena){
@@ -652,6 +693,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
     const grabarCompra = ()=>{
       const objCompra = verificarCompra(),
           fnConfirm = async (isConfirm) => {
+            $(".confirm").attr('disabled', 'disabled');
             if (isConfirm){
                 try {
                   const cabecera = objCompra.datos.cabecera,
@@ -705,7 +747,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
                     return
                   }
 
-                  swal("Error", JSON.stringify(error), "error");
+                  swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
                   
                 } finally {
                   _SAVING = false;
@@ -879,11 +921,14 @@ const RegistrarCompras = function($contenedor, _tpl8){
       DOM.radTipoPago[0].checked = true;
       DOM.radTipoTarjeta[0].checked = true;
       DOM.blkTipoTarjeta.hide();
+
+      DOM.txtFechaCompra.val(null);
+      DOM.txtHoraCompra.val(null);
   
       eliminarTodoCarrito();
     };
   
-    this.editar = function(cod_transaccion){
+    this.editar = async function(idCompra){
       /*1.- Obtener los datosa asociados a lad venta
       cabecera
       detalle
@@ -891,85 +936,79 @@ const RegistrarCompras = function($contenedor, _tpl8){
       imprimir detalle
         set teb stock
       */
-       var self = this, 
-           DOM  = self.DOM,
-           sucursalAnterior = DOM.cboSucursal.val(),
-            fn = function (xhr){
-                var datos = xhr.datos,
-                    cabecera,
-                    detalle;
-  
-                  if (datos.rpt) {  
-                    MODO = "*";
-  
-                    cabecera = datos.data.cabecera;
-                    detalle = datos.data.detalle;
-                    $("#lblrotuloedicion").html("EDITANDO COMPRA: "+cabecera.x_cod_transaccion);
-  
-                    COD_COMPRA_EDITAR = cabecera.cod_transaccion;
-  
-                    DOM.cboProveedorBuscar.val(cabecera.cod_proveedor).change().trigger("chosen:updated");
-  
-                    DOM.cboTipoComprobante.val(cabecera.cod_tipo_comprobante);//.change();
-  
-                    console.log(cabecera);
-  
-                    if (cabecera.cod_tipo_comprobante != ""){
-                      DOM.txtNumeroComprobante.val(cabecera.comprobante);
-                      DOM.blkComprobante.show();
-                    } else {
-                      DOM.blkComprobante.hide();
-                    }
-                    
-                    DOM.txtFechaCompra.val(cabecera.fecha_transaccion);
-  
-                    if (cabecera.tipo_tarjeta !=  null){
-                      DOM.radTipoTarjeta[0].checked = cabecera.tipo_tarjeta == "C";
-                      DOM.blkTipoTarjeta.show();  
-                    } else {
-                      DOM.blkTipoTarjeta.hide();  
-                    }
-                    
-                    DOM.cboSucursal.attr("disabled", true);
-  
-                    eliminarTodoCarrito(MODO == "+");
-  
-                    for (var i = 0, len = detalle.length; i < len ;i++) {
-                      var objDetalle = detalle[i];
-                       agregarFilaDetalle({
-                          id_producto: objDetalle.id_producto,
-                          nombre_producto: objDetalle.nombre_producto,
-                          img_url: objDetalle.img_url,
-                          precio_unitario: objDetalle.precio_unitario,
-                          cantidad : objDetalle.cantidad,
-                          subtotal: objDetalle.subtotal
-                        });
-                    };
-  
-                    DOM.lblTotal.html(cabecera.importe_total_venta);
-  
-                   $('.nav-tabs a[href="#tabRegistrarCompras"]').tab('show');
-                   DOM.btnCancelarEdicion.show();
-               
-                  }else{                  
-                    console.error(datos.msj);
-                  }
-            };
-  
-        new _Ajxur.Api({
-          modelo: "Compra",
-          metodo: "leerCompraEditar",
-          data_in : {
-            p_codTransaccion : cod_transaccion
-          }
-        },fn);
+        try {
+          const { data } = await apiAxios.get(`compras/${idCompra}`);
+          renderCompraParaEditar(data);
+        } catch (error) {
+          swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
+          console.error(error);
+        }
+    };
+
+    const renderCompraParaEditar = function(dataCompra){
+      const { DOM } = self;
+      sucursalAnterior = DOM.cboSucursal.val();
+      COD_COMPRA_EDITAR = dataCompra?.id;
+
+      MODO = "*";
+
+      //cabecera = datos.data.cabecera;
+      //detalle = datos.data.detalle;
+      $("#lblrotuloedicion").html(`EDITANDO COMPRA: ${String(dataCompra?.id).padStart(6,"0")}`);
+      DOM.cboProveedorBuscar.val(dataCompra?.proveedor?.id).change().trigger("chosen:updated");
+      DOM.cboTipoComprobante.val(dataCompra.id_tipo_comprobante);//.change();
+
+      if (dataCompra.id_tipo_comprobante != ""){
+        DOM.txtNumeroComprobante.val(dataCompra.numero_comprobante);
+        DOM.blkComprobante.show();
+      } else {
+        DOM.blkComprobante.hide();
+      }
+      
+      DOM.txtFechaCompra.val(dataCompra.fecha_compra);
+      DOM.txtHoraCompra.val(dataCompra.hora_compra);
+
+      if (dataCompra.tipo_pago == "E"){
+        DOM.blkTipoTarjeta.hide();  
+      } else {
+        DOM.blkTipoTarjeta.show();  
+        DOM.radTipoTarjeta[dataCompra.tipo_tarjeta === "C" ? 0 : 1].checked;
+        //DOM.radTipoTarjeta[0].checked = dataCompra.tipo_tarjeta == "C";
+      }
+
+      DOM.cboSucursal.attr("disabled", true);
+      DOM.cboSucursal.val(dataCompra.sucursal?.id);
+
+      DOM.txtObservaciones.val(dataCompra.observaciones);
+      DOM.txtGuiasRemision.val(dataCompra.guias_remision);
+
+      eliminarTodoCarrito(MODO == "+");
+      agregarFilaDetalles(dataCompra.detalle);
+      /*
+      for (var i = 0, len = detalle.length; i < len ;i++) {
+        var objDetalle = detalle[i];
+          agregarFilaDetalle({
+            id_producto: objDetalle.id_producto,
+            nombre_producto: objDetalle.nombre_producto,
+            img_url: objDetalle.img_url,
+            precio_unitario: objDetalle.precio_unitario,
+            cantidad : objDetalle.cantidad,
+            subtotal: objDetalle.subtotal
+          });
+      };
+      */
+
+      DOM.lblTotal.html(dataCompra.importe_total);
+      $('.nav-tabs a[href="#tabRegistrarCompras"]').tab('show');
+      DOM.btnCancelarEdicion.show();
     };
   
     this.cancelarEdicion = function(){
       COD_COMPRA_EDITAR = null;
       MODO = "+";
       $("#lblrotuloedicion").empty();
-      self.DOM.cboSucursal.attr("disabled",false);       
+      self.DOM.cboSucursal.attr("disabled",false);     
+      self.DOM.cboSucursal.val(sucursalAnterior);
       self.DOM.btnCancelarEdicion.hide();
   
       limpiarCompra();

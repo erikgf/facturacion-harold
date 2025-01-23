@@ -12,7 +12,8 @@ const StockProductos = function({$, tpl8, sucursales}){
       this.setDOM();
       this.setEventos();
 
-      sucursalSeleccionada = sucursales[0];
+      const idSucursal = document.getElementById("cbosucursal").value;
+      sucursalSeleccionada = sucursales.find ( item => item.id == idSucursal);
 
       this.obtenerTipoCategorias();
       this.obtenerCategorias();
@@ -192,6 +193,11 @@ const StockProductos = function({$, tpl8, sucursales}){
       fnAgregarProductoNuevo(objProducto);
   
       return listaNueva;
+    };
+
+    this.actualizarListaProductos = function ({idSucursal}) {
+      sucursalSeleccionada = {id: idSucursal};
+      this.obtenerProductosStock();
     };
   
     return this.init();

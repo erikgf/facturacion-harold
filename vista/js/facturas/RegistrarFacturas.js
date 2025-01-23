@@ -687,6 +687,8 @@ const RegistrarFacturas = function($contenedor, _tpl8){
               return;
             }
 
+            $(".confirm").attr('disabled', 'disabled');
+
             objButtonLoading.start();
 
             try {

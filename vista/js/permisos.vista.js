@@ -79,7 +79,7 @@ const listarPermisos = async function(){
         });
 
     } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
     }
 };
@@ -110,7 +110,7 @@ function agregar(){
                 listarPermisos();
                 resetBotones();
             } catch (error) {
-                swal("Error", JSON.stringify(error), "error");
+                swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
                 console.error(error);
             }
         }
@@ -143,7 +143,7 @@ function quitar(){
                 listarPermisos();
                 resetBotones();
             } catch (error) {
-                swal("Error", JSON.stringify(error), "error");
+                swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
                 console.error(error);
             }
         }
@@ -179,7 +179,7 @@ async function cargarRol(){
         $("#cborol").html(html);
 
     } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
     }
 }

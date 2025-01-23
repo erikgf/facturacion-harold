@@ -1,4 +1,5 @@
 <form id="frmregistro">
+	<h6 id="lblrotuloedicion" class="label label-danger label-lg"></h6>
 	<h4>Información Proveedor</h4>
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">

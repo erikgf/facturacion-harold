@@ -49,7 +49,7 @@ const ListarVentas = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`ventas?${paramsData.toString()}`);
         this.listarVentas(data);
       } catch (error) {
-        swal("Error", JSON.stringify(error), "error");
+        swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
         console.error(error);
       } finally {
         objButtonLoader.finish();
@@ -104,7 +104,7 @@ const ListarVentas = function($contenedor, _tpl8){
             const index = $btn.closest("tr")[0];
             DT.fnDeleteRow(DT.fnGetPosition(index));
           } catch (error) {
-              swal("Error", JSON.stringify(error), "error");
+              swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
               console.error(error);
           }
       });
@@ -115,7 +115,7 @@ const ListarVentas = function($contenedor, _tpl8){
         const { data } = await apiAxios.get(`ventas/${idVenta}`);
         renderVenta(data);
       } catch (error) {
-          swal("Error", JSON.stringify(error), "error");
+          swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
           console.error(error);
       }
     };

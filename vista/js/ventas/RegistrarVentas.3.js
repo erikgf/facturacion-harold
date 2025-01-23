@@ -1,4 +1,5 @@
 const RegistrarVentas = function($contenedor, _tpl8){
+  const storager = new Storager();
   const CARACTERES_LECTORA = 16;
     var _Util = Util,
         _ArrayUtils = ArrayUtils,
@@ -342,6 +343,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
       });
   
       DOM.cboSucursal.on("change", function(){
+        storager.setValue("sucursal", DOM.cboSucursal.val());
         self.obtenerDataProductos();
       });
   
@@ -620,6 +622,12 @@ const RegistrarVentas = function($contenedor, _tpl8){
   
           app.ListarVentas.DOM.cboSucursal.html(sucursalHTML);
           this.DOM.cboSucursal.html(sucursalHTML);
+
+          const cachedSucursal = storager.getValue("sucursal");
+          if (cachedSucursal){
+            this.DOM.cboSucursal.val(cachedSucursal);
+            app.ListarVentas.DOM.cboSucursal.val(cachedSucursal);
+          }
   
           this.obtenerDataProductos();
   
@@ -1000,7 +1008,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
             if(!isConfirm){
               return;
             }
-
+            $(".confirm").attr('disabled', 'disabled');
             objButtonLoading.start();
 
             try {

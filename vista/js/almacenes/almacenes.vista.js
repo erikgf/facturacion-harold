@@ -1,4 +1,5 @@
 var app = {};
+const storager = new Storager();
 
 app.init = async function(){
   this.tpl8 = Util.Templater($("script[type=handlebars-x]"));
@@ -8,6 +9,7 @@ app.init = async function(){
   this.cboSucursal = $("#cbosucursal");
 
   this.cboSucursal.on("change", function(e){
+    storager.setValue("sucursal", $("#cbosucursal").val());
     app.obtenerDataSoloProductos(this.value);
   });
 
@@ -20,7 +22,10 @@ app.init = async function(){
     }
 
     this.cboSucursal.html(this.tpl8.Sucursal(data));
-    this.cboSucursal.val(data[0].id);
+    const cachedSucursal = storager.getValue("sucursal");
+    if (cachedSucursal){
+      this.cboSucursal.val(cachedSucursal);
+    }
 
     this.objStockProductos = new StockProductos({$: this.$tabStockProductos, tpl8: this.tpl8, sucursales: data})
     this.objHistorialMovimientos = new HistorialMovimientos({$: this.$tabHistorialMovimientos, tpl8: this.tpl8, sucursales: data})
@@ -82,10 +87,10 @@ app.obtenerData = function(inicial){
 };
 
 app.obtenerDataSoloProductos = function(idSucursal){
-  this.HistorialMovimientos.actualizarListaProductos({
+  this.objHistorialMovimientos.actualizarListaProductos({
     idSucursal
   });
-  this.StockProductos.actualizarListaProductos({
+  this.objStockProductos.actualizarListaProductos({
     idSucursal
   });
 };

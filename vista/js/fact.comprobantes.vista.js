@@ -125,7 +125,7 @@ app.listar = async function(){
     const { data } = await apiAxios.get(`comprobantes/generacion/listar?${paramsData.toString()}`);
     app.renderLista(data);
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 };

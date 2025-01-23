@@ -31,8 +31,9 @@
 								<th style="width:75px">Item</th>
 								<th class="text-left">Producto</th>
 								<!-- <th class="text-left">F. Vencimiento</th> -->
-								<th class="text-left" style="width:100px">Lote</th>
-								<th class="text-center" style="width:175px">Precio Adquirido</th>
+								<th class="text-left" style="width:75px">Lote</th>
+								<th class="text-left" style="width:110px">Marca</th>
+								<th class="text-center" style="width:155px">Precio Adquirido</th>
 								<th class="text-center" style="width:150px">Stock</th>
 							</tr>
 						</thead>
@@ -50,6 +51,9 @@
 								-->
 								<td class="text-left">
 									<span>{{lote}}</span>
+								</td>
+								<td class="text-left">
+									<span>{{producto.marca.nombre}}</span>
 								</td>
 								<td class="text-center">{{#rotulo}} {{this}} {{else}} S/{{precio}} {{/rotulo}}</td>
 								<td class="text-center">{{stock}}</td>

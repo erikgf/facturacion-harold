@@ -240,6 +240,9 @@ var Util = {
     //$form.remove();  
   },
   STR_CARGANDO: `<i class="fa fa-spin fa-spinner"></i> <span> CARGANDO...</span>`,
+  completarCeros: ( numero, cantidadCeros) => {
+    return numero.lpad("0", cantidadCeros);
+  }
 };
 
 var ArrayUtils = {
@@ -498,6 +501,41 @@ if (window["Handlebars"]){
   });
 }
 
+const Storager = function() {
+  const KEY_STORAGE = "andreitababykids_store";
+  let objStorager;
 
+  this.init = () => {
+    const storager = window.localStorage.getItem(KEY_STORAGE);
+    try {
+      objStorager = Boolean(storager) 
+        ? JSON.parse(storager)
+        : {};  
+    } catch (error) {
+      objStorager = {};
+    }
+  };
 
-  
+  this.setValue = (key, value) => {
+    if (value === null){
+      delete objStorager[key];
+      window.localStorage.setItem(KEY_STORAGE, JSON.stringify(objStorager));
+      return;
+    }
+
+    objStorager = {...objStorager, [key] : value};
+    window.localStorage.setItem(KEY_STORAGE, JSON.stringify(objStorager));
+  };
+
+  this.getValue = (key) => {
+    const res = objStorager[key];
+    return res === undefined ? null : objStorager[key];
+  };
+
+  this.reset = () => {
+    window.localStorage.removeItem(KEY_STORAGE);
+    objStorager = null;
+  };
+
+  return this.init();
+}

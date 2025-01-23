@@ -52,6 +52,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabar();
           }
@@ -131,6 +132,7 @@ app.eliminar = function(cod){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
               new Ajxur.Api({
                 modelo: _CLASE,

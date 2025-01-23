@@ -59,6 +59,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabar();
           }
@@ -103,7 +104,7 @@ app.editar = async function(cod){
       DOM.cboTipo.val(data.tipo_categoria?.id)
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };
@@ -129,7 +130,7 @@ app.eliminar = function(cod){
               app.listar();
             
             } catch (error) {
-              swal("Error", JSON.stringify(error), "error");
+              swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
               console.error(error);
             }
           }
@@ -154,7 +155,7 @@ app.grabar = async function(){
     app.listar();
 
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 };
@@ -174,7 +175,7 @@ app.obtenerData = async function(){
       }), rotulo: "tipo de categoría"}));
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };
@@ -197,7 +198,7 @@ app.listar = async function(){
     });
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };

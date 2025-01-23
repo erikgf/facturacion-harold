@@ -58,8 +58,8 @@
                                		<i class="fa fa-trash bigger-130"></i>
                                </button>
                                {{#../admin}}
-                               <button class="btn btn-xs btn-warning" title="Editar" onclick ="app.RegistrarCompras.editar({{id}})">
-                                   		<i class="fa fa-edit bigger-130"></i>
+                               <button class="btn btn-xs btn-warning" title="Editar" onclick ="app.RegistrarCompras.editar({{../id}})">
+                               		<i class="fa fa-edit bigger-130"></i>
                                </button>
                                {{/../admin}}
                                <button class="btn btn-xs" title="Ver Detalle" onclick ="app.ListarCompras.verDetalle({{id}})">

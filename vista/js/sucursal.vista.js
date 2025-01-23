@@ -53,6 +53,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabar();
           }
@@ -94,7 +95,7 @@ app.editar = async function(cod){
     DOM.txtTelefono.val(data.telefono);
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };
@@ -113,6 +114,7 @@ app.eliminar = function(cod){
           imageUrl: "../images/pregunta.png"
         },
         async function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             try {
               await apiAxios.delete(`sucursales/${cod}`);
@@ -120,7 +122,7 @@ app.eliminar = function(cod){
               app.listar();
             
             } catch (error) {
-              swal("Error", JSON.stringify(error), "error");
+              swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
               console.error(error);
             }
           }
@@ -146,7 +148,7 @@ app.grabar = async function(){
     DOM.modal.modal("hide");
 
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 };
@@ -165,7 +167,7 @@ app.listar = async function(){
     });
 
   } catch (error) {
-      swal("Error", JSON.stringify(error), "error");
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);
   }
 };

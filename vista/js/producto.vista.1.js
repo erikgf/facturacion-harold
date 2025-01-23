@@ -94,6 +94,7 @@ app.setEventos  = function(){
           imageUrl: "../images/pregunta.png"
         },
         function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             self.grabar();
           }
@@ -154,7 +155,7 @@ app.editar = async function(idVenta){
     this.llenarTabs(data.imagenes_procesadas);
    
   } catch (error) {
-    swal("Error", JSON.stringify(error), "error");
+    swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
   }
 };
@@ -172,13 +173,14 @@ app.eliminar = function(cod){
           imageUrl: "../images/pregunta.png"
         },
         async function(isConfirm){ 
+          $(".confirm").attr('disabled', 'disabled');
           if (isConfirm){
             try {
               await apiAxios.delete(`productos/${cod}`);
               swal("Exito", "Eliminado con éxito.", "success");
               app.listar();
             } catch (error) {
-              swal("Error", JSON.stringify(error), "error");
+              swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
               console.error(error);
             }
           }

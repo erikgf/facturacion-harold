@@ -769,7 +769,7 @@ const RegistrarNotas = function($contenedor, _tpl8){
             if(!isConfirm){
               return;
             }
-
+            $(".confirm").attr('disabled', 'disabled');
             objButtonLoading.start();
 
             try {

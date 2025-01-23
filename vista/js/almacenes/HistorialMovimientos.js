@@ -28,7 +28,10 @@ const HistorialMovimientos = function({$, tpl8, sucursales}){
       this.setDOM();
       this.setEventos();
 
-      sucursalSeleccionada = sucursales[0];
+      console.log({})
+
+      const idSucursal = document.getElementById("cbosucursal").value;
+      sucursalSeleccionada = sucursales.find ( item => item.id == idSucursal);
 
       this.obtenerTipoCategorias();
       this.obtenerCategorias();
@@ -584,6 +587,11 @@ const HistorialMovimientos = function({$, tpl8, sucursales}){
         DOM.txtStockActual.val(objProducto.item.stock);
         DOM.txtStockActual.data("i",objProducto.i);
       }
+    };
+
+    this.actualizarListaProductos = function({idSucursal}){
+      sucursalSeleccionada = {id: idSucursal};
+      this.obtenerHistorialProductos();
     };
   
     return this.init();
