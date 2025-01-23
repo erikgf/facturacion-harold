@@ -9,7 +9,8 @@ app.init = function(){
   this.setEventos();
   this.setTemplate();
 
-  app.obtenerData();
+  app.obtenerTipoComprobantes();
+  app.obtenerSucursales();
   app.listar();
 };
 
@@ -24,6 +25,7 @@ app.setDOM = function(){
   DOM.cboTipoComprobante = DOM.frmGrabar.find("#cbotipocomprobante");
   DOM.txtSerie = DOM.frmGrabar.find("#txtserie");
   DOM.txtCorrelativo = DOM.frmGrabar.find("#txtcorrelativo");
+  DOM.cboSucursal = DOM.frmGrabar.find("#cbosucursal");
 
   this.DOM = DOM;
 };
@@ -96,6 +98,7 @@ app.editar = async function(cod){
     DOM.cboTipoComprobante.val(data.id_tipo_comprobante);
     DOM.txtSerie.val(data.serie);
     DOM.txtCorrelativo.val(data.correlativo);
+    DOM.cboSucursal.val(data.id_sucursal);
   } catch (error) {
     swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
     console.error(error);
@@ -141,7 +144,8 @@ app.grabar = async function(){
     const sentData = {
       id_tipo_comprobante : DOM.cboTipoComprobante.val(),
       serie: DOM.txtSerie.val(),
-      correlativo :  DOM.txtCorrelativo.val()
+      correlativo :  DOM.txtCorrelativo.val(),
+      id_sucursal : DOM.cboSucursal.val()
     };
 
     _ACCION === 'agregar' 
@@ -180,7 +184,7 @@ app.listar = async function(){
   }
 };
 
-app.obtenerData = async function(){
+app.obtenerTipoComprobantes = async function(){
   try {
       const { data } = await apiAxios.get('tipo-comprobantes');
       let html = "";
@@ -191,6 +195,23 @@ app.obtenerData = async function(){
       };
 
       this.DOM.cboTipoComprobante.html(html);
+  } catch (error) {
+      swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
+      console.error(error);
+  }
+}
+
+app.obtenerSucursales = async function(){
+  try {
+      const { data } = await apiAxios.get('sucursales');
+      let html = "";
+
+      for (let i = 0, len = data.length; i < len; i++) {
+          const item = data[i];
+          html += '<option value="' + item.id + '">'+ item.nombre + '</option>';
+      };
+
+      this.DOM.cboSucursal.html(html);
   } catch (error) {
       swal("Error", error?.response?.data?.message || JSON.stringify(error?.response?.data), "error");
       console.error(error);

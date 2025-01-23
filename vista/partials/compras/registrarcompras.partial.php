@@ -1,5 +1,9 @@
 <form id="frmregistro">
 	<h6 id="lblrotuloedicion" class="label label-danger label-lg"></h6>
+	<div class="form-group" style="position:absolute;right:16px;top:12px;width:200px">
+		<select  class="form-control" required id="cbosucursal">
+		</select>
+	</div>
 	<h4>Información Proveedor</h4>
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
@@ -86,13 +90,6 @@
 	</div>
 
 	<div class="row">
-		<div class="col-xs-12 col-sm-6 col-md-3">
-			<div class="form-group">
-				<label class="control-label">Surcusal de Compra</label>
-				<select  class="form-control" id="cbosucursal">
-				</select>
-			</div>
-		</div>
 		<div class="col-xs-12 col-sm-6 col-md-2">
 			<div class="form-group">
 				<label class="control-label">Guía(s) de Remisión</label>

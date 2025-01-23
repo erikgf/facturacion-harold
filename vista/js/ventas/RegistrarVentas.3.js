@@ -50,6 +50,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
     this.setDOM = function(){
         const DOM = _Util.preDOM2DOM($contenedor, [
                       {"frmRegistro": "#frmregistro"},
+                      {"cboSucursal": "#cbosucursal"},
                       {"cboClienteBuscar": "#cboclientebuscar"},
                       {"cboTipoComprobante": "#cbotipocomprobante"},
                       {"blkComprobante": "#blkcomprobante"},
@@ -63,7 +64,6 @@ const RegistrarVentas = function($contenedor, _tpl8){
                       {"txtDireccion": "#txtdireccion"},
                       {"txtCelular": "#txtcelular"},
                       {"txtCorreo": "#txtcorreo"},
-                      {"cboSucursal": "#cbosucursal"},
                       {"txtObservaciones" : "#txtobservaciones"},
                       {"txtFechaVenta": "#txtfechaventa"},
                       {"txtHoraVenta": "#txthoraventa"},
@@ -104,7 +104,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
   
       DOM.cboTipoComprobante.on("change", (e) => {
         const idTipoComprobante = e.currentTarget.value;
-        cargarSeriesPorTipoComprobante(idTipoComprobante);
+        cargarSeriesPorTipoComprobante(idTipoComprobante, DOM.cboSucursal.val());
       });
   
       DOM.txtCorrelativo.on("keypress", function(e){
@@ -344,6 +344,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
   
       DOM.cboSucursal.on("change", function(){
         storager.setValue("sucursal", DOM.cboSucursal.val());
+        cargarSeriesPorTipoComprobante(DOM.cboTipoComprobante.val(), DOM.cboSucursal.val());
         self.obtenerDataProductos();
       });
   
@@ -428,7 +429,6 @@ const RegistrarVentas = function($contenedor, _tpl8){
   
         const $nuevoDetalle = $(_tpl8.tblDetalle(dataFila));
         this.DOM.tblDetalle[!_VACIO ? "append" : "html"]($nuevoDetalle);
-        const $precio = $nuevoDetalle.find(".precio-unitario input");
         this.DOM.txtLectora.val("");
         //$precio.focus();
         //$precio.select();
@@ -652,16 +652,15 @@ const RegistrarVentas = function($contenedor, _tpl8){
       try {
           const { data } = await apiAxios.get(`serie-documentos`);
           this.setDataSeries(data);
-
-          cargarSeriesPorTipoComprobante(this.DOM.cboTipoComprobante.val());
+          cargarSeriesPorTipoComprobante(this.DOM.cboTipoComprobante.val(), this.DOM.cboSucursal.val());
       } catch (error) {
           swal("Error", "Error al obtener los series.", "error");
           console.error(error);
       }
     };
 
-    const cargarSeriesPorTipoComprobante = (idTipoComprobante) => {
-      const seriesPorTC = _data.series.filter(s => s.id_tipo_comprobante == idTipoComprobante);
+    const cargarSeriesPorTipoComprobante = (idTipoComprobante, idSucursal) => {
+      const seriesPorTC = _data.series.filter(s => s.id_tipo_comprobante == idTipoComprobante && s.id_sucursal == idSucursal);
       this.DOM.txtSerie.html(_tpl8.Series(seriesPorTC.map(({serie, correlativo})=> {
         return {serie, correlativo};
       })));
@@ -1294,6 +1293,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
       eliminarTodoCarrito(MODO == "*");
     };
   
+    /*
     this.editar = function(cod_transaccion){
       /*1.- Obtener los datosa asociados a lad venta
       cabecera
@@ -1301,7 +1301,6 @@ const RegistrarVentas = function($contenedor, _tpl8){
       imprimir cabecera
       imprimir detalle
         set teb stock
-      */
        var self = this, 
            DOM  = self.DOM,
            sucursalAnterior = DOM.cboSucursal.val(),
@@ -1407,6 +1406,7 @@ const RegistrarVentas = function($contenedor, _tpl8){
           }
         },fn);
     };
+    */
   
     this.cancelarEdicion = function(){
       COD_VENTA_EDITAR = null;

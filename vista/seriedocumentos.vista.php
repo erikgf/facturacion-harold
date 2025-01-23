@@ -61,9 +61,10 @@ $TITULO_PAGINA = "Gestión Series de Documentos";
                                   <thead>
                                     <tr>
                                       <th width="100px">Acción</th>
-                                      <th width="100px">Serie</th>
                                       <th>Comprobante</th>
+                                      <th width="100px">Serie</th>
                                       <th width="100px">Correlativo</th>
+                                      <th width="140px">Sucursal</th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -77,9 +78,10 @@ $TITULO_PAGINA = "Gestión Series de Documentos";
                                                 <i class="fa fa-trash bigger-130"></i>
                                                 </button>
                                             </td>
-                                            <td>{{serie}}</td>
                                             <td>{{tipo_comprobante.nombre}}</td>
+                                            <td>{{serie}}</td>
                                             <td>{{correlativo}}</td>
+                                            <td>{{sucursal.nombre}}</td>
                                          </tr>
                                       {{/this}}
                                   </tbody>
@@ -112,24 +114,30 @@ $TITULO_PAGINA = "Gestión Series de Documentos";
 
                       <div class="modal-body">
                         <div class="row">
-                            <div class="col-xs-4">
+                            <div class="col-xs-12 col-md-4">
                               <div class="control-group">
                                 <label class="control-label">Tipo Comprobante: </label>
                                 <select name="cbotipocomprobante" id="cbotipocomprobante" class="form-control" required=""></select>
                               </div>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-12 col-md-4">
                               <div class="control-group">
                                 <label class="control-label">Serie: </label>
                                 <input type="text" name="txtserie" id="txtserie" class="form-control" placeholder="Serie..." required="" maxlength="4"/>
                               </div>
                             </div>
-                            <div class="col-xs-4">
+                            <div class="col-xs-12 col-md-4">
                               <div class="control-group">
                                 <label class="control-label">Correlativo: </label>
                                 <input type="text" name="txtcorrelativo" id="txtcorrelativo" class="form-control" placeholder="Correlativo..." maxlength="7" required=""/>
                               </div>
-                            </div>                           
+                            </div>  
+                            <div class="col-xs-12 col-md-4">
+                              <div class="control-group">
+                                <label class="control-label">Sucursal: </label>
+                                <select name="cbosucursal" id="cbosucursal" class="form-control"required=""></select>
+                              </div>
+                            </div>                                  
                         </div>
                       </div>
                       <script id="tpl8Combo" type="handlebars-x">

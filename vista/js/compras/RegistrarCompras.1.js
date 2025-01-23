@@ -36,6 +36,7 @@ const RegistrarCompras = function($contenedor, _tpl8){
     this.setDOM = function(){
       var DOM = _Util.preDOM2DOM($contenedor, 
                       [{"frmRegistro": "#frmregistro"},
+                        {"cboSucursal": "#cbosucursal"},
                         {"cboProveedorBuscar": "#cboproveedorbuscar"},
                         {"cboTipoComprobante": "#cbotipocomprobante"},
                         {"blkComprobante": "#blkcomprobante"},
@@ -47,7 +48,6 @@ const RegistrarCompras = function($contenedor, _tpl8){
                         {"txtDireccion": "#txtdireccion"},
                         {"txtCelular": "#txtcelular"},
                         {"txtCorreo": "#txtcorreo"},
-                        {"cboSucursal": "#cbosucursal"},
                         {"txtGuiasRemision" : "#txtguiasremision"},
                         {"txtObservaciones" : "#txtobservaciones"},
                         {"tblDetalle": "#tbldetallebody"},

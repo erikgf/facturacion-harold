@@ -1,5 +1,9 @@
 <form id="frmregistro">
 	<h4>Información Cliente</h4>
+	<div class="form-group" style="position:absolute;right:16px;top:12px;width:200px">
+		<select  class="form-control" required id="cbosucursal">
+		</select>
+	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
 			<div class="form-group">
@@ -30,8 +34,7 @@
 					<div class="col-xs-4">
 						<div class="form-group">
 							<label class="control-label">Serie</label>
-							<select style="background: #ded2d2;color: darkred;" class="form-control text-center" id="txtserie" required>
-							</select>
+							<select style="background: #ded2d2;color: darkred;" readonly class="form-control text-center" id="txtserie" required></select>
 						</div>
 					</div>
 					<div class="col-sm-4">
@@ -102,13 +105,6 @@
 	<div class="space-6"></div>
 
 	<div class="row">
-		<div class="col-xs-12 col-sm-6 col-md-2">
-			<div class="form-group">
-				<label class="control-label">Sucursal</label>
-				<select  class="form-control" required id="cbosucursal">
-				</select>
-			</div>
-		</div>
 		<div class="col-xs-12 col-sm-6 col-md-4">
 			<div class="form-group">
 				<label class="control-label">Observaciones</label>
