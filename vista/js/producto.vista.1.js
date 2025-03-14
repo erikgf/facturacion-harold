@@ -4,7 +4,7 @@ var app = {},
   _CLASE = "Producto",
   _IMAGEN = 0, /*0: default, 1: misma, 2: nueva*/
   DT = null,
-  maxImg = 10,
+  maxCantidadImg = 10,
   _CATEGORIAS = [],
   arImg = [],
   _cache_busqueda = null;
@@ -41,7 +41,7 @@ app.setDOM = function(){
   DOM.txtTallas = DOM.frmGrabar.find("#txttallas");
 
   DOM.tabImgProductos = DOM.frmGrabar.find("#tabImgProductos");
-  DOM.tabContent = DOM.frmGrabar.find(".tab-content");
+  DOM.tabContent = DOM.frmGrabar.find(".tab-content-imagenes");
   DOM.cboImagenPrincipal = DOM.frmGrabar.find("#cboimagenprincipal");
 
   //DOM.txtImgUrl = DOM.frmGrabar.find("#txtimgurl");
@@ -100,8 +100,19 @@ app.setEventos  = function(){
           }
       });
   });
-};
 
+  DOM.tabContent.on("change", ".on-cambiar-imagen", function ({currentTarget : input}) {
+    app.cambiarImagen(input);
+  });
+
+  DOM.tabContent.on("click", ".borrar-img-producto", function ({currentTarget : a}) {
+    app.cancelarImagen($(a).parents(".tab-pane"));
+  });
+
+  DOM.tabContent.on("click", ".on-imagen-defecto", function ({currentTarget : a}) {
+    app.imagenDefecto($(a).parents(".tab-pane"));
+  });
+};
 
 app.setTemplate = function(){
   var tpl8 = {};
@@ -204,11 +215,12 @@ app.grabar = async function(){
       datosFrm.append("id_categoria_producto", objDatosFormulario.cbocategoria);
       datosFrm.append("numero_imagen_principal", objDatosFormulario.cboimagenprincipal);
 
-      for (let i = maxImg; i >= 1; i--) {
-        const datasetImg = $("#imgurl_"+i)[0].dataset.imagen;
-        if (datasetImg != "1"){
-          datosFrm.append("imagenes[]", $("#txtimg_"+i)[0].files[0]);
-          datosFrm.append("imagenes_indices[]", datasetImg);
+      for (let i = maxCantidadImg; i >= 1; i--) {
+        const $bloque = DOM.tabContent.find(`[data-id=${i}]`);
+        const $inputFile = $bloque.find(".on-cambiar-imagen");
+        if ($inputFile.val()){
+          datosFrm.append("imagenes[]", $inputFile[0].files[0]);
+          datosFrm.append("imagenes_indices[]", i);
         }
       };
 
@@ -331,32 +343,25 @@ app.llenarTabs = function(dataImagenes){
 
   /*Dataimagenes seria un arr => [numero_imagen, img_url, es_principal (active per default)*/
   const tabs = [], tabPanes = [], numeroImagen = DOM.cboImagenPrincipal.val();
+  const cantidadImagenes = dataImagenes?.length;
+  const contieneImagenes = dataImagenes && Boolean(cantidadImagenes);
 
-  for (var i = 1; i <= maxImg; i++) {
-      var imgFound = false;
-      if (dataImagenes){
-          for (var j = dataImagenes.length - 1; j >= 0; j--) {
-            var objImagen = dataImagenes[j],
-                objImagenNI = objImagen.numero_imagen,
-                esActive =  objImagenNI == numeroImagen ? true : null;
-            if (objImagenNI == i){
-              tabs.push({i: i, is_active: esActive});
-              tabPanes.push({i: objImagenNI, img_url: objImagen.img_url, is_active: esActive});
-              dataImagenes.splice(j,1);
-              imgFound  =true;
-              break;
-            }
-          };
+  for (let i = 1; i <= maxCantidadImg; i++) {
+      if (contieneImagenes){
+        const objImagen = dataImagenes.find(item => item.numero_imagen === i);
+        if (objImagen){
+          const objImagenNI = objImagen.numero_imagen;
+          const esActive =  objImagenNI == numeroImagen ? true : null;
+          tabs.push({id: i, is_active: esActive});
+          tabPanes.push({id: objImagenNI, img_url: objImagen.img_url, is_active: esActive});
+          dataImagenes.splice(j,1);
+          continue;
+        }
       }
 
-      if (!imgFound){
-        const esActive = numeroImagen == i;
-        tabs.push({i: i, is_active: esActive});
-        tabPanes.push({i: i, img_url: "../imagenes/productos/default_producto.jpg", is_active: esActive});
-      }     
-      //var esActive = (i > 1 ? null : true);
-      //  
-      //  
+      const esActive = numeroImagen == i;
+      tabs.push({id: i, is_active: esActive});
+      tabPanes.push({id: i, img_url: "../imagenes/productos/default_producto.jpg", is_active: esActive});
   };
 /*
 
@@ -366,40 +371,37 @@ app.llenarTabs = function(dataImagenes){
         tabs.push({i: i, is_active: objDI.es_principal});
         tabPanes.push({i: i, img_url: objDI.img_url, is_active: objDI.es_principal});
     };
-  } else {
-    
   }
 */
   tabImgProductos.html(tpl8.tab(tabs));
   DOM.tabContent.html(tpl8.tabPane(tabPanes));
 };
 
-app.cambiarImagen = function(dis, i){
-   var $this = $(dis),
-        parent = $this.parent(),
-        //id = dis.id,
-        spnBorrarProducto = parent.find("#btnborrarimg_"+i),
-        imgUrl = parent.find("#imgurl_"+i);
+app.cambiarImagen = function(input){
+   const $this = $(input),
+        parent = $this.parents(".tab-pane"),
+        spnBorrarProducto = parent.find(".borrar-img-producto"),
+        imgUrl = parent.find("img");
 
-      if (dis.files && dis.files[0]) {        
-        //var num = id.substr(id.length - 1);
-        var reader = new FileReader();
-           reader.onload = function(e){
-          imgUrl.attr('src', e.target.result);
-          //_IMAGEN = 2;
-          imgUrl[0].dataset.imagen = 2;
-          spnBorrarProducto.show();
-        };
-        reader.readAsDataURL(dis.files[0]);
-      }
+    if (input.files && input.files[0]) {        
+      //var num = id.substr(id.length - 1);
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imgUrl.attr('src', e.target.result);
+        //_IMAGEN = 2;
+        spnBorrarProducto.show();
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
 };
 
-app.setImagenAccion = function(dis, i, tipoAccion){
+app.setImagenAccion = function($bloque, tipoAccion){
   //TipoAccion: 0 =>setDefecto, 1=>AnteriorImagen
-  var parent = $(dis).parent(),
-      imgUrl = parent.find("#imgurl_"+i),
-      spnBorrarProducto = parent.find("#btnborrarimg_"+i),
-      src;
+  //const parent = $(a).parent(),
+  const imgUrl = $bloque.find("img"),
+        spnBorrarProducto = $bloque.find(".borrar-img-producto"),
+        txtImg = $bloque.find(".on-cambiar-imagen");
+  let src;
   //_IMAGEN = tipoAccion;
   imgUrl[0].dataset.imagen = tipoAccion;
 
@@ -410,16 +412,16 @@ app.setImagenAccion = function(dis, i, tipoAccion){
   }
 
   imgUrl[0].src = src;
-  $("#txtimg_"+i).val("");
+  txtImg.val("");
   spnBorrarProducto.hide();
 }
 
-app.cancelarImagen = function(dis,i){
-  this.setImagenAccion(dis, i, 1);
+app.cancelarImagen = function($bloque){
+  this.setImagenAccion($bloque, 1);
 };
 
-app.imagenDefecto = function(dis,i){
-  this.setImagenAccion(dis, i, 0);
+app.imagenDefecto = function($bloque){
+  this.setImagenAccion($bloque, 0);
 };
 
 $(document).ready(function(){

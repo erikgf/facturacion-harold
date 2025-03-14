@@ -1,10 +1,9 @@
 <?php
-
 include '../datos/local_config_web.php';
-include 'session.vista.php';
 $TITULO_PAGINA = "Catálogo";
+$fechaHoy = date('Y-m-d');
 
-$mostrarPrecios = $objAcceso->getUsuario() != "";
+$mostrarPrecios = true;// $objAcceso->getUsuario() != "";
 ?>
 
 <!DOCTYPE html>
@@ -19,14 +18,12 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
           <?php  include '_css/main.css.php'; ?>
     </head>
     <body class="no-skin">
-        <?php include 'navbar.php'; ?>
+    <?php include './partials/_globals/navbar.php'; ?>
 
         <div class="main-container ace-save-state" id="main-container">
             <script type="text/javascript">
                 try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-
-            <?php include 'menu.php'; ?>
 
             <div class="main-content">
               <div class="main-content-inner">
@@ -39,7 +36,7 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
 
                 <div class="page-content">
                
-                  <?php include 'ace.settings.php' ?>
+                  <?php include './partials/_globals/ace.settings.php' ?>
 
                   <div class="page-header">
                     <h1>
@@ -65,6 +62,14 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                     </div>
                     <div class="col-xs-6 col-sm-3 col-md-2">
                       <div class="control-group">
+                        <label class="control-label">Filtrar por Marca</label>
+                        <select id="cbofiltromarca" class="form-control">
+                          <option value="">Todos</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-3 col-md-2">
+                      <div class="control-group">
                         <label class="control-label">Filtrar por Tipo</label>
                         <select id="cbofiltrotipo" class="form-control">
                           <option value="">Todos</option>
@@ -84,9 +89,11 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                   <div class="space-10"></div>
 
                   <div class="row">
-                    <div class="col-xs-12 text-right">
-                       <ul class="pagination">
-                       </ul>
+                    <div class="col-xs-12 col-md-4 text-left">
+                      <h2 id="lbl-cargando" style="display: none;"><i class="fa fa-spin fa-spinner"></i>  Cargando...</h2>
+                    </div>
+                    <div class="col-xs-12 col-md-8 text-right">
+                       <ul class="pagination"></ul>
                     </div>
                   </div>
                   
@@ -100,7 +107,7 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                           </div>
                           <div class="widget-body">
                             <div class="widget-main text-center">
-                              <img src="../imagenes/productos/{{img_url}}" class="img-catalogo-res">
+                              <img src="{{img_url}}" class="img-catalogo-res">
                               <hr>
                               <?php if ($mostrarPrecios){
                                       echo '<div class="price precios-mostrar">S/ {{precio_unitario}}</div>';
@@ -108,7 +115,7 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                               ?>
                             </div>
                             <div>
-                              <a href="javascript:;" class="btn btn-block btn-primary" onclick="app.obtenerProducto({{cod_producto}})">
+                              <a href="javascript:;" class="btn btn-block btn-primary" onclick="app.obtenerProducto({{id}})">
                                 <i class="ace-icon fa fa-search bigger-110"></i>
                                 <span>Ver Información</span>
                               </a>
@@ -153,6 +160,14 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                                           <script id="tpl8Info" type="handlebars-x">
                                             {{#.}}
                                               <h2 class="control-label">{{nombre}}</h2>
+                                              <div class="row">
+                                                <div class="col-sm-6">
+                                                  <div style="font-size:1.25em"><strong>Categoría: </strong> <div >{{categoria}}</div></div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                  <div style="font-size:1.25em"><strong>Marca: </strong> <div>{{marca}}</div></div>
+                                                </div>
+                                              </div>
                                               <p style="font-size:1.15em"><strong>Descripción: </strong> <div class="img-descripcion-catalogo">{{descripcion}}</div></p>
                                               <h3 class="precios-mostrar" <?php echo $mostrarPrecios ? 'style="display:block"' : 'style="display:none"'; ?>></strong>Precio Venta: S/ {{precio_unitario}}</strong></h3>
                                               <a class="btn btn-xs btn-info" <?php echo $mostrarPrecios ? 'style="display:none"' : 'style="display:block"'; ?> onclick="app.verPrecio(this)">VER PRECIO</a>
@@ -168,7 +183,7 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                                       <script id="tpl8Items" type="handlebars-x">
                                        {{#.}}
                                         <div class="item">
-                                          <img class="img-thumbnail" src="../imagenes/productos/{{img_url}}">
+                                          <img class="img-thumbnail" src="{{img_url}}">
                                         </div>
                                        {{/.}}
                                       </script>
@@ -180,7 +195,7 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                               <script id="tpl8Combo" type="handlebars-x">
                                   <option value="">Todos</option>
                                   {{#.}}
-                                    <option value='{{codigo}}'>{{nombre}}</option>
+                                    <option value='{{id}}'>{{nombre}}</option>
                                   {{/.}}
                               </script>                                
 
@@ -199,8 +214,9 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
               </div>
             </div><!-- /.main-content -->
 
-           <?php include 'footer.php'; ?>
+           <?php include './partials/_globals/footer.php'; ?>
 
+           <!--
            <script id="tpl8Paginacion" type="handlebars-x">
                 <li class="pag-first disabled">
                   <a href="javascript:;" onclick="app.previousPagina()">
@@ -221,11 +237,20 @@ $mostrarPrecios = $objAcceso->getUsuario() != "";
                   </a>
                 </li>
           </script>
+                                  -->
+
+          <script id="tpl8Paginacion" type="handlebars-x">
+              {{#.}}
+                <li class="pags {{#if active}}active{{/if}}">
+                  <a href="javacript:;" data-url="{{url}}">{{{label}}}</a>
+                </li>
+              {{/.}}
+          </script>
 
         </div><!-- /.main-container -->
 
         <?php  include '_js/main.js.php';?>
-        <script type="text/javascript" src="js/principal.vista.js<?php echo '?'.time();?>"></script>
+        <script type="text/javascript" src="js/catalogo.publico.vista.js<?php echo '?'.time();?>"></script>
         <script type="text/javascript">
           var MOSTRAR_PRECIOS = <?php echo $mostrarPrecios ? 'true' : 'false' ?>;
         </script>

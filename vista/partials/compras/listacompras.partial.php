@@ -63,7 +63,7 @@
                                </button>
                                {{/../admin}}
                                <button class="btn btn-xs" title="Ver Detalle" onclick ="app.ListarCompras.verDetalle({{id}})">
-                                   		<i class="fa fa-eye bigger-130"></i>
+									<i class="fa fa-eye bigger-130"></i>
                                </button>
 							</td>
 							<td><b>{{id}}</b></td>

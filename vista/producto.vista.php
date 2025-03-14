@@ -212,7 +212,7 @@ $TITULO_PAGINA = "Gestión de Productos";
                                       <?php endwhile; ?>
                                      </select>
                                 </div>
-                                <small>(*) Aparecerá como imagen en las miniaturas.</small>
+                                <small>(*) Aparecerá como imagen principal en las miniaturas.</small>
                              </div>
                         </div>
 
@@ -222,7 +222,7 @@ $TITULO_PAGINA = "Gestión de Productos";
                             <div class="tabbable">
                               <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="tabImgProductos">
                               </ul>
-                              <div class="tab-content">                       
+                              <div class="tab-content tab-content-imagenes">                       
                               </div>
                             </div>
                           </div>
@@ -244,14 +244,14 @@ $TITULO_PAGINA = "Gestión de Productos";
 
             <script id="tpl8TabPane" type="handlebars-x">
               {{#.}}              
-                  <div id="img_{{i}}" class="tab-pane {{#is_active}}active{{/is_active}}">
+                  <div data-id="{{id}}" id="img_{{id}}" class="tab-pane {{#is_active}}active{{/is_active}}">
                     <div class="row">
                       <div class="col-xs-6 form-group">
-                        <input onchange="app.cambiarImagen(this,{{i}})" type="file" id="txtimg_{{i}}" class="form-control"  accept="image/*">
+                        <input type="file" class="form-control on-cambiar-imagen"  accept="image/*">
                         <div class="text-center" style="padding:10px">
-                          <a onclick="app.cancelarImagen(this,{{i}})" id="btnborrarimg_{{i}}" class="borrar-img-producto" style="display:none"><i class="fa fa-ban"></i></a>
-                          <img style="width:256px" id="imgurl_{{i}}" data-imagen="1" data-original="{{img_url}}" src="{{img_url}}">
-                          <br><a href="javascript:;" onclick="app.imagenDefecto(this,{{i}})">Sin imagen</a>
+                          <a class="borrar-img-producto" style="display:none"><i class="fa fa-ban"></i></a>
+                          <img style="width:256px" data-original="{{img_url}}" src="{{img_url}}">
+                          <br><a href="javascript:;" class="on-imagen-defecto">Sin imagen</a>
                         </div>
                       </div>
                     </div>
@@ -262,8 +262,8 @@ $TITULO_PAGINA = "Gestión de Productos";
             <script id="tpl8Tab" type="handlebars-x">
               {{#.}}
                 <li class="{{#is_active}}active{{/is_active}}">
-                  <a data-toggle="tab" href="#img_{{i}}" aria-expanded="false">{{i}}</a>
-               </li>
+                  <a data-toggle="tab" href="#img_{{id}}" aria-expanded="false">{{id}}</a>
+                </li>
               {{/.}}
             </script>
 

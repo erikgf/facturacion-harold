@@ -29,7 +29,7 @@ app.limpiar = function(){
 
 $(document).ready(function(){
   new AccesoAuxiliar(()=>{
-    window.___ad = USUARIO?.idRol === 1;
+    window.___ad = USUARIO?.idRol == 1;
     app.init();
   });
 });

@@ -99,7 +99,7 @@ input.ahp-valor{
 
 .carousel-items .item > img{
     height: 128px;
-    max-width: 128px;
+    width: 128px;
 }
 
 .widget-header>.widget-title {

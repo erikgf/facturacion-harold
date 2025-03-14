@@ -113,7 +113,6 @@ const app = function() {
 
     this.cargarProductosSeleccionadosTabla = () => {
       const productosSeleccionados = this.productosFiltrados.filter(p=>p.seleccionado);
-      console.log({productosSeleccionados})
       this.tblListado.find("tbody").html(this.tpl8.Listado(productosSeleccionados));
       this.mdlRegistro.modal("hide");
     };
