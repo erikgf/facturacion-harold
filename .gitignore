@@ -1,3 +1,4 @@
 # ignore env file
 /vista/js/_env.js
 /datos/config_facturacion.php
+/impresiones/*.png
